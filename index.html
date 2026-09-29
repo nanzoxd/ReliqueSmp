@@ -2535,7 +2535,8 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
   var API_URL='/relique'; // same-site path; vercel.json forwards it to the plugin (http://187.127.139.212:19489)
   var API_KEY=''; // only if you set api-key in the plugin config
   var SITES=[
-    {k:'mc',n:'MCTiers',u:'https://mctiers.com/rankings/overall',modes:['Sword','SMP','Axe','Mace','Pot','UHC','NethOP','Vanilla'],t:['HT','LT']}
+    {k:'mc',n:'MCTiers',u:'https://mctiers.com/rankings/overall',modes:['Sword','SMP','Axe','Mace','Pot','UHC','NethOP','Vanilla'],t:['HT','LT']},
+    {k:'sub',n:'SubTiers',u:'https://subtiers.net/ranking/overall',optional:true}
   ];
   var TCLS=function(t){return t.charAt(0)==='R'?'rt':t.charAt(0)==='H'?'ht':t.charAt(0)==='M'?'mt':'lt'};
 
@@ -2792,10 +2793,19 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
       var d=el('div');d.append(el('dt',null,x[0]),el('dd',null,x[1]));info.append(d);
     });
     var tiers=document.getElementById('pf-tiers');tiers.replaceChildren();var oldb=M.querySelector('.pf-livebtn');if(oldb)oldb.remove();
+    var uuidP=resolveUuid(p.n);
     SITES.forEach(function(s){
-      var t=p.tiers[s.k],box=el('div','pf-site'),a=el('a',null,s.n+' \u2197');a.href=s.u;a.target='_blank';a.rel='noopener';box.append(a);
-      var c=el('div','tchip'+(t?'':' na'));c.append(el('span',null,t?(t[0]||'Top tier'):'No data'),el('span','tb '+(t?TCLS(t[1]):'na'),t?t[1]:'\u2014'));box.append(c);
-      if(t&&t[2])box.append(el('small','pf-meta',t[2]));tiers.append(box);
+      var box=el('div','pf-site'),a=el('a',null,s.n+' \u2197');a.href=s.u;a.target='_blank';a.rel='noopener';box.append(a);
+      var c=el('div','tchip na'),lab=el('span',null,'Loading\u2026'),tb=el('span','tb na','\u2014');c.append(lab,tb);box.append(c);
+      if(!s.optional)tiers.append(box);
+      var site=LIVE.filter(function(x){return x.k===s.k})[0];
+      fetchSite(site,p.n,uuidP).then(function(d){
+        if(document.getElementById('pf-name').textContent!==p.n)return;
+        if(d&&d.list&&d.list.length){
+          var top=d.list[0];lab.textContent=top.mode;tb.textContent=top.label;tb.className='tb '+TCLS(top.label);c.className='tchip';
+          if(s.optional)tiers.append(box);
+        }else if(!s.optional){lab.textContent='Not ranked'}
+      },function(){if(!s.optional&&document.getElementById('pf-name').textContent===p.n)lab.textContent='Unavailable'});
     });
     var lb=el('button','pf-livebtn','Check live tiers for '+p.n+' \u2192');lb.type='button';lb.addEventListener('click',function(){closeCard();goLive(p.n)});tiers.after(lb);
     var fl=document.getElementById('pf-fights');fl.replaceChildren();

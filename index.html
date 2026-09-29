@@ -2804,7 +2804,7 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
         if(d&&d.list&&d.list.length){
           var top=d.list[0];lab.textContent=top.mode;tb.textContent=top.label;tb.className='tb '+TCLS(top.label);c.className='tchip';
           if(s.optional)tiers.append(box);
-        }else if(!s.optional){lab.textContent='Not ranked'}
+        }else if(!s.optional){lab.textContent=d?'No gamemode tiers yet':'Not ranked'}
       },function(){if(!s.optional&&document.getElementById('pf-name').textContent===p.n)lab.textContent='Unavailable'});
     });
     var lb=el('button','pf-livebtn','Check live tiers for '+p.n+' \u2192');lb.type='button';lb.addEventListener('click',function(){closeCard();goLive(p.n)});tiers.after(lb);

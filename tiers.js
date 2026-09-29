@@ -1,5 +1,3 @@
-// Vercel serverless function: lets the site read MCTiers / SubTiers / PlayerDB from the browser.
-// Called as  /api/tiers?url=<encoded https url>
 const ALLOWED = ['mctiers.com', 'subtiers.net', 'playerdb.co'];
 
 module.exports = async (req, res) => {

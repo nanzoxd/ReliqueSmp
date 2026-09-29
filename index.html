@@ -2532,7 +2532,7 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
   var LADDER=[['Rookie',700],['Combat Novice',950],['Combat Cadet',1200],['Combat Specialist',1450],['Combat Ace',1700],['Combat Master',1950],['Combat Grandmaster',1950]];
   var COLORS=['#9aa7bd','#6ee7a8','#7ecbff','#c4a4ff','#ffd25c','#ff9a5c','#ff5c7a'];
   // ---------- server link: URL of the Relique Online API plugin (see plugin config.yml port) ----------
-  var API_URL='http://187.127.139.212:19489'; // plugin API. If your site is https, browsers block http: put an https tunnel URL here instead
+  var API_URL='/relique'; // same-site path; vercel.json forwards it to the plugin (http://187.127.139.212:19489)
   var API_KEY=''; // only if you set api-key in the plugin config
   var SITES=[
     {k:'mc',n:'MCTiers',u:'https://mctiers.com/rankings/overall',modes:['Sword','SMP','Axe','Mace','Pot','UHC','NethOP','Vanilla'],t:['HT','LT']}

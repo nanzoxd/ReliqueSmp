@@ -2647,7 +2647,7 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
   // ---------- live tier lookup (MCTiers + SubTiers public APIs) ----------
   // Runs in the visitor's browser. If a site blocks browser requests (CORS) you'll see an error for it;
   // set CORS_PROXY to a proxy prefix (e.g. your own Cloudflare Worker) to route requests through it.
-  var CORS_PROXY=''; // e.g. 'https://YOUR-WORKER.workers.dev/?url='  (see tier-proxy-worker.js)
+  var CORS_PROXY='/api/tiers?url='; // Vercel function in api/tiers.js
   var LIVE=[
     {k:'mc',n:'MCTiers',u:'https://mctiers.com/',api:'https://mctiers.com/api/v2'},
     {k:'sub',n:'SubTiers',u:'https://subtiers.net/',api:'https://subtiers.net/api/v2',optional:true} // shown only if the browser can read it

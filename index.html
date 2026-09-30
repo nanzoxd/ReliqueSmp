@@ -1803,6 +1803,21 @@ html[data-theme="amoled"] .ice-snow{display:none !important}
 .lb-cats .lb-tab:hover{color:var(--ice-1)}
 .lb-cats .lb-tab[aria-selected="true"]{background:none;box-shadow:none;color:var(--ice-1)}
 .lb-cats .lb-tab[aria-selected="true"]::after{content:"";position:absolute;left:22%;right:22%;bottom:-1px;height:2px;border-radius:2px;background:var(--ice-3)}
+.pf-nofight{margin:0;color:var(--muted);font-size:13.5px}
+.ev{margin-top:20px;border-radius:26px;padding:10px 12px;display:grid;gap:8px}
+.ev[hidden]{display:none}
+.ev-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-radius:14px;background:rgba(4,12,30,.5);border:1px solid rgba(126,203,255,.10);border-left:3px solid #ef4444}
+.ev-row.env{border-left-color:#8fa6c1}
+.ev-line{display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px;min-width:0;font-size:14px;color:var(--text)}
+.ev-who{display:inline-flex;align-items:center;gap:7px}
+.ev-who .av{width:26px;height:26px;border-radius:7px;flex:none}
+.ev-who b{color:var(--ice-1);font-weight:600}
+.ev-who em{font-style:normal;font:600 11.5px var(--font-d);padding:2px 7px;border-radius:8px}
+.ev-who em.gain{color:#4ade80;background:rgba(74,222,128,.12)}
+.ev-who em.loss{color:#f87171;background:rgba(248,113,113,.12)}
+.ev-t{flex:none;font-size:12px;color:var(--muted)}
+html[data-theme="amoled"] .ev-row{background:rgba(0,0,0,.5)}
+@media (max-width:700px){.ev{padding:8px}.ev-row{flex-direction:column;align-items:flex-start;gap:6px}}
 </style></head>
 <body>
 <div class="ice-snow idle" aria-hidden="true"><div class="sw"><div class="sf a"></div><div class="sf b"></div></div></div>
@@ -2290,6 +2305,7 @@ html[data-theme="amoled"] .ice-snow{display:none !important}
       <div class="lb-tabs" role="tablist" aria-label="Leaderboard view">
         <button type="button" class="lb-tab" role="tab" id="tab-top" aria-selected="true">Top 20</button>
         <button type="button" class="lb-tab" role="tab" id="tab-on" aria-selected="false"><i class="odot"></i>Online <span class="ct" id="on-ct">0</span></button>
+        <button type="button" class="lb-tab" role="tab" id="tab-ev" aria-selected="false">Recent events</button>
         <button type="button" class="lb-tab" role="tab" id="tab-live" aria-selected="false">Live tiers</button>
       </div>
       <label class="lb-search"><span class="sr">Search players</span>
@@ -2307,6 +2323,7 @@ html[data-theme="amoled"] .ice-snow{display:none !important}
       <p class="lb-empty" id="lb-empty" hidden></p>
     </div>
     <div class="lv glass" id="lv" hidden aria-live="polite"></div>
+    <div class="ev glass" id="ev" hidden aria-live="polite"></div>
     <p class="note">Only SMP is tracked: Elo, kills, deaths, K/D and playtime. Tiers come from <a href="https://mctiers.com/rankings/overall" target="_blank" rel="noopener" style="color:var(--ice-3)">MCTiers</a>, <a href="https://subtiers.net/ranking/overall" target="_blank" rel="noopener" style="color:var(--ice-3)">SubTiers</a>, <a href="https://www.mcpvp.com/tiers" target="_blank" rel="noopener" style="color:var(--ice-3)">MCPVP</a> and <a href="https://pvphq.com/" target="_blank" rel="noopener" style="color:var(--ice-3)">PvPHQ</a>.</p>
   </div>
 </section>
@@ -2338,7 +2355,8 @@ html[data-theme="amoled"] .ice-snow{display:none !important}
     <dl class="pf-info" id="pf-info"></dl>
     <h3 class="pf-h">Best tier</h3>
     <div class="pf-tiers" id="pf-tiers"></div>
-    <div class="pf-fights" id="pf-fights" hidden></div>
+    <h3 class="pf-h">Recent fights</h3>
+    <div class="pf-fights" id="pf-fights"></div>
     <div class="pf-actions"><a class="btn ghost" id="pf-namemc" href="#" target="_blank" rel="noopener">NameMC &#8599;</a><button type="button" class="btn primary" id="pf-close">Close</button></div>
   </div>
 </div>
@@ -2606,25 +2624,80 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
     var o={headers:{Accept:'application/json'}};if(API_KEY)o.headers['X-Api-Key']=API_KEY;
     return fetch(API_URL+path,o).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()});
   }
+  var CACHE_KEY='relique-stats-cache',staleNote='',EVENTS=[];
+  function ago(t){var m=Math.max(1,Math.round((Date.now()-t)/60000));if(m<60)return m+' min ago';var h=Math.round(m/60);return h<48?h+' h ago':Math.round(h/24)+' days ago'}
+  function buildPlayers(list,on){
+    P=(list||[]).map(function(x){
+      var elo=Math.round(x.elo);
+      return{n:x.name,uuid:x.uuid,elo:elo,k:x.kills||0,d:x.deaths||0,kd:x.kd!=null?x.kd:(x.deaths?x.kills/x.deaths:x.kills),h:(x.playtime_seconds||0)/3600,bm:x.blocks_mined||0,rk:rankIdx(x.rank,elo),on:!!on[x.name.toLowerCase()],tiers:{},f:[]};
+    });
+    P.sort(function(a,b){return b.elo-a.elo});
+    P.forEach(function(p,i){p.pos=i+1});
+    var byName={};P.forEach(function(p){byName[p.n.toLowerCase()]=p});
+    (list||[]).forEach(function(x){if(x.skin)SKINS[String(x.name).toLowerCase()]=String(x.skin).replace(/^http:/,'https:')});
+    (list||[]).forEach(function(x){
+      var me=byName[String(x.name).toLowerCase()];if(!me)return;
+      me.f=(x.recent_fights||[]).map(function(f){
+        var d=new Date(f.time),o=byName[String(f.opponent).toLowerCase()],c=Math.round(f.elo_change||0);
+        function z(n){return('0'+n).slice(-2)}
+        return[f.opponent,o?o.elo:null,f.result==='win'?1:0,c?(c>0?'+'+c:String(c)):'',z(d.getDate())+'/'+z(d.getMonth()+1)+'/'+d.getFullYear(),z(d.getHours())+':'+z(d.getMinutes()),o?RN(o):''];
+      });
+    });
+    document.getElementById('on-ct').textContent=P.filter(function(p){return p.on}).length;
+    render();
+  }
+  function timeAgo(t){var m=Math.round((Date.now()-t)/60000);if(m<1)return'just now';if(m<60)return m+' min ago';var h=Math.round(m/60);return h<48?h+' h ago':Math.round(h/24)+' days ago'}
+  function evWho(name,chg,cls){
+    var w=el('span','ev-who');w.append(av(name),el('b',null,name));
+    if(chg)w.append(el('em',cls,(chg>0?'+':'\u2212')+Math.abs(chg)+' Elo'));
+    return w;
+  }
+  function evRow(e){
+    var r=el('div','ev-row '+(e.type==='pvp'?'pvp':'env')),line=el('div','ev-line');
+    line.append(evWho(e.victim,e.type==='pvp'?e.victim_elo:0,'loss'));
+    if(e.type==='pvp'&&e.killer){
+      line.append(el('span','ev-txt','died '+e.cause+' by'),evWho(e.killer,e.killer_elo,'gain'));
+    }else line.append(el('span','ev-txt',e.cause||'died'));
+    r.append(line,el('span','ev-t',timeAgo(e.time)));
+    return r;
+  }
+  function renderEvents(){
+    var q=state.q,list=EVENTS.filter(function(e){return !q||String(e.victim).toLowerCase().indexOf(q)>-1||String(e.killer||'').toLowerCase().indexOf(q)>-1});
+    metaEl.textContent=(list.length?'Recent events \u2014 latest '+list.length:'Recent events')+(staleNote?' \u00b7 '+staleNote:'');
+    evEl.replaceChildren();
+    if(!list.length){evEl.append(el('p','lv-hint',q?'No events for that player.':'No events yet. Kills and deaths will show up here.'));return}
+    list.forEach(function(e){evEl.append(evRow(e))});
+  }
   function loadLive(){
     if(!API_URL||API_URL.indexOf('YOUR-API-URL')>-1){metaEl.textContent='Leaderboard not connected: set API_URL in the site script.';return}
-    Promise.all([apiGet('/api/stats?sort=elo'),apiGet('/api/online').catch(function(){return{players:[]}})]).then(function(res){
+    Promise.all([apiGet('/api/stats?sort=elo'),apiGet('/api/online').catch(function(){return{players:[]}}),apiGet('/api/events?limit=50').catch(function(){return{events:[]}})]).then(function(res){
       var on={};(res[1].players||[]).forEach(function(x){on[x.name.toLowerCase()]=1});
-      P=(res[0].players||[]).map(function(x){
-        var elo=Math.round(x.elo);
-        return{n:x.name,uuid:x.uuid,elo:elo,k:x.kills||0,d:x.deaths||0,kd:x.kd!=null?x.kd:(x.deaths?x.kills/x.deaths:x.kills),h:(x.playtime_seconds||0)/3600,bm:x.blocks_mined||0,rk:rankIdx(x.rank,elo),on:!!on[x.name.toLowerCase()],tiers:{},f:[]};
-      });
-      P.sort(function(a,b){return b.elo-a.elo});
-      P.forEach(function(p,i){p.pos=i+1});
-      document.getElementById('on-ct').textContent=P.filter(function(p){return p.on}).length;
-      render();
-    }).catch(function(){metaEl.textContent='Couldn\u2019t reach the server stats right now. Try again soon.'});
+      staleNote='';EVENTS=res[2].events||[];
+      try{localStorage.setItem(CACHE_KEY,JSON.stringify({t:Date.now(),players:res[0].players||[],events:EVENTS}))}catch(e){}
+      buildPlayers(res[0].players,on);
+    }).catch(function(){
+      // server/plugin is off: fall back to the last stats this browser saw
+      var c=null;try{c=JSON.parse(localStorage.getItem(CACHE_KEY)||'null')}catch(e){}
+      if(c&&c.players&&c.players.length){staleNote='server offline \u2014 saved stats from '+ago(c.t);EVENTS=c.events||[];buildPlayers(c.players,{})}
+      else metaEl.textContent='Server is offline right now and there are no saved stats yet. Try again soon.';
+    });
   }
 
   // ---------- helpers ----------
   function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
   function hue(n){var h=0;for(var i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))%360;return h}
+  var SKINS={}; // lower-case name -> skin texture URL from the server (works for cracked players with SkinsRestorer)
+  function skinHead(url,name){
+    var c=document.createElement('canvas');c.className='av';c.width=c.height=64;c.setAttribute('role','img');c.setAttribute('aria-label',name);
+    var g=c.getContext('2d');g.imageSmoothingEnabled=false;
+    var img=new Image();
+    img.onload=function(){g.drawImage(img,8,8,8,8,0,0,64,64);g.drawImage(img,40,8,8,8,0,0,64,64)}; // face + hat layer
+    img.onerror=function(){var f=new Image();f.onload=function(){g.drawImage(f,0,0,64,64)};f.src='https://mc-heads.net/avatar/'+encodeURIComponent(name)+'/64'};
+    img.src=url;
+    return c;
+  }
   function av(name){
+    var sk=SKINS[String(name).toLowerCase()];if(sk)return skinHead(sk,name);
     var i=new Image();i.className='av';i.alt='';i.loading='lazy';i.draggable=false;
     i.src='https://mc-heads.net/avatar/'+encodeURIComponent(name)+'/96';
     i.addEventListener('error',function(){
@@ -2649,7 +2722,7 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
   var catsEl=document.getElementById('lb-cats');
   CATS.forEach(function(c,i){var b=el('button','lb-tab',c.n);b.type='button';b.setAttribute('role','tab');b.addEventListener('click',function(){state.cat=i;render()});catsEl.append(b)});
   var podEl=document.getElementById('lb-podium'),rowsEl=document.getElementById('lb-rows'),emptyEl=document.getElementById('lb-empty'),metaEl=document.getElementById('lb-meta'),headEl=document.querySelector('#lb-table .lb-head');
-  var tabTop=document.getElementById('tab-top'),tabOn=document.getElementById('tab-on'),qEl=document.getElementById('lb-q');
+  var tabTop=document.getElementById('tab-top'),tabOn=document.getElementById('tab-on'),tabEv=document.getElementById('tab-ev'),evEl=document.getElementById('ev'),qEl=document.getElementById('lb-q');
   document.getElementById('on-ct').textContent=P.filter(function(p){return p.on}).length;
 
   function podium(top3){
@@ -2671,11 +2744,13 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
   function render(){
     var live=state.tab==='live';
     var V=P.slice().sort(CATS[state.cat].cmp);V.forEach(function(p,i){p.vp=i+1});
-    catsEl.hidden=live;Array.prototype.forEach.call(catsEl.children,function(b,i){b.setAttribute('aria-selected',i===state.cat)});
+    var evs=state.tab==='events';
+    catsEl.hidden=live||evs;Array.prototype.forEach.call(catsEl.children,function(b,i){b.setAttribute('aria-selected',i===state.cat)});
     tabTop.setAttribute('aria-selected',state.tab==='top');tabOn.setAttribute('aria-selected',state.tab==='on');tabLive.setAttribute('aria-selected',live);
     searchEl.classList.toggle('live',live);goEl.hidden=!live;qEl.placeholder=live?'Minecraft username':'Search players';
-    lvEl.hidden=!live;tableEl.hidden=live;
+    tabEv.setAttribute('aria-selected',evs);lvEl.hidden=!live;tableEl.hidden=live||evs;evEl.hidden=!evs;
     if(live){podEl.hidden=true;metaEl.textContent='Check a player\u2019s real MCTiers and SubTiers ranks';if(!lvEl.firstChild)liveHint();return}
+    if(evs){podEl.hidden=true;renderEvents();return}
     var q=state.q,hit=function(p){return !q||p.n.toLowerCase().indexOf(q)>-1},list,pod=false,meta;
     if(state.tab==='top'){
       if(q){list=V.filter(hit);meta=list.length+(list.length===1?' player':' players')+' matching \u201c'+qEl.value.trim()+'\u201d'}
@@ -2685,7 +2760,7 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
       var all=P.filter(function(p){return p.on}).length;
       meta=q?list.length+' online matching \u201c'+qEl.value.trim()+'\u201d':all+' players online now';
     }
-    metaEl.textContent=meta;
+    metaEl.textContent=meta+(staleNote?' \u00b7 '+staleNote:'');
     podEl.hidden=!pod;if(pod)podium(V.slice(0,3));
     rowsEl.replaceChildren();list.forEach(function(p){rowsEl.append(row(p))});
     var none=!list.length&&!pod;emptyEl.hidden=!none;headEl.hidden=none;tableEl.hidden=!list.length&&pod;
@@ -2694,6 +2769,7 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
       if(q){var nm=qEl.value.trim(),bt=el('button','btn ghost','Check live tiers for \u201c'+nm+'\u201d');bt.type='button';bt.style.marginTop='16px';bt.addEventListener('click',function(){goLive(nm)});emptyEl.append(document.createElement('br'),bt)}
     }
   }
+  tabEv.addEventListener('click',function(){state.tab='events';state.q=qEl.value.trim().toLowerCase();render()});
   tabTop.addEventListener('click',function(){state.tab='top';state.q=qEl.value.trim().toLowerCase();render()});
   tabOn.addEventListener('click',function(){state.tab='on';state.q=qEl.value.trim().toLowerCase();render()});
   tabLive.addEventListener('click',function(){state.tab='live';render();qEl.focus()});
@@ -2901,9 +2977,10 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
     });
     var lb=el('button','pf-livebtn','Check live tiers for '+p.n+' \u2192');lb.type='button';lb.addEventListener('click',function(){closeCard();goLive(p.n)});tiers.after(lb);
     var fl=document.getElementById('pf-fights');fl.replaceChildren();
+    if(!(p.f&&p.f.length))fl.append(el('p','pf-nofight','No PvP fights recorded yet.'));
     (p.f||[]).forEach(function(f){
       var r=el('div','ft'+(f[2]?' win':'')),op=el('div','op'),t=el('div');
-      t.append(el('b',null,f[0]),el('small',null,(f[6]?f[6]+' \u00b7 ':'')+fmt(f[1])+' Elo'));op.append(av(f[0]),t);
+      t.append(el('b',null,f[0]),el('small',null,f[1]!=null?(f[6]?f[6]+' \u00b7 ':'')+fmt(f[1])+' Elo':''));op.append(av(f[0]),t);
       var dt=el('div','dt');dt.append(document.createTextNode(f[5]),document.createElement('br'),document.createTextNode(f[4]));
       var rs=el('div','rs');rs.append(el('em',null,f[2]?'WIN':'LOSS'));if(f[3])rs.append(el('span',null,f[3]+' Elo'));
       r.append(op,dt,rs);fl.append(r);

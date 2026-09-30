@@ -636,6 +636,18 @@ button.lb-row:hover{background:rgba(126,203,255,.07)}
 .lb-tab{white-space:nowrap}
 .lb-cats{display:flex;margin-top:14px;overflow-x:auto;max-width:100%}.lb-cats .lb-tab{flex:1;justify-content:center}
 .lb-search input::-webkit-search-cancel-button{display:none}
+/* ---------- search suggestions dropdown ---------- */
+.lb-sug{position:absolute;left:0;right:0;top:calc(100% + 8px);z-index:70;padding:8px;border-radius:20px;background:rgba(6,13,32,.97);border:1px solid var(--edge);box-shadow:0 18px 44px rgba(0,0,0,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;flex-direction:column;gap:2px;max-height:min(420px,60vh);overflow-y:auto}
+.lb-sug[hidden]{display:none}
+.sug-i{display:flex;align-items:center;gap:12px;width:100%;padding:8px 10px;border:0;border-radius:13px;background:none;color:var(--ice-1);font:600 15px var(--font-b,inherit);text-align:left;cursor:pointer}
+.sug-i:hover,.sug-i.on{background:rgba(126,203,255,.14)}
+.sug-i .av{width:36px;height:36px;border-radius:9px}
+.sug-i .avw{flex:none}
+.sug-n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sug-i small{margin-left:auto;font-size:11.5px;font-weight:600;white-space:nowrap}
+.sug-none{padding:10px 12px 6px;font-size:14px;color:var(--muted)}
+.sug-live{color:var(--ice-3);font-size:14px}
+
 @media (max-width:700px){.lv{padding:16px}.lv-grid{grid-template-columns:1fr}.lb-tab{padding:9px 10px;font-size:13.5px}}
 
 /* ---------- responsive ---------- */
@@ -2310,8 +2322,9 @@ html[data-theme="amoled"] .ev-row{background:rgba(0,0,0,.5)}
       </div>
       <label class="lb-search"><span class="sr">Search players</span>
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.6-3.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <input type="search" id="lb-q" placeholder="Search players" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search">
+        <input type="search" id="lb-q" placeholder="Search players" role="combobox" aria-expanded="false" aria-controls="lb-sug" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search">
         <button type="button" class="lb-go" id="lb-go" hidden>Look up</button>
+        <div class="lb-sug" id="lb-sug" role="listbox" aria-label="Matching players" hidden></div>
       </label>
     </div>
     <div class="lb-tabs lb-cats" id="lb-cats" role="tablist" aria-label="Leaderboard category"></div>
@@ -2743,38 +2756,73 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
   var tabLive=document.getElementById('tab-live'),lvEl=document.getElementById('lv'),tableEl=document.getElementById('lb-table'),searchEl=document.querySelector('.lb-search'),goEl=document.getElementById('lb-go');
   function render(){
     var live=state.tab==='live';
-    var V=P.slice().sort(CATS[state.cat].cmp);V.forEach(function(p,i){p.vp=i+1});
+    var isTop=state.tab==='top';
+    var V=P.slice().sort((isTop?CATS[state.cat]:CATS[0]).cmp);V.forEach(function(p,i){p.vp=i+1});
     var evs=state.tab==='events';
-    catsEl.hidden=live||evs;Array.prototype.forEach.call(catsEl.children,function(b,i){b.setAttribute('aria-selected',i===state.cat)});
+    closeSug();
+    catsEl.hidden=!isTop;Array.prototype.forEach.call(catsEl.children,function(b,i){b.setAttribute('aria-selected',i===state.cat)});
     tabTop.setAttribute('aria-selected',state.tab==='top');tabOn.setAttribute('aria-selected',state.tab==='on');tabLive.setAttribute('aria-selected',live);
     searchEl.classList.toggle('live',live);goEl.hidden=!live;qEl.placeholder=live?'Minecraft username':'Search players';
     tabEv.setAttribute('aria-selected',evs);lvEl.hidden=!live;tableEl.hidden=live||evs;evEl.hidden=!evs;
     if(live){podEl.hidden=true;metaEl.textContent='Check a player\u2019s real MCTiers and SubTiers ranks';if(!lvEl.firstChild)liveHint();return}
     if(evs){podEl.hidden=true;renderEvents();return}
-    var q=state.q,hit=function(p){return !q||p.n.toLowerCase().indexOf(q)>-1},list,pod=false,meta;
-    if(state.tab==='top'){
-      if(q){list=V.filter(hit);meta=list.length+(list.length===1?' player':' players')+' matching \u201c'+qEl.value.trim()+'\u201d'}
-      else{pod=P.length>=1;list=V.slice(3,20);meta=P.length?CATS[state.cat].n+' \u2014 top '+Math.min(20,P.length)+' of '+P.length+' players':'Loading server stats\u2026'}
+    var list,pod=false,meta;
+    if(isTop){
+      pod=P.length>=1;list=V.slice(3,20);meta=P.length?CATS[state.cat].n+' \u2014 top '+Math.min(20,P.length)+' of '+P.length+' players':'Loading server stats\u2026';
     }else{
-      list=V.filter(function(p){return p.on&&hit(p)});
-      var all=P.filter(function(p){return p.on}).length;
-      meta=q?list.length+' online matching \u201c'+qEl.value.trim()+'\u201d':all+' players online now';
+      list=V.filter(function(p){return p.on});
+      meta=list.length+(list.length===1?' player':' players')+' online now';
     }
     metaEl.textContent=meta+(staleNote?' \u00b7 '+staleNote:'');
     podEl.hidden=!pod;if(pod)podium(V.slice(0,3));
     rowsEl.replaceChildren();list.forEach(function(p){rowsEl.append(row(p))});
     var none=!list.length&&!pod;emptyEl.hidden=!none;headEl.hidden=none;tableEl.hidden=!list.length&&pod;
     if(none){
-      emptyEl.replaceChildren(document.createTextNode(state.tab==='on'&&!q?'Nobody is online right now.':'No players found.'));
-      if(q){var nm=qEl.value.trim(),bt=el('button','btn ghost','Check live tiers for \u201c'+nm+'\u201d');bt.type='button';bt.style.marginTop='16px';bt.addEventListener('click',function(){goLive(nm)});emptyEl.append(document.createElement('br'),bt)}
+      emptyEl.replaceChildren(document.createTextNode(state.tab==='on'?'Nobody is online right now.':'No players found.'));
     }
   }
   tabEv.addEventListener('click',function(){state.tab='events';state.q=qEl.value.trim().toLowerCase();render()});
   tabTop.addEventListener('click',function(){state.tab='top';state.q=qEl.value.trim().toLowerCase();render()});
   tabOn.addEventListener('click',function(){state.tab='on';state.q=qEl.value.trim().toLowerCase();render()});
   tabLive.addEventListener('click',function(){state.tab='live';render();qEl.focus()});
-  qEl.addEventListener('input',function(){state.q=qEl.value.trim().toLowerCase();if(state.tab!=='live')render()});
-  qEl.addEventListener('keydown',function(e){if(e.key==='Enter'&&state.tab==='live'){e.preventDefault();lookup(qEl.value)}});
+  // ---------- search suggestions (type a few letters, pick a player, their card opens) ----------
+  var sugEl=document.getElementById('lb-sug'),sugItems=[],sugIdx=-1;
+  function closeSug(){sugEl.hidden=true;sugEl.replaceChildren();sugItems=[];sugIdx=-1;qEl.setAttribute('aria-expanded','false')}
+  function hlSug(i){
+    if(!sugItems.length)return;
+    sugIdx=(i+sugItems.length)%sugItems.length;
+    sugItems.forEach(function(it,j){it.b.classList.toggle('on',j===sugIdx);it.b.setAttribute('aria-selected',j===sugIdx)});
+    sugItems[sugIdx].b.scrollIntoView({block:'nearest'});
+  }
+  function addSug(b,fn){b.type='button';b.setAttribute('role','option');b.addEventListener('mousedown',function(e){e.preventDefault()});b.addEventListener('click',fn);sugEl.append(b);sugItems.push({b:b,fn:fn})}
+  function showSug(){
+    var raw=qEl.value.trim(),q=raw.toLowerCase();
+    if(state.tab==='live'||!q){closeSug();return}
+    var starts=[],has=[],byElo=function(a,b){return b.elo-a.elo};
+    P.forEach(function(p){var n=p.n.toLowerCase(),i=n.indexOf(q);if(i===0)starts.push(p);else if(i>-1)has.push(p)});
+    var list=starts.sort(byElo).concat(has.sort(byElo)).slice(0,7);
+    sugEl.replaceChildren();sugItems=[];sugIdx=-1;
+    list.forEach(function(p){
+      var b=el('button','sug-i');
+      b.append(avw(p,true),el('span','sug-n',p.n),el('small','rkn k'+p.rk,RN(p)));
+      addSug(b,function(){closeSug();qEl.blur();openCard(p,qEl)});
+    });
+    if(!list.length){
+      sugEl.append(el('div','sug-none','No players found'));
+      addSug(el('button','sug-i sug-live','Check live tiers for \u201c'+raw+'\u201d'),function(){closeSug();goLive(raw)});
+    }
+    sugEl.hidden=false;qEl.setAttribute('aria-expanded','true');
+  }
+  qEl.addEventListener('input',function(){state.q=qEl.value.trim().toLowerCase();showSug()});
+  qEl.addEventListener('focus',showSug);
+  qEl.addEventListener('keydown',function(e){
+    if(state.tab==='live'){if(e.key==='Enter'){e.preventDefault();lookup(qEl.value)}return}
+    if(e.key==='ArrowDown'){if(sugEl.hidden)showSug();else hlSug(sugIdx+1);e.preventDefault()}
+    else if(e.key==='ArrowUp'){if(!sugEl.hidden){hlSug(sugIdx<0?-1:sugIdx-1);e.preventDefault()}}
+    else if(e.key==='Enter'){if(sugItems.length){e.preventDefault();sugItems[sugIdx<0?0:sugIdx].fn()}}
+    else if(e.key==='Escape'){closeSug()}
+  });
+  document.addEventListener('click',function(e){if(!searchEl.contains(e.target))closeSug()});
   goEl.addEventListener('click',function(){lookup(qEl.value)});
   function goLive(name){state.tab='live';qEl.value=name;render();lookup(name);lvEl.scrollIntoView({behavior:'smooth',block:'start'})}
   render();

@@ -2433,14 +2433,22 @@ html[data-theme="amoled"] .ev-row{background:rgba(0,0,0,.5)}
       .tm,.jn{margin-top:20px;border-radius:26px;padding:20px}
       .tm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
       .tm-card{background:rgba(4,12,30,.45);border:1px solid var(--edge);border-radius:18px;padding:14px}
-      .tm-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+      .tm-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+      .tm-title{display:flex;align-items:center;gap:8px;min-width:0}
+      .tm-title .tm-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
       .tm-tag{font-family:monospace;font-weight:700;letter-spacing:.03em;color:var(--ice-2,#7ecbff);font-size:12.5px}
-      .tm-ct{font-size:12px;color:var(--muted)}
-      .tm-name{margin:0 0 10px;font-size:17px}
+      .tm-ct{font-size:12.5px;color:var(--muted);flex-shrink:0;font-weight:600}
+      .tm-name{margin:0;font-size:17px}
+      .tm-stat{display:flex;gap:12px;margin:0 0 10px;font-size:12px;color:var(--muted)}
+      .tm-stat span{display:inline-flex;align-items:center;gap:5px}
+      .tm-sd{width:7px;height:7px;border-radius:50%;background:#6b7280;display:inline-block}
+      .tm-on .tm-sd{background:#3ddc84;box-shadow:0 0 6px rgba(61,220,132,.7)}
+      .tm-on{color:#8ff0b8}
       .tm-members{display:flex;flex-wrap:wrap;gap:8px}
       .tm-chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.04);border:1px solid var(--edge);border-radius:999px;padding:4px 10px 4px 4px;font-size:13px}
       .tm-chip.on{border-color:rgba(126,203,255,.5)}
-      .tm-chip .av{width:22px;height:22px;border-radius:7px}
+      .tm-chip .av{width:22px;height:22px;border-radius:7px;border:2px solid #ef4444;box-shadow:0 0 6px rgba(239,68,68,.45);box-sizing:border-box}
+      .tm-chip.on .av{border-color:#3ddc84;box-shadow:0 0 6px rgba(61,220,132,.55)}
       .tm-chip .dot{margin-left:2px}
       .tm-badge{margin-left:4px;color:#ffd25c;font-style:normal}
       .tm-badge-img{display:inline-block;width:auto;height:14px;margin-left:5px;vertical-align:-2px;object-fit:contain;image-rendering:auto}
@@ -2871,9 +2879,16 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
     var online=members.filter(function(m){return m.online}).length;
     var card=el('div','tm-card');
     var head=el('div','tm-head');
-    var lim=+t.limit||0;head.append(el('span','tm-ct',lim>0?members.length+'/'+lim:members.length+(members.length===1?' member':' members')));
-    if(t.tag)head.append(el('span','tm-tag','['+t.tag+']'));
-    card.append(head,el('h3','tm-name',t.name));
+    var left=el('div','tm-title');
+    left.append(el('h3','tm-name',t.name));
+    if(t.tag)left.append(el('span','tm-tag','['+t.tag+']'));
+    var lim=+t.limit||0;
+    head.append(left,el('span','tm-ct',lim>0?members.length+'/'+lim:members.length+(members.length===1?' member':' members')));
+    card.append(head);
+    var stat=el('div','tm-stat');
+    var on=el('span','tm-on');on.append(el('i','tm-sd'),document.createTextNode(online+' online'));
+    var off=el('span','tm-off');off.append(el('i','tm-sd'),document.createTextNode((members.length-online)+' offline'));
+    stat.append(on,off);card.append(stat);
     var mem=el('div','tm-members');
     members.forEach(function(m){
       var chip=el('span','tm-chip'+(m.online?' on':''));

@@ -3244,7 +3244,7 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
     function fresh(p){var c=tierCache[p.n.toLowerCase()];return c&&Date.now()-c.t<TIER_TTL}
     function paint(){
       var found=P.map(function(p){var c=tierCache[p.n.toLowerCase()];return{p:p,d:c&&c.d}}).filter(function(x){return x.d&&x.d.list&&x.d.list.length});
-      found.sort(function(a,b){return b.d.list[0].score-a.d.list[0].score||(b.d.points||0)-(a.d.points||0)||b.p.elo-a.p.elo});
+      found.sort(function(a,b){return (b.d.points||0)-(a.d.points||0)||b.d.list[0].score-a.d.list[0].score||(a.d.list[0].retired-b.d.list[0].retired)||b.p.elo-a.p.elo});
       list.replaceChildren();
       found.forEach(function(x){
         var top=x.d.list[0],r=el('button','lv-row');r.type='button';

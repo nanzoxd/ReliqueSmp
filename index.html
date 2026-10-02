@@ -603,6 +603,15 @@ button.lb-row:hover{background:rgba(126,203,255,.07)}
 .tb.mt{color:#d8b4fe;background:rgba(192,132,252,.14);border:1px solid rgba(192,132,252,.45)}
 
 
+.lv-all{display:flex;flex-direction:column;gap:10px}
+.lv-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%;text-align:left;padding:12px 14px;border-radius:16px;cursor:pointer;color:inherit;font:inherit;background:rgba(4,12,30,.5);border:1px solid rgba(126,203,255,.12)}
+.lv-row:hover{background:rgba(126,203,255,.08)}
+.lv-row .nm{display:flex;flex-direction:column;min-width:0;flex:1}
+.lv-row .nm b{font:600 15px var(--font-d);color:var(--ice-1);overflow-wrap:anywhere}
+.lv-row .nm small{color:var(--muted);font-size:12px}
+.lv-row .avw .av{width:40px;height:40px;border-radius:10px}
+.lv-row-pills{flex-basis:100%;margin-top:0}
+.lv-back{width:auto;margin:0 0 0 auto;padding:8px 14px}
 /* live tier lookup */
 .lb-table[hidden],.lv[hidden],.lb-go[hidden]{display:none}
 .lb-search.live input{padding-right:96px}
@@ -3063,7 +3072,7 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
     searchEl.classList.toggle('live',live);goEl.hidden=!live;qEl.placeholder=live?'Minecraft username':'Search players';
     tabEv.setAttribute('aria-selected',evs);tabTeams.setAttribute('aria-selected',teamsTab);tabJoined.setAttribute('aria-selected',joinedTab);
     lvEl.hidden=!live;tableEl.hidden=live||evs||teamsTab||joinedTab;evEl.hidden=!evs;tmEl.hidden=!teamsTab;jnEl.hidden=!joinedTab;
-    if(live){podEl.hidden=true;metaEl.textContent='Check a player\u2019s real MCTiers and SubTiers ranks';if(!lvEl.firstChild)liveHint();return}
+    if(live){podEl.hidden=true;metaEl.textContent=lvMode==='all'?'Every tier-tested player on the server \u00b7 search any username to check them':'Check a player\u2019s real MCTiers and SubTiers ranks';if(lvMode==='all')liveAll();else if(!lvEl.firstChild)liveHint();return}
     if(evs){podEl.hidden=true;renderEvents();return}
     if(teamsTab){podEl.hidden=true;renderTeams();return}
     if(joinedTab){podEl.hidden=true;renderJoined();return}
@@ -3087,7 +3096,7 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
   tabOn.addEventListener('click',function(){state.tab='on';state.q=qEl.value.trim().toLowerCase();render()});
   tabTeams.addEventListener('click',function(){state.tab='teams';render()});
   tabJoined.addEventListener('click',function(){state.tab='joined';JOINED_PAGE=1;render()});
-  tabLive.addEventListener('click',function(){state.tab='live';render();qEl.focus()});
+  tabLive.addEventListener('click',function(){state.tab='live';if(!qEl.value.trim())lvMode='all';render();qEl.focus()});
   // ---------- search suggestions (type a few letters, pick a player, their card opens) ----------
   var sugEl=document.getElementById('lb-sug'),sugItems=[],sugIdx=-1;
   function closeSug(){sugEl.hidden=true;sugEl.replaceChildren();sugItems=[];sugIdx=-1;qEl.setAttribute('aria-expanded','false')}
@@ -3217,14 +3226,66 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
     var t=el('div','lv-top'),L=el('div'),gr=el('div','gm-row'),bi=icon(ui.k,top.slug,30);L.append(el('small',null,'Highest tier'),el('b',null,top.mode));if(bi)gr.append(bi);gr.append(L);t.append(gr,el('span','tb '+TCLS(top.label),top.label));box.append(t);
     var pills=el('div','lv-pills');d.list.forEach(function(x){var pl=el('span','lv-pill'),pi=icon(ui.k,x.slug,18);if(pi)pl.append(pi);pl.append(document.createTextNode(x.mode),el('span','tb '+TCLS(x.label),x.label));pills.append(pl)});box.append(pills);
   }
+
+  // ---------- all tier-tested players (every server player who is ranked on MCTiers) ----------
+  var lvMode='all',tierSig='',tierRun=0,TIER_KEY='relique-tier-cache',TIER_TTL=30*60*1000,tierCache={};
+  try{tierCache=JSON.parse(localStorage.getItem(TIER_KEY)||'{}')||{}}catch(e){tierCache={}}
+  function saveTiers(){try{localStorage.setItem(TIER_KEY,JSON.stringify(tierCache))}catch(e){}}
+  function liveAll(){
+    var names=P.map(function(p){return p.n.toLowerCase()}).sort().join('|');
+    if(names===tierSig&&lvEl.firstChild)return;
+    tierSig=names;var my=++tierRun;
+    lvEl.replaceChildren();
+    var head=el('div','lv-head'),info=el('div'),h2=el('h2',null,'Tier-tested players');h2.append(el('span','lv-live','LIVE'));
+    var sm=el('small',null,P.length?'Checking players\u2026':'Loading server players\u2026');info.append(h2,sm);head.append(info);
+    var list=el('div','lv-all');lvEl.append(head,list);
+    if(!P.length)return;
+    var site=LIVE[0],total=P.length,checked=0;
+    function fresh(p){var c=tierCache[p.n.toLowerCase()];return c&&Date.now()-c.t<TIER_TTL}
+    function paint(){
+      var found=P.map(function(p){var c=tierCache[p.n.toLowerCase()];return{p:p,d:c&&c.d}}).filter(function(x){return x.d&&x.d.list&&x.d.list.length});
+      found.sort(function(a,b){return b.d.list[0].score-a.d.list[0].score||(b.d.points||0)-(a.d.points||0)||b.p.elo-a.p.elo});
+      list.replaceChildren();
+      found.forEach(function(x){
+        var top=x.d.list[0],r=el('button','lv-row');r.type='button';
+        var nm=el('span','nm');nm.append(el('b',null,x.p.n),el('small',null,(x.d.region?x.d.region+' \u00b7 ':'')+top.mode));
+        var bi=icon('mc',top.slug,22);
+        r.append(avw(x.p,true),nm);if(bi)r.append(bi);r.append(el('span','tb '+TCLS(top.label),top.label));
+        var pills=el('div','lv-pills lv-row-pills');
+        x.d.list.forEach(function(g){var pl=el('span','lv-pill'),pi=icon('mc',g.slug,16);if(pi)pl.append(pi);pl.append(document.createTextNode(g.mode),el('span','tb '+TCLS(g.label),g.label));pills.append(pl)});
+        r.append(pills);
+        r.addEventListener('click',function(){goLive(x.p.n)});
+        list.append(r);
+      });
+      sm.textContent=(checked<total?'Checked '+checked+' of '+total+' players \u00b7 ':'')+found.length+(found.length===1?' tier-tested player':' tier-tested players')+(checked>=total&&!found.length?' \u2014 none of the server players are ranked yet':'');
+    }
+    var queue=[];
+    P.forEach(function(p){if(fresh(p))checked++;else queue.push(p)});
+    paint();
+    function next(){
+      if(my!==tierRun)return;
+      var p=queue.shift();if(!p)return;
+      fetchSite(site,p.n,resolveUuid(p.n)).then(function(d){
+        if(my!==tierRun)return;
+        tierCache[p.n.toLowerCase()]={t:Date.now(),d:d};
+      },function(){}).then(function(){
+        if(my!==tierRun)return;
+        checked++;saveTiers();paint();next();
+      });
+    }
+    for(var i=0;i<4;i++)next();
+  }
   function liveHint(){lvEl.replaceChildren();var h=el('p','lv-hint');h.innerHTML='Type a Minecraft username above and press <b>Enter</b> to see their <b>real</b> highest tier on MCTiers and SubTiers.';lvEl.append(h)}
   var token=0;
   function lookup(raw){
     var name=(raw||'').trim();
+    if(!name){lvMode='all';tierSig='';liveAll();return}
+    lvMode='one';
     if(!/^\.?[A-Za-z0-9_]{2,16}$/.test(name)){lvEl.replaceChildren();var e=el('p','lv-hint','Enter a valid Minecraft username (2\u201316 letters, numbers or _).');lvEl.append(e);return}
     var my=++token;lvEl.replaceChildren();
     var head=el('div','lv-head'),info=el('div'),h2=el('h2',null,name);h2.append(el('span','lv-live','LIVE'));info.append(h2,el('small',null,'Real data from each tier list'));
     head.append(av(name),info);
+    var back=el('button','pf-livebtn lv-back','\u2190 All tier-tested players');back.type='button';back.addEventListener('click',function(){qEl.value='';lvMode='all';tierSig='';render()});head.append(back);
     var grid=el('div','lv-grid');lvEl.append(head,grid);
     var uuidP=resolveUuid(name),ui={};
     grid.style.gridTemplateColumns='1fr';

@@ -1822,7 +1822,8 @@ html[data-theme="amoled"] .ice-snow{display:none !important}
 .ev-t{flex:none;font-size:12px;color:var(--muted)}
 html[data-theme="amoled"] .ev-row{background:rgba(0,0,0,.5)}
 @media (max-width:700px){.ev{padding:8px}.ev-row{flex-direction:column;align-items:flex-start;gap:6px}}
-</style></head>
+</style><script>try{if((localStorage.getItem('relique-theme')||'amoled')==='amoled')document.documentElement.setAttribute('data-theme','amoled')}catch(e){document.documentElement.setAttribute('data-theme','amoled')}</script>
+</head>
 <body>
 <div class="ice-snow idle" aria-hidden="true"><div class="sw"><div class="sf a"></div><div class="sf b"></div></div></div>
 <div class="star-fall" aria-hidden="true"><div class="sw"><div class="sf a"></div><div class="sf b"></div></div></div>
@@ -3537,8 +3538,8 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
 
   /* ---------- theme (dark / AMOLED), persisted ---------- */
   var themeBtn=document.getElementById('themetoggle');
-  var savedTheme='dark';
-  try{ savedTheme=localStorage.getItem('relique-theme')||'dark' }catch(e){}
+  var savedTheme='amoled'; // AMOLED dark is the default; a visitor's own choice is remembered
+  try{ savedTheme=localStorage.getItem('relique-theme')||'amoled' }catch(e){}
   if(savedTheme==='amoled') document.documentElement.setAttribute('data-theme','amoled');
   if(themeBtn) themeBtn.addEventListener('click',function(){
     var on=document.documentElement.getAttribute('data-theme')==='amoled';

@@ -1860,6 +1860,7 @@ html[data-theme="amoled"] .ev-row{background:rgba(0,0,0,.5)}
     <a href="#home" data-scroll="hx-rules">Rules</a>
     <i class="rq-sep" aria-hidden="true"></i>
     <a href="#home" data-scroll="hx-concept">Concept</a>
+    <a href="#home" data-scroll="hx-videos" id="rqVideosLink" hidden>Uploads</a>
     <a href="#home" data-scroll="elo-about">Elo System</a>
   </nav>
   <!-- Socials: set href and remove "hidden" to show a tile. Discord is already live. -->
@@ -1942,6 +1943,11 @@ html[data-theme="amoled"] .ev-row{background:rgba(0,0,0,.5)}
   <div class="rqc-dots" role="group" aria-label="Choose a card"></div>
 </section>
 
+    <section class="hx-sec" id="hx-videos" aria-labelledby="hx-videos-h" hidden>
+      <div class="vd-head"><div><h2 class="hx-h" id="hx-videos-h">Watch Relique SMP</h2></div></div>
+      <ul class="vd-grid"></ul>
+    </section>
+
     <section class="hx-elo" id="elo-about" aria-labelledby="hx-elo-h">
       <i class="hx-tile-art art-a12" aria-hidden="true"></i>
       <h2 class="hx-h" id="hx-elo-h">About the Elo system</h2>
@@ -1962,6 +1968,8 @@ html[data-theme="amoled"] .ev-row{background:rgba(0,0,0,.5)}
       <div><h2 class="hx-h">Discord</h2><p>Report rule breaks, open a support ticket, appeal a punishment or catch the latest announcements.</p></div>
       <span class="btn primary">Join the Discord</span>
     </a>
+
+
   </div>
 </section>
 
@@ -4126,6 +4134,7 @@ html body .phead::before{opacity:.6}
 
 
 </style>
+<script src="videos.js"></script>
 <script id="rq-redesign-js">
 (function(){
   'use strict';
@@ -4289,9 +4298,10 @@ html body .phead::before{opacity:.6}
     var line=window.innerHeight*.38,cur=items[0];
     items.forEach(function(a){
       var el=d.getElementById(a.getAttribute('data-scroll'));
-      if(el&&el.getBoundingClientRect().top<=line)cur=a;
+      if(el&&el.getClientRects().length&&el.getBoundingClientRect().top<=line)cur=a;
     });
-    if(window.innerHeight+window.scrollY>=d.documentElement.scrollHeight-4)cur=items[items.length-1];
+    var vis=items.filter(function(a){return !a.hidden});
+    if(window.innerHeight+window.scrollY>=d.documentElement.scrollHeight-4)cur=vis[vis.length-1]||cur;
     items.forEach(function(a){
       var on=a===cur;a.classList.toggle('active',on);
       if(on)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');

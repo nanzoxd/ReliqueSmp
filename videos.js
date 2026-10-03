@@ -17,6 +17,7 @@
 
 window.RELIQUE_VIDEOS = {
   title: 'Watch Relique SMP',
+  subtitle: 'Videos and highlights from the server.',
 
   videos: [
     /* 1  */ 'https://youtu.be/s6naKooW18g?si=jV1pmJ4g_kj7jl8_',
@@ -61,9 +62,6 @@ window.RELIQUE_VIDEOS = {
     '#hx-videos .vd-grid{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:22px}' +
     '#hx-videos .vd-tile{margin:0;min-width:0}' +
     '#hx-videos [hidden]{display:none!important}' +
-    /* heading look: heavy white title, small yellow spaced subtitle */
-    '#hx-videos .hx-h{font:400 clamp(30px,6.2vw,52px)/1 "Archivo Black","Unbounded",system-ui,sans-serif;text-transform:uppercase;letter-spacing:0;color:#fff;margin:0}' +
-    '#hx-videos .hx-sub{margin:10px 0 0;font:700 clamp(10px,1.6vw,12px)/1.2 "Space Mono",ui-monospace,monospace;text-transform:uppercase;letter-spacing:.14em;color:#ffd25c;max-width:none}' +
     '.vd-card{position:relative;display:block;width:100%;aspect-ratio:16/9;padding:0;border:1px solid var(--cd-edge,rgba(150,208,255,.22));border-radius:22px;overflow:hidden;background:#050a18 center/cover no-repeat;cursor:pointer;color:#fff;box-shadow:0 24px 50px -28px rgba(0,0,0,.8)}' +
     '.vd-card:focus-visible{outline:2px solid var(--glow,#7fd0ff);outline-offset:3px}' +
     '.vd-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(2,6,16,.7));pointer-events:none}' +
@@ -73,21 +71,15 @@ window.RELIQUE_VIDEOS = {
     '.vd-cap{position:absolute;left:16px;right:16px;bottom:12px;z-index:1;text-align:left;font:600 14px/1.3 var(--font-b,system-ui);text-shadow:0 1px 6px rgba(0,0,0,.8)}' +
     '.vd-frame{display:block;width:100%;aspect-ratio:16/9;border:1px solid var(--cd-edge,rgba(150,208,255,.22));border-radius:22px;background:#000}' +
     '@media (prefers-reduced-motion:reduce){.vd-play{transition:none}}';
-  if (!document.getElementById('rq-videos-font')) {
-    var fl = document.createElement('link');
-    fl.id = 'rq-videos-font';
-    fl.rel = 'stylesheet';
-    fl.href = 'https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@700&display=swap';
-    document.head.appendChild(fl);
-  }
   var st = document.createElement('style');
   st.id = 'rq-videos-css';
   st.textContent = css;
   document.head.appendChild(st);
 
   /* ---- heading ---- */
-  var h = root.querySelector('#hx-videos-h');
+  var h = root.querySelector('#hx-videos-h'), sub = root.querySelector('.hx-sub');
   if (cfg.title) h.textContent = cfg.title;
+  if (cfg.subtitle) sub.textContent = cfg.subtitle; else sub.hidden = true;
   
   /* ---- slides ---- */
   var track = root.querySelector('.vd-grid');

@@ -1902,7 +1902,7 @@ html[data-theme="amoled"] .ev-row{background:rgba(0,0,0,.5)}
           <div class="hx-ips">
             <div class="hx-ipr"><span class="hx-k">First IP Address</span><button type="button" class="hx-ip" id="srv-ip-copy" title="Click to copy IP"><code data-ip></code><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2.5"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/></svg></button></div>
             <div class="hx-ipr"><span class="hx-k">Second IP Address</span><button type="button" class="hx-ip" data-copy="reliques3.spinex.cloud" title="Click to copy IP"><code>reliques3.spinex.cloud</code><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2.5"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/></svg></button></div>
-            <div class="hx-ipr"><span class="hx-k">Third IP Address</span><button type="button" class="hx-ip" data-copy="187.127.139.212:19734" title="Click to copy IP"><code>187.127.139.212:19734</code><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2.5"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/></svg></button></div>
+            <div class="hx-ipr"><span class="hx-k">Third IP Address</span><button type="button" class="hx-ip" data-copy="201.18.192.202:19224" title="Click to copy IP"><code>201.18.192.202:19224</code><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2.5"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/></svg></button></div>
           </div>
         </article>
         <article class="hx-tile hx-type">
@@ -2409,7 +2409,7 @@ html[data-theme="amoled"] .ev-row{background:rgba(0,0,0,.5)}
   /* Fallback that works with no backend. TRADE-OFF: the address below is readable in the page source.
      Once /api/status is deployed and working, set USE_DIRECT_FALLBACK=false (and delete DIRECT) to keep it private. */
   var USE_DIRECT_FALLBACK=true;
-  var DIRECT='187.127.139.212:19768';
+  var DIRECT='201.18.192.202:19224';
   var CHECKS=[[viaFunction,'']];
   if(USE_DIRECT_FALLBACK)CHECKS.push([viaMcStatus,DIRECT],[viaSrvStat,DIRECT]);
   CHECKS.push([viaPlugin,''],[viaSrvStat,SRV],[viaMcStatus,SRV]);
@@ -2890,7 +2890,7 @@ document.getElementById('rc-nums').addEventListener('change', e => document.getE
   var LADDER=[['Rookie',700],['Combat Novice',950],['Combat Cadet',1200],['Combat Specialist',1450],['Combat Ace',1700],['Combat Master',1950],['Combat Grandmaster',1950]];
   var COLORS=['#9aa7bd','#6ee7a8','#7ecbff','#c4a4ff','#ffd25c','#ff9a5c','#ff5c7a'];
   // ---------- server link: URL of the Relique Online API plugin (see plugin config.yml port) ----------
-  var API_URL='/relique'; // same-site path; vercel.json forwards it to the plugin (http://187.127.139.212:19489)
+  var API_URL='/relique'; // same-site path; vercel.json forwards it to the plugin (http://201.18.192.202:19395)
   var API_KEY=''; // only if you set api-key in the plugin config
   var SITES=[
     {k:'mc',n:'MCTiers',u:'https://mctiers.com/rankings/overall',modes:['Sword','SMP','Axe','Mace','Pot','UHC','NethOP','Vanilla'],t:['HT','LT']},

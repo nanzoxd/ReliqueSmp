@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/relique/:path*",
-      "destination": "http://201.18.192.202:19395/:path*"
+      "destination": "http://187.126.120.209:19395/:path*"
     }
   ]
 }

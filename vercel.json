@@ -11,7 +11,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com;"
+          "value": "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://e.widgetbot.io https://*.widgetbot.io;"
         },
         {
           "key": "Permissions-Policy",

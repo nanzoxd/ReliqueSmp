@@ -1,0 +1,27 @@
+{
+  "rewrites": [
+    {
+      "source": "/relique/:path*",
+      "destination": "http://187.126.120.209:19395/:path*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://e.widgetbot.io https://*.widgetbot.io;"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "autoplay=*, fullscreen=*, picture-in-picture=*"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        }
+      ]
+    }
+  ]
+}

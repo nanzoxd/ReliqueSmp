@@ -2113,7 +2113,7 @@ html.js.rdy .nav-links a{animation-duration:.2s !important}
 </style>
 </head>
 <body><a class="skip" href="#main">Skip to content</a>
-<script>/* ===== SERVER IP: change it here, once. Everything on the site reads this. ===== */window.RQ_IP='reliquesmp.spinex.cloud';</script>
+<script>/* ===== SERVER IP: change it here, once. Everything on the site reads this. ===== */window.RQ_IP='r99-p.lordcloud.ovh:25533';</script>
 <div class="rq-bgart" aria-hidden="true"></div>
 <div class="ice-snow idle" aria-hidden="true"><div class="sw"><div class="sf a"></div><div class="sf b"></div></div></div>
 <div class="star-fall" aria-hidden="true"><div class="sw"><div class="sf a"></div><div class="sf b"></div></div></div>
@@ -2189,9 +2189,7 @@ html.js.rdy .nav-links a{animation-duration:.2s !important}
           <div class="hx-k hx-ipk">Server IP</div>
           <div class="hx-ips">
             <div class="hx-ipr"><span class="hx-k">First IP Address</span><button type="button" class="hx-ip" id="srv-ip-copy" title="Click to copy IP"><code data-ip></code><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2.5"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/></svg></button></div>
-            <div class="hx-ipr"><span class="hx-k">Second IP Address</span><button type="button" class="hx-ip" data-copy="reliques3.spinex.cloud" title="Click to copy IP"><code>reliques3.spinex.cloud</code><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2.5"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/></svg></button></div>
-            <div class="hx-ipr"><span class="hx-k">Third IP Address</span><button type="button" class="hx-ip" data-copy="201.18.192.202:19224" title="Click to copy IP"><code>201.18.192.202:19224</code><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2.5"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/></svg></button></div>
-          </div>
+</div>
         </article>
         <article class="hx-tile hx-type">
           <i class="hx-tile-art art-a3" aria-hidden="true"></i>
@@ -2773,8 +2771,8 @@ html.js.rdy .nav-links a{animation-duration:.2s !important}
   }
   /* Fallback that works with no backend. TRADE-OFF: the address below is readable in the page source.
      Once /api/status is deployed and working, set USE_DIRECT_FALLBACK=false (and delete DIRECT) to keep it private. */
-  var USE_DIRECT_FALLBACK=true;
-  var DIRECT='201.18.192.202:19224';
+  var USE_DIRECT_FALLBACK=false;
+  var DIRECT='';
   var CHECKS=[[viaFunction,'']];
   if(USE_DIRECT_FALLBACK)CHECKS.push([viaMcStatus,DIRECT],[viaSrvStat,DIRECT]);
   CHECKS.push([viaPlugin,''],[viaSrvStat,SRV],[viaMcStatus,SRV]);
@@ -3280,7 +3278,7 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
   var LADDER=[['Rookie',700],['Combat Novice',950],['Combat Cadet',1200],['Combat Specialist',1450],['Combat Ace',1700],['Combat Master',1950],['Combat Grandmaster',1950]];
   var COLORS=['#9aa7bd','#6ee7a8','#7ecbff','#c4a4ff','#ffd25c','#ff9a5c','#ff5c7a'];
   // ---------- server link: URL of the Relique Online API plugin (see plugin config.yml port) ----------
-  var API_URL='/relique'; // same-site path; vercel.json forwards it to the plugin (http://201.18.192.202:19395)
+  var API_URL='/relique'; // same-site path; vercel.json forwards it to the plugin
   var API_KEY=''; // only if you set api-key in the plugin config
   var SITES=[
     {k:'mc',n:'MCTiers',u:'https://mctiers.com/rankings/overall',modes:['Sword','SMP','Axe','Mace','Pot','UHC','NethOP','Vanilla'],t:['HT','LT']},
@@ -3513,7 +3511,7 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
     {k:'elo',n:'Top Elo',sub:'Elo rating',val:function(p){return fmt(p.elo)},cmp:function(a,b){return b.elo-a.elo}},
     {k:'kills',n:'Top Kills',sub:'Kills',val:function(p){return fmt(p.k)},cmp:function(a,b){return b.k-a.k||b.elo-a.elo}},
     {k:'play',n:'Top Playtime',sub:'Playtime',val:function(p){return play(p.h)},cmp:function(a,b){return b.h-a.h||b.elo-a.elo}},
-    {k:'deaths',n:'Top Deaths',sub:'Deaths',val:function(p){return fmt(p.d)},cmp:function(a,b){return b.d-a.d||b.elo-a.elo}}
+    {k:'blocks',n:'Top Blocks Mined',sub:'Blocks mined',val:function(p){return fmt(p.bm)},cmp:function(a,b){return b.bm-a.bm||b.elo-a.elo}}
   ];
   var state={tab:'top',q:'',cat:0};
   var catsEl=document.getElementById('lb-cats');

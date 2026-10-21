@@ -21,13 +21,13 @@ window.RELIQUE_VIDEOS = {
 
   videos: [
     /* 1  */ 'https://youtu.be/s6naKooW18g?si=jV1pmJ4g_kj7jl8_',
-    /* 2  */ '',
-    /* 3  */ '',
-    /* 4  */ '',
-    /* 5  */ '',
-    /* 6  */ '',
-    /* 7  */ '',
-    /* 8  */ '',
+    /* 2  */ 'https://www.youtube.com/watch?v=6U8cCenpJjU',
+    /* 3  */ 'https://youtu.be/6vbJIJUzXcc',
+    /* 4  */ 'https://youtu.be/YWlrxuN94z0?si=nK3W7sg8RXQhys6R',
+    /* 5  */ 'https://youtu.be/m4oIYvIv2RY?si=2Vr21tFrF8JhYjtQ',
+    /* 6  */ 'https://youtu.be/S1TEBRxVnj4?si=k9QA-9bh6RNrz-ty',
+    /* 7  */ 'https://youtu.be/EClVVdog7u0?si=VdTHnPBgphEfKS5U',
+    /* 8  */ 'https://youtu.be/psFTI-DPT3k?si=TcZzPR9QpvQ_JhCU',
     /* 9  */ '',
     /* 10 */ ''
   ]
@@ -116,10 +116,11 @@ window.RELIQUE_VIDEOS = {
     b.addEventListener('click', function () {
       var f = document.createElement('iframe');
       f.className = 'vd-frame';
-      f.src = 'https://www.youtube-nocookie.com/embed/' + v.id + '?autoplay=1&rel=0';
+      f.src = 'https://www.youtube-nocookie.com/embed/' + v.id + '?autoplay=1&rel=0&modestbranding=1';
       f.title = v.title || 'Relique SMP video ' + (i + 1);
-      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen; web-share';
       f.setAttribute('allowfullscreen', '');
+      f.setAttribute('loading', 'lazy');
       f.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
       li.replaceChild(f, b);
       f.focus();

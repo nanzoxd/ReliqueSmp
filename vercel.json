@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/relique/:path*",
-      "destination": "http://in-1.lordnodes.in:25570/:path*"
+      "destination": "http://r99-p.lordcloud.ovh:25551/:path*"
     }
   ],
   "headers": [

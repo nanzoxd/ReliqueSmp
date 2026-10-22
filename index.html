@@ -2111,6 +2111,99 @@ body{background-attachment:scroll !important}
 html.js.rdy .nav{animation-duration:.2s !important}
 html.js.rdy .nav-links a{animation-duration:.2s !important}
 </style>
+<style id="rq-health-css">
+/* ===== Server Pulse page ===== */
+.pl-hero{display:grid;grid-template-columns:minmax(230px,300px) 1fr;gap:22px;padding:22px;margin:0 0 14px}
+.pl-orbbox{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:6px 4px}
+.pl-orb{position:relative;width:104px;height:104px;border-radius:50%;display:grid;place-items:center;margin-bottom:6px;
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.18),rgba(255,255,255,0) 55%),var(--orb,#5ee0a0);box-shadow:0 0 38px -6px var(--orb,#5ee0a0)}
+.pl-orb::before,.pl-orb::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:2px solid var(--orb,#5ee0a0);opacity:.0;animation:plr 2.8s ease-out infinite}
+.pl-orb::after{animation-delay:1.4s}
+.pl-orb.still::before,.pl-orb.still::after{animation:none}
+@keyframes plr{0%{transform:scale(.88);opacity:.55}100%{transform:scale(1.35);opacity:0}}
+.pl-orb svg{width:46px;height:46px;stroke:#04101f;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.pl-state{font-size:13px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--orb,#5ee0a0)}
+.pl-clock{font-size:30px;font-weight:600;color:#fff;line-height:1.1}
+.pl-sub{font-size:12.5px;color:var(--muted);max-width:26ch}
+.pl-side{display:flex;flex-direction:column;gap:16px;min-width:0}
+.pl-gauges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pl-gauge{text-align:center;min-width:0}
+.pl-gauge svg{width:100%;max-width:130px;height:auto;display:block;margin:0 auto}
+.pl-gauge .tr{fill:none;stroke:rgba(126,203,255,.14);stroke-width:9;stroke-linecap:round}
+.pl-gauge .fg{fill:none;stroke-width:9;stroke-linecap:round;transition:stroke-dasharray .6s ease}
+.pl-gauge text{fill:#fff;font-weight:600}
+.pl-gauge b{display:block;font-size:13px;color:var(--ice-1);margin-top:-2px}
+.pl-gauge small{display:block;font-size:11.5px;color:var(--muted)}
+.pl-slots{background:rgba(3,8,20,.4);border:1px solid var(--edge);border-radius:14px;padding:12px 14px}
+.pl-slots-h{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted);margin-bottom:8px}
+.pl-slots-h b{color:var(--ice-1)}
+.pl-meter{position:relative;height:10px;border-radius:99px;background:rgba(126,203,255,.12)}
+.pl-meter i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,#ff6b8b,#ffa3b8)}
+.pl-meter u{position:absolute;top:-4px;bottom:-4px;width:2px;background:#ffd25c;border-radius:2px}
+.pl-tool{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:0 0 14px}
+.pl-chipset{display:flex;flex-wrap:wrap;gap:6px}
+.pl-chip{font:inherit;font-size:13px;color:var(--muted);background:rgba(3,8,20,.45);border:1px solid var(--edge);border-radius:999px;padding:7px 14px;cursor:pointer;transition:all .15s}
+.pl-chip:hover{color:var(--ice-1)}
+.pl-chip[aria-pressed="true"]{color:#04101f;background:var(--ice-2);border-color:var(--ice-2);font-weight:600}
+.pl-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pl-live{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);margin-right:4px}
+.pl-dot{width:8px;height:8px;border-radius:50%;background:#5ee0a0;animation:pld 2s infinite}
+.pl-dot.off{background:#ff6b6b;animation:none}.pl-dot.frz{background:#ffd25c;animation:none}.pl-dot.wait{background:#8aa0ba;animation:none}
+@keyframes pld{70%{box-shadow:0 0 0 7px rgba(94,224,160,0)}0%{box-shadow:0 0 0 0 rgba(94,224,160,.6)}}
+.pl-act{font:inherit;font-size:13px;color:var(--ice-1);background:rgba(126,203,255,.10);border:1px solid var(--edge);border-radius:10px;padding:7px 13px;cursor:pointer}
+.pl-act:hover{background:rgba(126,203,255,.18)}
+.pl-ribbon{padding:16px 20px;margin:0 0 14px}
+.pl-rh{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 14px;margin-bottom:10px;font-size:13px;color:var(--muted)}
+.pl-rh b{color:var(--ice-1)}
+.pl-rib{position:relative;height:18px;border-radius:9px;overflow:hidden;background:rgba(94,224,160,.38)}
+.pl-rib span{position:absolute;top:0;bottom:0;min-width:3px}
+.pl-rib .off{background:#ff5d5d}
+.pl-rib .nod{background:repeating-linear-gradient(135deg,rgba(138,160,186,.35) 0 6px,rgba(138,160,186,.12) 6px 12px)}
+.pl-rib .rs{background:#fff;width:2px;min-width:2px;opacity:.85}
+.pl-rl{display:flex;justify-content:space-between;margin-top:6px;font-size:11.5px;color:var(--muted)}
+.pl-stage{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:14px;margin:0 0 14px}
+.pl-main{padding:18px 18px 14px;min-width:0}
+.pl-mh{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 14px;align-items:baseline;margin:2px 0 8px}
+.pl-mh h3{margin:0;font-size:18px;color:var(--ice-1)}
+.pl-mh span{font-size:13px;color:var(--muted)}
+.pl-plot{position:relative;touch-action:pan-y;outline:none}
+.pl-plot svg{display:block;width:100%;height:auto}
+.pl-plot text{fill:var(--muted);font-size:11px}
+.pl-plot .ln{filter:drop-shadow(0 0 5px var(--glow,rgba(125,189,240,.5)))}
+.pl-tip{position:absolute;top:0;transform:translateX(-50%);pointer-events:none;background:rgba(3,8,20,.96);border:1px solid var(--edge);border-radius:10px;padding:6px 10px;font-size:12.5px;color:var(--ice-1);white-space:nowrap;display:none;z-index:2}
+.pl-tip small{display:block;color:var(--muted);font-size:11px}
+.pl-read{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.pl-read div{background:rgba(3,8,20,.4);border:1px solid var(--edge);border-radius:12px;padding:8px 10px;min-width:0}
+.pl-read span{display:block;font-size:11px;color:var(--muted)}
+.pl-read b{font-size:15px;color:var(--ice-1);font-weight:600}
+.pl-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-content:start}
+.pl-tile{font:inherit;text-align:left;cursor:pointer;color:inherit;padding:12px 12px 8px;border-radius:16px;border:1px solid var(--edge);background:rgba(8,18,38,.55);transition:border-color .15s,transform .15s;min-width:0}
+.pl-tile:hover{transform:translateY(-2px)}
+.pl-tile[aria-pressed="true"]{border-color:var(--tc);box-shadow:0 0 0 1px var(--tc) inset}
+.pl-tile small{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pl-tile b{display:block;font-size:20px;color:#fff;margin:2px 0 4px;font-weight:600}
+.pl-tile b em{font-style:normal;font-size:11.5px;color:var(--muted);font-weight:400;margin-left:4px}
+.pl-tile svg{display:block;width:100%;height:34px}
+.pl-tile i{display:block;font-style:normal;font-size:11px;margin-top:2px}
+.pl-two{display:grid;grid-template-columns:1fr 1.3fr;gap:14px}
+.pl-card{padding:18px 20px;min-width:0}
+.pl-card h3{margin:0 0 12px;font-size:16px;color:var(--ice-1)}
+.pl-rec{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pl-rec div{border-left:2px solid var(--edge);padding:2px 0 2px 10px}
+.pl-rec span{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pl-rec b{display:block;font-size:20px;color:#fff;font-weight:600}
+.pl-rec small{font-size:11.5px;color:var(--muted)}
+.pl-tl{list-style:none;margin:0;padding:0 0 0 4px;position:relative}
+.pl-tl::before{content:"";position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:var(--edge)}
+.pl-tl li{position:relative;padding:0 0 14px 28px;font-size:13.5px;color:var(--muted)}
+.pl-tl li:last-child{padding-bottom:0}
+.pl-tl li::before{content:"";position:absolute;left:3px;top:3px;width:12px;height:12px;border-radius:50%;background:var(--dc,#7dbdf0);border:2px solid #030814}
+.pl-tl li b{display:block;color:var(--ice-1);font-weight:600}
+.pl-none{color:var(--muted);font-size:13.5px}
+.pl-note{margin:14px 2px 0;color:var(--muted);font-size:12.5px}
+@media (max-width:860px){.pl-hero{grid-template-columns:1fr}.pl-stage,.pl-two{grid-template-columns:1fr}.pl-gauges{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.pl-read{grid-template-columns:repeat(2,1fr)}.pl-hero{padding:16px}}
+</style>
 </head>
 <body><a class="skip" href="#main">Skip to content</a>
 <script>/* ===== SERVER IP: change it here, once. Everything on the site reads this. ===== */window.RQ_IP='r99-p.lordcloud.ovh:25533';</script>
@@ -2126,7 +2219,7 @@ html.js.rdy .nav-links a{animation-duration:.2s !important}
 <!-- Top bar: every screen (same as index 2) -->
 <header class="nav" id="nav">
   <a class="brand" href="#home" aria-label="Relique home"><img data-m="logo" width="884" height="318" alt="" ></a>
-  <nav class="nav-links" id="navlinks" aria-label="Main" data-nav><a href="#home" data-page="home">Home</a><a href="#rules" data-page="rules">Rules</a><a href="#concept" data-page="concept">Infuse SMP S3</a><a href="#recipes" data-page="recipes">Recipes</a><a href="#leaderboard" data-page="leaderboard" data-lb hidden>Leaderboard</a><a href="#announcements" data-page="announcements">Announcements</a><a class="m-cta" href="https://discord.gg/cy3VCNRqf" target="_blank" rel="noopener">Join the Discord</a></nav>
+  <nav class="nav-links" id="navlinks" aria-label="Main" data-nav><a href="#home" data-page="home">Home</a><a href="#rules" data-page="rules">Rules</a><a href="#concept" data-page="concept">Infuse SMP S3</a><a href="#recipes" data-page="recipes">Recipes</a><a href="#leaderboard" data-page="leaderboard" data-lb hidden>Leaderboard</a><a href="#health" data-page="health">Server Pulse</a><a href="#announcements" data-page="announcements">Announcements</a><a class="m-cta" href="https://discord.gg/cy3VCNRqf" target="_blank" rel="noopener">Join the Discord</a></nav>
   <div class="nav-tools">
     <button type="button" class="nav-icon-btn" id="themetoggle" aria-label="Toggle AMOLED theme" title="Toggle AMOLED theme">
       <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -2211,7 +2304,7 @@ html.js.rdy .nav-links a{animation-duration:.2s !important}
     <section class="rqc hx-sec" data-start="1" id="hx-explore" aria-labelledby="hx-explore-h" data-autoplay="6500">
   <div class="rqc-head"><div><h2 class="hx-h" id="hx-explore-h">Explore Relique</h2><p class="hx-sub">Jump straight into the part of the server you need.</p></div>
     <div class="rqc-ctrl"><button type="button" class="rqc-btn rqc-prev" aria-label="Previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.500 5.500-6.500 6.500 6.500 6.500"/></svg></button><button type="button" class="rqc-btn rqc-next" aria-label="Next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.500 5.500 6.500 6.500-6.500 6.500"/></svg></button></div></div>
-  <div class="rqc-vp" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Explore Relique"><ul class="rqc-track"><li class="rqc-slide" data-lb hidden><a class="cd" href="#leaderboard" ><i class="cd-art art-a7" aria-hidden="true"></i><span class="cd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20.5V12h4v8.5M10 20.5V4h4v16.5M15 20.5V14h4v6.5"/></svg></span><span class="cd-body"><span class="cd-title">Leaderboard</span><span class="cd-text">Top 20 players by Elo, who is online, recent events, teams and live tiers.</span></span><span class="cd-go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a></li><li class="rqc-slide"><a class="cd" href="#rules" ><i class="cd-art art-a6" aria-hidden="true"></i><span class="cd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4.5 6v6c0 4.6 3.1 7.6 7.5 9 4.4-1.4 7.5-4.4 7.5-9V6z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg></span><span class="cd-body"><span class="cd-title">Rules</span><span class="cd-text">Conduct, combat, spawn, teams and punishments in full detail, plus the kit rules.</span></span><span class="cd-go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a></li><li class="rqc-slide"><a class="cd" href="#recipes" ><i class="cd-art art-a13" aria-hidden="true"></i><span class="cd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><path d="M9.2 3.5v17M14.8 3.5v17M3.5 9.2h17M3.5 14.8h17"/></svg></span><span class="cd-body"><span class="cd-title">Recipes</span><span class="cd-text">Every custom crafting recipe on Relique, including the nine charm recipes.</span></span><span class="cd-go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a></li><li class="rqc-slide"><a class="cd" href="#concept" ><i class="cd-art art-a4" aria-hidden="true"></i><span class="cd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.5 8.5 4.8v9.4L12 21.5l-8.5-4.8V7.3z"/><path d="m3.5 7.3 8.5 4.8 8.5-4.8M12 12.1v9.4"/></svg></span><span class="cd-body"><span class="cd-title">Infuse SMP S3</span><span class="cd-text">How Charm and RankSMP work: abilities, ranks #1 to #30 and the Elo ladder.</span></span><span class="cd-go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a></li><li class="rqc-slide"><a class="cd" href="#announcements" ><i class="cd-art art-a9" aria-hidden="true"></i><span class="cd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 10.5v3a1 1 0 0 0 1 1H7l5 4V5.5L7 9.5H4.5a1 1 0 0 0-1 1z"/><path d="M16 8.5a5 5 0 0 1 0 7"/><path d="M18.6 5.8a9 9 0 0 1 0 12.4"/></svg></span><span class="cd-body"><span class="cd-title">Announcements</span><span class="cd-text">Official updates and upcoming events, synced live from Discord.</span></span><span class="cd-go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a></li></ul></div>
+  <div class="rqc-vp" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Explore Relique"><ul class="rqc-track"><li class="rqc-slide" data-lb hidden><a class="cd" href="#leaderboard" ><i class="cd-art art-a7" aria-hidden="true"></i><span class="cd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20.5V12h4v8.5M10 20.5V4h4v16.5M15 20.5V14h4v6.5"/></svg></span><span class="cd-body"><span class="cd-title">Leaderboard</span><span class="cd-text">Top 20 players by Elo, who is online, recent events and teams.</span></span><span class="cd-go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a></li><li class="rqc-slide"><a class="cd" href="#rules" ><i class="cd-art art-a6" aria-hidden="true"></i><span class="cd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4.5 6v6c0 4.6 3.1 7.6 7.5 9 4.4-1.4 7.5-4.4 7.5-9V6z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg></span><span class="cd-body"><span class="cd-title">Rules</span><span class="cd-text">Conduct, combat, spawn, teams and punishments in full detail, plus the kit rules.</span></span><span class="cd-go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a></li><li class="rqc-slide"><a class="cd" href="#recipes" ><i class="cd-art art-a13" aria-hidden="true"></i><span class="cd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><path d="M9.2 3.5v17M14.8 3.5v17M3.5 9.2h17M3.5 14.8h17"/></svg></span><span class="cd-body"><span class="cd-title">Recipes</span><span class="cd-text">Every custom crafting recipe on Relique, including the nine charm recipes.</span></span><span class="cd-go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a></li><li class="rqc-slide"><a class="cd" href="#concept" ><i class="cd-art art-a4" aria-hidden="true"></i><span class="cd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.5 8.5 4.8v9.4L12 21.5l-8.5-4.8V7.3z"/><path d="m3.5 7.3 8.5 4.8 8.5-4.8M12 12.1v9.4"/></svg></span><span class="cd-body"><span class="cd-title">Infuse SMP S3</span><span class="cd-text">How Charm and RankSMP work: abilities, ranks #1 to #30 and the Elo ladder.</span></span><span class="cd-go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a></li><li class="rqc-slide"><a class="cd" href="#announcements" ><i class="cd-art art-a9" aria-hidden="true"></i><span class="cd-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 10.5v3a1 1 0 0 0 1 1H7l5 4V5.5L7 9.5H4.5a1 1 0 0 0-1 1z"/><path d="M16 8.5a5 5 0 0 1 0 7"/><path d="M18.6 5.8a9 9 0 0 1 0 12.4"/></svg></span><span class="cd-body"><span class="cd-title">Announcements</span><span class="cd-text">Official updates and upcoming events, synced live from Discord.</span></span><span class="cd-go">Open<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a></li></ul></div>
   <div class="rqc-dots" role="group" aria-label="Choose a card"></div>
 </section>
 
@@ -2844,12 +2937,10 @@ html.js.rdy .nav-links a{animation-duration:.2s !important}
         <button type="button" class="lb-tab" role="tab" id="tab-ev" aria-selected="false">Recent events</button>
         <button type="button" class="lb-tab" role="tab" id="tab-teams" aria-selected="false">Teams</button>
         <button type="button" class="lb-tab" role="tab" id="tab-joined" aria-selected="false">Joined</button>
-        <button type="button" class="lb-tab" role="tab" id="tab-live" aria-selected="false">Live tiers</button>
       </div>
       <label class="lb-search"><span class="sr">Search players</span>
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.6-3.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         <input type="search" id="lb-q" placeholder="Search players" role="combobox" aria-expanded="false" aria-controls="lb-sug" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search">
-        <button type="button" class="lb-go" id="lb-go" hidden>Look up</button>
         <div class="lb-sug" id="lb-sug" role="listbox" aria-label="Matching players" hidden></div>
       </label>
     </div>
@@ -2861,7 +2952,6 @@ html.js.rdy .nav-links a{animation-duration:.2s !important}
       <div id="lb-rows"></div>
       <p class="lb-empty" id="lb-empty" hidden></p>
     </div>
-    <div class="lv glass" id="lv" hidden aria-live="polite"></div>
     <div class="ev glass" id="ev" hidden aria-live="polite"></div>
     <div class="tm glass" id="tm" hidden aria-live="polite"></div>
     <div class="jn glass" id="jn" hidden aria-live="polite"></div>
@@ -2912,6 +3002,43 @@ html.js.rdy .nav-links a{animation-duration:.2s !important}
       .jn-pg-lbl{font-size:12.5px;color:var(--muted)}
     </style>
     <p class="note">Only SMP is tracked: Elo, kills, deaths, K/D and playtime. Tiers come from <a href="https://mctiers.com/rankings/overall" target="_blank" rel="noopener" style="color:var(--ice-3)">MCTiers</a>, <a href="https://subtiers.net/ranking/overall" target="_blank" rel="noopener" style="color:var(--ice-3)">SubTiers</a>, <a href="https://www.mcpvp.com/tiers" target="_blank" rel="noopener" style="color:var(--ice-3)">MCPVP</a> and <a href="https://pvphq.com/" target="_blank" rel="noopener" style="color:var(--ice-3)">PvPHQ</a>.</p>
+  </div>
+</section>
+<section class="page" id="page-health">
+  <div class="docwrap" style="margin-top:0">
+    <header class="phead glass">
+      <div class="phead-copy"><h1>Server Pulse</h1><p class="lede">How Relique is running right now and how it has been running: speed, memory, load, players, restarts and outages.</p></div>
+    </header>
+    <div class="glass pl-hero" id="pl-hero"><div class="pl-none">Reading the server&hellip;</div></div>
+    <div class="pl-tool">
+      <div class="pl-chipset" id="pl-range" role="group" aria-label="Time window">
+        <button type="button" class="pl-chip" data-hr="1" aria-pressed="true">1 hour</button>
+        <button type="button" class="pl-chip" data-hr="6" aria-pressed="false">6 hours</button>
+        <button type="button" class="pl-chip" data-hr="24" aria-pressed="false">1 day</button>
+        <button type="button" class="pl-chip" data-hr="48" aria-pressed="false">2 days</button>
+      </div>
+      <div class="pl-actions">
+        <span class="pl-live"><i class="pl-dot wait" id="pl-dot"></i><span id="pl-livetxt">Connecting&hellip;</span></span>
+        <button type="button" class="pl-act" id="pl-freeze">Freeze</button>
+        <button type="button" class="pl-act" id="pl-refresh">Update now</button>
+        <button type="button" class="pl-act" id="pl-csv">Download data</button>
+      </div>
+    </div>
+    <div class="glass pl-ribbon" id="pl-ribbon" hidden></div>
+    <div class="pl-stage">
+      <div class="glass pl-main">
+        <div class="pl-chipset" id="pl-chips" role="group" aria-label="Metric"></div>
+        <div class="pl-mh"><h3 id="pl-mt"></h3><span id="pl-ms"></span></div>
+        <div class="pl-plot" id="pl-plot" tabindex="0" aria-label="Metric chart, use the arrow keys to move along it"></div>
+        <div class="pl-read" id="pl-read"></div>
+      </div>
+      <div class="pl-tiles" id="pl-tiles"></div>
+    </div>
+    <div class="pl-two">
+      <div class="glass pl-card" id="pl-records"></div>
+      <div class="glass pl-card" id="pl-log"></div>
+    </div>
+    <p class="pl-note" id="pl-foot"></p>
   </div>
 </section>
 </main>
@@ -3183,7 +3310,7 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
 (function(){
   /* LEADERBOARD SWITCH: set to true when the in-game leaderboard is ready */
   var SHOW_LEADERBOARD=true;
-  var pages=['home','rules','concept','recipes','announcements'];
+  var pages=['home','rules','concept','recipes','announcements','health'];
   if(SHOW_LEADERBOARD){ pages.splice(4,0,'leaderboard'); document.querySelectorAll('[data-lb]').forEach(function(e){e.hidden=false}); }
   var links=document.querySelectorAll('[data-nav] a[data-page]');
   var navlinks=document.getElementById('navlinks'), toggle=document.getElementById('navtoggle');
@@ -3284,7 +3411,7 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
   var COLORS=['#9aa7bd','#6ee7a8','#7ecbff','#c4a4ff','#ffd25c','#ff9a5c','#ff5c7a'];
   // ---------- server link: URL of the Relique Online API plugin (see plugin config.yml port) ----------
   var API_URL='/relique'; // same-site path; vercel.json forwards it to the plugin
-  var API_KEY=''; // only if you set api-key in the plugin config
+  var API_KEY='';window.RQ_API_URL=API_URL;window.RQ_API_KEY=API_KEY; // the Server Health page reads these // only if you set api-key in the plugin config
   var SITES=[
     {k:'mc',n:'MCTiers',u:'https://mctiers.com/rankings/overall',modes:['Sword','SMP','Axe','Mace','Pot','UHC','NethOP','Vanilla'],t:['HT','LT']},
     {k:'sub',n:'SubTiers',u:'https://subtiers.net/ranking/overall',optional:true}
@@ -3552,9 +3679,8 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
     r.append(el('span','pos',p.vp),who,el('span','n c-k',fmt(p.k)),el('span','n c-d',fmt(p.d)),el('span','n kd',p.kd.toFixed(2)),el('span','n c-p',play(p.h)),el('span','elo',fmt(p.elo)));
     r.addEventListener('click',function(){openCard(p,r)});return r;
   }
-  var tabLive=document.getElementById('tab-live'),lvEl=document.getElementById('lv'),tableEl=document.getElementById('lb-table'),searchEl=document.querySelector('.lb-search'),goEl=document.getElementById('lb-go');
+  var tableEl=document.getElementById('lb-table'),searchEl=document.querySelector('.lb-search');
   function render(){
-    var live=state.tab==='live';
     var isTop=state.tab==='top';
     var V=P.slice().sort((isTop?CATS[state.cat]:CATS[0]).cmp);V.forEach(function(p,i){p.vp=i+1});
     var evs=state.tab==='events';
@@ -3562,11 +3688,9 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
     var joinedTab=state.tab==='joined';
     closeSug();
     catsEl.hidden=!isTop;Array.prototype.forEach.call(catsEl.children,function(b,i){b.setAttribute('aria-selected',i===state.cat)});
-    tabTop.setAttribute('aria-selected',state.tab==='top');tabOn.setAttribute('aria-selected',state.tab==='on');tabLive.setAttribute('aria-selected',live);
-    searchEl.classList.toggle('live',live);goEl.hidden=!live;qEl.placeholder=live?'Minecraft username':'Search players';
+    tabTop.setAttribute('aria-selected',state.tab==='top');tabOn.setAttribute('aria-selected',state.tab==='on');
     tabEv.setAttribute('aria-selected',evs);tabTeams.setAttribute('aria-selected',teamsTab);tabJoined.setAttribute('aria-selected',joinedTab);
-    lvEl.hidden=!live;tableEl.hidden=live||evs||teamsTab||joinedTab;evEl.hidden=!evs;tmEl.hidden=!teamsTab;jnEl.hidden=!joinedTab;
-    if(live){podEl.hidden=true;metaEl.textContent=lvMode==='all'?'Every tier-tested player on the server \u00b7 search any username to check them':'Check a player\u2019s real MCTiers and SubTiers ranks';if(lvMode==='all')liveAll();else if(!lvEl.firstChild)liveHint();return}
+    tableEl.hidden=evs||teamsTab||joinedTab;evEl.hidden=!evs;tmEl.hidden=!teamsTab;jnEl.hidden=!joinedTab;
     if(evs){podEl.hidden=true;renderEvents();return}
     if(teamsTab){podEl.hidden=true;renderTeams();return}
     if(joinedTab){podEl.hidden=true;renderJoined();return}
@@ -3590,7 +3714,6 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
   tabOn.addEventListener('click',function(){state.tab='on';state.q=qEl.value.trim().toLowerCase();render()});
   tabTeams.addEventListener('click',function(){state.tab='teams';render()});
   tabJoined.addEventListener('click',function(){state.tab='joined';JOINED_PAGE=1;render()});
-  tabLive.addEventListener('click',function(){state.tab='live';if(!qEl.value.trim())lvMode='all';render();qEl.focus()});
   // ---------- search suggestions (type a few letters, pick a player, their card opens) ----------
   var sugEl=document.getElementById('lb-sug'),sugItems=[],sugIdx=-1;
   function closeSug(){sugEl.hidden=true;sugEl.replaceChildren();sugItems=[];sugIdx=-1;qEl.setAttribute('aria-expanded','false')}
@@ -3603,7 +3726,7 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
   function addSug(b,fn){b.type='button';b.setAttribute('role','option');b.addEventListener('mousedown',function(e){e.preventDefault()});b.addEventListener('click',fn);sugEl.append(b);sugItems.push({b:b,fn:fn})}
   function showSug(){
     var raw=qEl.value.trim(),q=raw.toLowerCase();
-    if(state.tab==='live'||!q){closeSug();return}
+    if(!q){closeSug();return}
     var starts=[],has=[],byElo=function(a,b){return b.elo-a.elo};
     P.forEach(function(p){var n=p.n.toLowerCase(),i=n.indexOf(q);if(i===0)starts.push(p);else if(i>-1)has.push(p)});
     var list=starts.sort(byElo).concat(has.sort(byElo)).slice(0,7);
@@ -3615,22 +3738,18 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
     });
     if(!list.length){
       sugEl.append(el('div','sug-none','No players found'));
-      addSug(el('button','sug-i sug-live','Check live tiers for \u201c'+raw+'\u201d'),function(){closeSug();goLive(raw)});
     }
     sugEl.hidden=false;qEl.setAttribute('aria-expanded','true');
   }
   qEl.addEventListener('input',function(){state.q=qEl.value.trim().toLowerCase();showSug()});
   qEl.addEventListener('focus',showSug);
   qEl.addEventListener('keydown',function(e){
-    if(state.tab==='live'){if(e.key==='Enter'){e.preventDefault();lookup(qEl.value)}return}
     if(e.key==='ArrowDown'){if(sugEl.hidden)showSug();else hlSug(sugIdx+1);e.preventDefault()}
     else if(e.key==='ArrowUp'){if(!sugEl.hidden){hlSug(sugIdx<0?-1:sugIdx-1);e.preventDefault()}}
     else if(e.key==='Enter'){if(sugItems.length){e.preventDefault();sugItems[sugIdx<0?0:sugIdx].fn()}}
     else if(e.key==='Escape'){closeSug()}
   });
   document.addEventListener('click',function(e){if(!searchEl.contains(e.target))closeSug()});
-  goEl.addEventListener('click',function(){lookup(qEl.value)});
-  function goLive(name){state.tab='live';qEl.value=name;render();lookup(name);lvEl.scrollIntoView({behavior:'smooth',block:'start'})}
   render();
   loadLive();
   setInterval(function(){if(!document.hidden)loadLive()},15000); // live: refresh every 15s while the page is open
@@ -3707,103 +3826,6 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
     if(!d)return null;
     var i=el('img','gm-ico');i.src='data:image/png;base64,'+d;i.alt='';i.width=i.height=px||18;i.setAttribute('aria-hidden','true');return i;
   }
-  function siteBlock(site){
-    var box=el('div','lv-site'),h=el('h3'),a=el('a',null,site.n+' \u2197');a.href=site.u;a.target='_blank';a.rel='noopener';h.append(a);box.append(h);
-    return {box:box,head:h,k:site.k};
-  }
-  function fillSite(ui,res){
-    var box=ui.box;while(box.children.length>1)box.lastChild.remove();
-    if(res.state==='load'){var n=el('p','lv-note');n.append(el('i','lv-spin'),document.createTextNode('Looking up\u2026'));box.append(n);return}
-    if(res.state==='link'){box.append(el('p','lv-note','This site has no public API I could find, so its tiers can\u2019t be pulled in automatically yet.'));var lk=el('a','pf-livebtn lv-open','Open '+res.name+' on '+res.site+' \u2197');lk.href=res.href;lk.target='_blank';lk.rel='noopener';lk.style.textDecoration='none';lk.style.textAlign='center';box.append(lk);return}
-    if(res.state==='err'){box.append(el('p','lv-note err','No readable answer from this site. It either blocks browser requests, or this player isn\u2019t ranked there (their \u201cnot found\u201d replies can arrive without the headers browsers need). A small proxy (tier-proxy-worker.js) gives a clear answer.'));return}
-    if(!res.data||!res.data.list.length){box.append(el('p','lv-note',res.data?'Ranked, but no gamemode tiers yet.':'Not ranked on this site.'));return}
-    var d=res.data,top=d.list[0],meta=[];
-    if(d.region)meta.push(d.region);if(d.points!=null)meta.push(d.points+' pts');
-    ui.head.append(el('span',null,meta.join(' \u00b7 ')));
-    var t=el('div','lv-top'),L=el('div'),gr=el('div','gm-row'),bi=icon(ui.k,top.slug,30);L.append(el('small',null,'Highest tier'),el('b',null,top.mode));if(bi)gr.append(bi);gr.append(L);t.append(gr,el('span','tb '+TCLS(top.label),top.label));box.append(t);
-    var pills=el('div','lv-pills');d.list.forEach(function(x){var pl=el('span','lv-pill'),pi=icon(ui.k,x.slug,18);if(pi)pl.append(pi);pl.append(document.createTextNode(x.mode),el('span','tb '+TCLS(x.label),x.label));pills.append(pl)});box.append(pills);
-  }
-
-  // ---------- all tier-tested players (every server player who is ranked on MCTiers) ----------
-  var lvMode='all',tierSig='',tierRun=0,TIER_KEY='relique-tier-cache',TIER_TTL=30*60*1000,tierCache={};
-  try{tierCache=JSON.parse(localStorage.getItem(TIER_KEY)||'{}')||{}}catch(e){tierCache={}}
-  function saveTiers(){try{localStorage.setItem(TIER_KEY,JSON.stringify(tierCache))}catch(e){}}
-  function liveAll(){
-    var names=P.map(function(p){return p.n.toLowerCase()}).sort().join('|');
-    if(names===tierSig&&lvEl.firstChild)return;
-    tierSig=names;var my=++tierRun;
-    lvEl.replaceChildren();
-    var head=el('div','lv-head'),info=el('div'),h2=el('h2',null,'Tier-tested players');h2.append(el('span','lv-live','LIVE'));
-    var sm=el('small',null,P.length?'Checking players\u2026':'Loading server players\u2026');info.append(h2,sm);head.append(info);
-    var list=el('div','lv-all');lvEl.append(head,list);
-    if(!P.length)return;
-    var site=LIVE[0],total=P.length,checked=0;
-    function fresh(p){var c=tierCache[p.n.toLowerCase()];return c&&Date.now()-c.t<TIER_TTL}
-    function paint(){
-      var found=P.map(function(p){var c=tierCache[p.n.toLowerCase()];return{p:p,d:c&&c.d}}).filter(function(x){return x.d&&x.d.list&&x.d.list.length});
-      found.sort(function(a,b){return (b.d.points||0)-(a.d.points||0)||b.d.list[0].score-a.d.list[0].score||(a.d.list[0].retired-b.d.list[0].retired)||b.p.elo-a.p.elo});
-      list.replaceChildren();
-      found.forEach(function(x){
-        var top=x.d.list[0],r=el('button','lv-row');r.type='button';
-        var nm=el('span','nm');nm.append(el('b',null,x.p.n),el('small',null,(x.d.region?x.d.region+' \u00b7 ':'')+top.mode));
-        var bi=icon('mc',top.slug,22);
-        r.append(avw(x.p,true),nm);if(bi)r.append(bi);r.append(el('span','tb '+TCLS(top.label),top.label));
-        var pills=el('div','lv-pills lv-row-pills');
-        x.d.list.forEach(function(g){var pl=el('span','lv-pill'),pi=icon('mc',g.slug,16);if(pi)pl.append(pi);pl.append(document.createTextNode(g.mode),el('span','tb '+TCLS(g.label),g.label));pills.append(pl)});
-        r.append(pills);
-        r.addEventListener('click',function(){goLive(x.p.n)});
-        list.append(r);
-      });
-      sm.textContent=(checked<total?'Checked '+checked+' of '+total+' players \u00b7 ':'')+found.length+(found.length===1?' tier-tested player':' tier-tested players')+(checked>=total&&!found.length?' \u2014 none of the server players are ranked yet':'');
-    }
-    var queue=[];
-    P.forEach(function(p){if(fresh(p))checked++;else queue.push(p)});
-    paint();
-    function next(){
-      if(my!==tierRun)return;
-      var p=queue.shift();if(!p)return;
-      fetchSite(site,p.n,resolveUuid(p.n)).then(function(d){
-        if(my!==tierRun)return;
-        tierCache[p.n.toLowerCase()]={t:Date.now(),d:d};
-      },function(){}).then(function(){
-        if(my!==tierRun)return;
-        checked++;saveTiers();paint();next();
-      });
-    }
-    for(var i=0;i<4;i++)next();
-  }
-  function liveHint(){lvEl.replaceChildren();var h=el('p','lv-hint');h.innerHTML='Type a Minecraft username above and press <b>Enter</b> to see their <b>real</b> highest tier on MCTiers and SubTiers.';lvEl.append(h)}
-  var token=0;
-  function lookup(raw){
-    var name=(raw||'').trim();
-    if(!name){lvMode='all';tierSig='';liveAll();return}
-    lvMode='one';
-    if(!/^\.?[A-Za-z0-9_]{2,16}$/.test(name)){lvEl.replaceChildren();var e=el('p','lv-hint','Enter a valid Minecraft username (2\u201316 letters, numbers or _).');lvEl.append(e);return}
-    var my=++token;lvEl.replaceChildren();
-    var head=el('div','lv-head'),info=el('div'),h2=el('h2',null,name);h2.append(el('span','lv-live','LIVE'));info.append(h2,el('small',null,'Real data from each tier list'));
-    head.append(av(name),info);
-    var back=el('button','pf-livebtn lv-back','\u2190 All tier-tested players');back.type='button';back.addEventListener('click',function(){qEl.value='';lvMode='all';tierSig='';render()});head.append(back);
-    var grid=el('div','lv-grid');lvEl.append(head,grid);
-    var uuidP=resolveUuid(name),ui={};
-    grid.style.gridTemplateColumns='1fr';
-    LIVE.forEach(function(site){
-      ui[site.k]=siteBlock(site);
-      if(!site.optional)grid.append(ui[site.k].box);
-      fillSite(ui[site.k],{state:'load'});
-      fetchSite(site,name,uuidP).then(function(data){
-        if(my!==token)return;
-        if(site.optional){
-          if(data&&data.list&&data.list.length){grid.append(ui[site.k].box);grid.style.gridTemplateColumns='';fillSite(ui[site.k],{state:'ok',data:data})}
-          return;
-        }
-        fillSite(ui[site.k],{state:'ok',data:data});
-      },function(err){
-        if(my!==token||site.optional)return;
-        fillSite(ui[site.k],{state:'err',msg:err&&err.name==='AbortError'?'timed out':err&&err.message});
-      });
-    });
-  }
-
   // ---------- classification radar ----------
   // 5 axes = the 5 classifications. The shape touches every axis the player has reached
   // and leans toward the next one by how close their Elo is to it.
@@ -3884,7 +3906,6 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
         }else if(!s.optional){lab.textContent=d?'No gamemode tiers yet':'Not ranked'}
       },function(){if(!s.optional&&document.getElementById('pf-name').textContent===p.n)lab.textContent='Unavailable'});
     });
-    var lb=el('button','pf-livebtn','Check live tiers for '+p.n+' \u2192');lb.type='button';lb.addEventListener('click',function(){closeCard();goLive(p.n)});tiers.after(lb);
     var fl=document.getElementById('pf-fights');fl.replaceChildren();
     if(!(p.f&&p.f.length))fl.append(el('p','pf-nofight','No PvP fights recorded yet.'));
     (p.f||[]).forEach(function(f){
@@ -5043,5 +5064,277 @@ html.rq-resizing *{transition:none !important;animation-duration:.001s !importan
     prep('.hx-grid > *','nr-pre',true);
   }
   if(d.readyState==='loading')d.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+<script>
+(function(){
+  var root=document.getElementById('page-health'); if(!root) return;
+  var CACHE='relique-health-cache';
+  var st={hours:1,paused:false,data:null,online:null,lastOk:0,offset:0,mcUp:null,metric:'tps'};
+  var $=function(id){return document.getElementById(id)};
+
+  /* ---------- formatting ---------- */
+  function fmtDur(s){s=Math.max(0,Math.round(s));var d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),x=s%60;
+    if(d)return d+'d '+h+'h';if(h)return h+'h '+m+'m';if(m)return m+'m '+x+'s';return x+'s'}
+  function tm(ms){return new Date(ms).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}
+  function dt(ms){return new Date(ms).toLocaleString([],{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
+  function gb(mb){return (mb/1024).toFixed(mb>=10240?0:1)+' GB'}
+  function niceMax(v){if(v<=0)return 1;var p=Math.pow(10,Math.floor(Math.log10(v))),n=v/p;return (n<=1?1:n<=2?2:n<=5?5:10)*p}
+  function active(){return location.hash==='#health'}
+  function nowMs(){return Date.now()+(st.online?st.offset:0)}
+  var GOOD='#5ee0a0',WARN='#ffd25c',BAD='#ff6b6b';
+
+  /* ---------- metrics (one definition drives gauges, tiles, chart and readouts) ---------- */
+  function pct(c){return c.ram_max_mb?c.ram_used_mb/c.ram_max_mb*100:0}
+  var M={
+    tps:{name:'Tick speed',short:'TPS',unit:'TPS',dec:2,color:'#5ee0a0',val:function(p){return p.tps},cur:function(c){return c.tps},stat:'tps',
+      tag:function(c){return c.tps>=19.5?['Smooth',GOOD]:c.tps>=17?['Hiccups',WARN]:['Struggling',BAD]},
+      range:function(lo,hi){return [Math.min(18,Math.floor(lo)),Math.max(20,Math.ceil(hi))]},line:{v:20,t:'20 TPS = perfect'},
+      about:'Ticks per second. 20 is perfect, lower means the world is lagging.'},
+    mspt:{name:'Tick time',short:'MSPT',unit:'ms',dec:1,color:'#ffd25c',val:function(p){return p.mspt},cur:function(c){return c.mspt},stat:'mspt',
+      tag:function(c){return c.mspt<=40?['Comfortable',GOOD]:c.mspt<=50?['Tight',WARN]:['Overloaded',BAD]},
+      range:function(lo,hi){return [0,niceMax(Math.max(20,hi*1.15))]},line:{v:50,t:'50 ms limit'},
+      about:'Milliseconds the server needs per tick. It must stay under 50 ms.'},
+    ram:{name:'Memory',short:'RAM',unit:'MB',dec:0,color:'#7dbdf0',val:function(p){return p.ram},cur:function(c){return c.ram_used_mb},stat:'ram_mb',
+      fmt:function(v){return gb(v)},axis:function(v){return gb(v)},
+      tag:function(c){var p=pct(c);return p<75?['Roomy',GOOD]:p<90?['Filling up',WARN]:['Nearly full',BAD]},
+      range:function(lo,hi,d){return [0,(d.current&&d.current.ram_max_mb)||niceMax(hi*1.1)]},
+      about:'Java memory in use out of what the server is allowed to use.'},
+    cpu:{name:'Processor',short:'CPU',unit:'%',dec:1,color:'#b79cff',val:function(p){return p.cpu},cur:function(c){return c.cpu_process},stat:'cpu',
+      fmt:function(v){return v.toFixed(1)+'%'},axis:function(v){return v+'%'},
+      tag:function(c){return c.cpu_process<70?['Light',GOOD]:c.cpu_process<90?['Busy',WARN]:['Maxed out',BAD]},
+      range:function(){return [0,100]},about:'How much processor power the server is using.'},
+    online:{name:'Players',short:'Players',unit:'players',dec:0,color:'#ff6b8b',val:function(p){return p.online},cur:function(c){return c.online},stat:'online',
+      tag:function(c){return c.max_players?[Math.round(c.online/c.max_players*100)+'% full',GOOD]:['',GOOD]},
+      range:function(lo,hi){return [0,niceMax(Math.max(5,hi*1.2))]},about:'Players online at each moment.'},
+    entities:{name:'World load',short:'Entities',unit:'entities',dec:0,color:'#4fd1c5',val:function(p){return p.entities},cur:function(c){return c.entities},
+      tag:function(c){return [c.chunks!=null?c.chunks.toLocaleString()+' chunks':'',GOOD]},
+      range:function(lo,hi){return [0,niceMax(Math.max(10,hi*1.2))]},about:'Mobs, items and other entities loaded in the worlds.'}
+  };
+  var ORDER=['tps','mspt','ram','cpu','online','entities'];
+  function fv(m,v){return v==null?'\u2014':(m.fmt?m.fmt(v):Number(v).toFixed(m.dec))}
+  function localStats(pts,fn){var s=0,n=0,lo=Infinity,hi=-Infinity;pts.forEach(function(p){var v=fn(p);if(v==null)return;s+=v;n++;if(v<lo)lo=v;if(v>hi)hi=v});
+    return n?{avg:s/n,min:lo,max:hi}:{avg:null,min:null,max:null}}
+  function statsOf(m,d){return (m.stat&&d.stats&&d.stats[m.stat])||localStats(d.samples,m.val)}
+
+  /* ---------- data ---------- */
+  function get(h){
+    var o={cache:'no-store',headers:{Accept:'application/json'}},k=window.RQ_API_KEY||'';
+    if(k)o.headers['X-Api-Key']=k;
+    var ctl=window.AbortController?new AbortController():null,t=setTimeout(function(){if(ctl)ctl.abort()},8000);
+    if(ctl)o.signal=ctl.signal;
+    return fetch((window.RQ_API_URL||'/relique')+'/api/health?hours='+h+'&points=240&_='+Date.now(),o)
+      .then(function(r){clearTimeout(t);if(!r.ok)throw 0;return r.json()},function(e){clearTimeout(t);throw e});
+  }
+  function load(){
+    var h=st.hours;
+    get(h).then(function(d){
+      if(h!==st.hours)return;
+      if(!d||!d.available)throw 0;
+      st.data=d;st.online=true;st.mcUp=null;st.lastOk=Date.now();st.offset=d.now-Date.now();
+      try{localStorage.setItem(CACHE,JSON.stringify({t:Date.now(),hours:h,data:d}))}catch(e){}
+      render();
+    }).catch(function(){offline()});
+  }
+  function offline(){
+    var c=null;try{c=JSON.parse(localStorage.getItem(CACHE)||'null')}catch(e){}
+    if(!st.data&&c&&c.data)st.data=c.data;
+    if(!st.lastOk&&c)st.lastOk=c.t;
+    st.online=false;render();
+    // is the Minecraft server itself still answering? (/api/status asks it from the server side)
+    fetch('/api/status',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(s){
+      st.mcUp=s?!!s.online:null;renderHero();setLive();
+    }).catch(function(){});
+  }
+
+  /* ---------- live badge ---------- */
+  function setLive(){
+    var dot=$('pl-dot'),t=$('pl-livetxt');
+    if(st.online===null){dot.className='pl-dot wait';t.textContent='Connecting\u2026';return}
+    if(st.paused){dot.className='pl-dot frz';t.textContent='Frozen';return}
+    if(st.online){dot.className='pl-dot';t.textContent='Live';return}
+    var warn=st.mcUp===true;dot.className='pl-dot '+(warn?'frz':'off');t.textContent=warn?'No health data':'Server offline';
+  }
+
+  function clockText(){var d=st.data;
+    if(st.online&&d)return fmtDur((nowMs()-d.server.started_at)/1000);
+    if(!st.online&&st.mcUp!==true&&st.lastOk)return fmtDur((Date.now()-st.lastOk)/1000);
+    return '\u2014'}
+
+  /* ---------- hero: status orb + gauges + player meter ---------- */
+  function gauge(frac,color,text,label,sub){
+    var r=46,C=2*Math.PI*r,arc=0.75*C,f=Math.max(0,Math.min(1,frac));
+    return '<div class="pl-gauge"><svg viewBox="0 0 120 120" role="img" aria-label="'+label+' '+text+'">'
+      +'<circle class="tr" cx="60" cy="60" r="'+r+'" stroke-dasharray="'+arc.toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(135 60 60)"/>'
+      +'<circle class="fg" cx="60" cy="60" r="'+r+'" stroke="'+color+'" stroke-dasharray="'+(arc*f).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(135 60 60)"/>'
+      +'<text x="60" y="66" text-anchor="middle" font-size="20">'+text+'</text></svg><b>'+label+'</b><small>'+sub+'</small></div>';
+  }
+  var ICON_ON='<svg viewBox="0 0 24 24"><path d="M3 12h4l2.5-6 4 12 2.5-6H21"/></svg>';
+  var ICON_OFF='<svg viewBox="0 0 24 24"><path d="M12 3v8"/><path d="M6.3 6.8a8 8 0 1 0 11.4 0"/></svg>';
+  function renderHero(){
+    var d=st.data,el=$('pl-hero'),on=st.online,warn=!on&&st.mcUp===true,c=(d&&d.current)||null;
+    if(on===null){return}
+    var col=on?GOOD:warn?WARN:BAD,state=on?'Online':warn?'Online, no data':'Offline',clock='',sub='';
+    if(on&&d){clock=clockText();sub='since the last restart on '+dt(d.server.started_at)}
+    else if(warn){clock='\u2014';sub='The server answers, but the health plugin is not responding. Showing the last saved data.'}
+    else if(st.lastOk){clock=clockText();sub='offline since about '+dt(st.lastOk)+(d&&d.server?' \u00b7 last restart was '+dt(d.server.started_at):'')}
+    else{clock='\u2014';sub='Not reachable, and this browser has no saved data yet.'}
+    var left='<div class="pl-orbbox" style="--orb:'+col+'"><div class="pl-orb'+(on?'':' still')+'">'+(on?ICON_ON:ICON_OFF)+'</div>'
+      +'<div class="pl-state">'+state+'</div><div class="pl-clock">'+clock+'</div><div class="pl-sub">'+sub+'</div></div>';
+    var right='';
+    if(c){
+      var tg=M.tps.tag(c),tm2=M.mspt.tag(c),rm=M.ram.tag(c),cp=M.cpu.tag(c);
+      right+='<div class="pl-gauges">'
+        +gauge(c.tps/20,tg[1],c.tps.toFixed(1),'Tick speed',tg[0])
+        +gauge(c.mspt==null?0:c.mspt/50,c.mspt==null?GOOD:tm2[1],c.mspt==null?'\u2014':c.mspt.toFixed(1),'Tick time (ms)',c.mspt==null?'':tm2[0])
+        +gauge(pct(c)/100,rm[1],Math.round(pct(c))+'%','Memory',gb(c.ram_used_mb)+' of '+gb(c.ram_max_mb))
+        +gauge(c.cpu_process==null?0:c.cpu_process/100,c.cpu_process==null?GOOD:cp[1],c.cpu_process==null?'\u2014':Math.round(c.cpu_process)+'%','Processor',c.cpu_process==null?'':cp[0])
+        +'</div>';
+      var pk=d.peak||{},slots=c.max_players||1;
+      right+='<div class="pl-slots"><div class="pl-slots-h"><span><b>'+c.online+'</b> of '+(c.max_players||'?')+' player slots in use</span><span>peak this session <b>'+(pk.session||0)+'</b> \u00b7 all-time <b>'+(pk.all_time||0)+'</b></span></div>'
+        +'<div class="pl-meter"><i style="width:'+Math.min(100,c.online/slots*100)+'%"></i>'+(pk.session?'<u style="left:'+Math.min(99.5,pk.session/slots*100)+'%" title="Peak this session"></u>':'')+'</div></div>';
+    }else right='<div class="pl-none">'+(on?'Collecting the first samples, this fills in within a minute.':'No saved readings yet.')+'</div>';
+    el.innerHTML=left+'<div class="pl-side">'+right+'</div>';
+  }
+
+  /* ---------- availability ribbon ---------- */
+  function renderRibbon(){
+    var d=st.data,el=$('pl-ribbon');
+    if(!d||!d.history){el.hidden=true;return}
+    var end=st.online?nowMs():Date.now(),start=end-st.hours*3600e3,hist=d.history.oldest||start,segs=[],offMs=0,noDataMs=0;
+    var from=Math.max(start,Math.min(hist,end));
+    if(hist>start){noDataMs=from-start;segs.push(['nod',start,from,'No data recorded yet'])}
+    (d.downtimes||[]).forEach(function(x){
+      var a=Math.max(x.from,from),b=Math.min(x.to,end);
+      if(b>a){offMs+=b-a;segs.push(['off',a,b,'Offline '+fmtDur((b-a)/1000)+' ('+dt(x.from)+' \u2192 '+dt(x.to)+')'])}
+      if(x.to>=from&&x.to<=end)segs.push(['rs',x.to,x.to,'Server started '+dt(x.to)])});
+    if(!st.online&&st.lastOk){var a2=Math.max(st.lastOk,from);if(end>a2){offMs+=end-a2;segs.push(['off',a2,end,'Offline right now'])}}
+    var span=end-start,tot=Math.max(1,end-from),avail=Math.max(0,Math.min(100,(1-offMs/tot)*100));
+    var h='<div class="pl-rh"><span>Availability, last <b>'+(st.hours>=24?(st.hours/24)+' day'+(st.hours>24?'s':''):st.hours+' hour'+(st.hours>1?'s':''))+'</b></span><span><b>'+avail.toFixed(avail>=99.95||avail<=0?0:2)+'%</b> online'+(offMs?' \u00b7 '+fmtDur(offMs/1000)+' down':'')+'</span></div><div class="pl-rib">';
+    segs.forEach(function(s){var l=(s[1]-start)/span*100,w=Math.max(0,(s[2]-s[1])/span*100);
+      h+='<span class="'+s[0]+'" style="left:'+l.toFixed(2)+'%;'+(s[0]==='rs'?'':'width:'+w.toFixed(2)+'%')+'" title="'+s[3]+'"></span>'});
+    h+='</div><div class="pl-rl"><span>'+dt(start)+'</span><span>green = online \u00b7 red = offline \u00b7 white line = restart</span><span>now</span></div>';
+    el.innerHTML=h;el.hidden=false;
+  }
+
+  /* ---------- big chart ---------- */
+  function chartSVG(m,pts,d,W,H,pad){
+    var L=pad.l,R=pad.r,T=pad.t,B=pad.b,vals=pts.map(m.val).filter(function(v){return v!=null});
+    var lo=vals.length?Math.min.apply(null,vals):0,hi=vals.length?Math.max.apply(null,vals):1;
+    var r=m.range(lo,hi,d),y0=r[0],y1=r[1];if(y1<=y0)y1=y0+1;
+    var t0=pts.length?pts[0].t:0,t1=pts.length?pts[pts.length-1].t:1;if(t1<=t0)t1=t0+1;
+    var X=function(t){return L+(t-t0)/(t1-t0)*(W-L-R)},Y=function(v){return T+(1-(Math.min(Math.max(v,y0),y1)-y0)/(y1-y0))*(H-T-B)};
+    var dts=[];for(var i=1;i<pts.length;i++)dts.push(pts[i].t-pts[i-1].t);dts.sort(function(a,b){return a-b});
+    var med=dts.length?dts[Math.floor(dts.length/2)]:0,gap=Math.max(med*3,90000),g='';
+    for(var k=0;k<=4;k++){var v=y0+(y1-y0)*k/4,yy=Y(v);
+      g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yy+'" y2="'+yy+'" stroke="rgba(126,203,255,.10)" stroke-dasharray="2 5"/><text x="'+(L-8)+'" y="'+(yy+3.5)+'" text-anchor="end">'+(m.axis?m.axis(v):(y1-y0>=8?Math.round(v):v.toFixed(1).replace(/\.0$/,'')))+'</text>'}
+    if(m.line&&m.line.v>=y0&&m.line.v<=y1){var ly=Y(m.line.v);
+      g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+ly+'" y2="'+ly+'" stroke="'+m.color+'" stroke-opacity=".5" stroke-dasharray="6 5"/><text x="'+(W-R)+'" y="'+(ly-5)+'" text-anchor="end" style="fill:'+m.color+';fill-opacity:.85">'+m.line.t+'</text>'}
+    var segs=[],cur=[];
+    pts.forEach(function(p,i){var v=m.val(p);
+      if(i>0&&p.t-pts[i-1].t>gap){if(cur.length)segs.push(cur);cur=[];
+        g+='<rect x="'+X(pts[i-1].t)+'" y="'+T+'" width="'+(X(p.t)-X(pts[i-1].t))+'" height="'+(H-T-B)+'" fill="rgba(255,93,93,.12)"/>'}
+      if(v==null){if(cur.length)segs.push(cur);cur=[];return}
+      cur.push([X(p.t),Y(v)])});
+    if(cur.length)segs.push(cur);
+    var gid='plg-'+m.short;
+    g='<defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+m.color+'" stop-opacity=".30"/><stop offset="1" stop-color="'+m.color+'" stop-opacity="0"/></linearGradient></defs>'+g;
+    segs.forEach(function(s){
+      if(s.length===1){g+='<circle cx="'+s[0][0]+'" cy="'+s[0][1]+'" r="3" fill="'+m.color+'"/>';return}
+      var line=s.map(function(q,i){return (i?'L':'M')+q[0].toFixed(1)+' '+q[1].toFixed(1)}).join(' ');
+      g+='<path d="'+line+' L'+s[s.length-1][0].toFixed(1)+' '+(H-B)+' L'+s[0][0].toFixed(1)+' '+(H-B)+' Z" fill="url(#'+gid+')"/>';
+      g+='<path class="ln" d="'+line+'" fill="none" stroke="'+m.color+'" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>'});
+    var span=t1-t0,fx=span>20*3600e3?dt:tm;
+    g+='<text x="'+L+'" y="'+(H-6)+'">'+fx(t0)+'</text><text x="'+((L+W-R)/2)+'" y="'+(H-6)+'" text-anchor="middle">'+fx(t0+span/2)+'</text><text x="'+(W-R)+'" y="'+(H-6)+'" text-anchor="end">'+fx(t1)+'</text>';
+    g+='<line class="pl-vl" y1="'+T+'" y2="'+(H-B)+'" stroke="rgba(255,255,255,.4)" style="display:none"/><circle class="pl-pt" r="5" fill="'+m.color+'" stroke="#030814" stroke-width="2.5" style="display:none"/>';
+    return {svg:'<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+m.name+' over time" style="--glow:'+m.color+'88">'+g+'</svg>',X:X,Y:Y,W:W}
+  }
+  function hover(plot,m,pts,geom){
+    var tip=plot.querySelector('.pl-tip'),vl=plot.querySelector('.pl-vl'),pt=plot.querySelector('.pl-pt'),idx=-1;
+    function show(i){
+      var p=pts[i];if(!p)return;var v=m.val(p);if(v==null)return;idx=i;var x=geom.X(p.t),y=geom.Y(v);
+      vl.setAttribute('x1',x);vl.setAttribute('x2',x);vl.style.display='';pt.setAttribute('cx',x);pt.setAttribute('cy',y);pt.style.display='';
+      tip.innerHTML=fv(m,v)+(m.fmt?'':' '+m.unit)+'<small>'+dt(p.t)+'</small>';tip.style.display='block';tip.style.left=Math.min(Math.max(x/geom.W*100,12),88)+'%'}
+    function hide(){tip.style.display='none';vl.style.display='none';pt.style.display='none'}
+    function near(ev){var r=plot.getBoundingClientRect(),x=(ev.clientX-r.left)/r.width*geom.W,best=-1,bd=1e18;
+      for(var i=0;i<pts.length;i++){if(m.val(pts[i])==null)continue;var dd=Math.abs(geom.X(pts[i].t)-x);if(dd<bd){bd=dd;best=i}}
+      if(best>=0)show(best)}
+    plot.addEventListener('pointermove',near);plot.addEventListener('pointerdown',near);plot.addEventListener('pointerleave',hide);
+    plot.addEventListener('keydown',function(e){
+      if(e.key!=='ArrowLeft'&&e.key!=='ArrowRight')return;e.preventDefault();
+      var dir=e.key==='ArrowRight'?1:-1,i=idx<0?pts.length-1:idx+dir;
+      while(i>=0&&i<pts.length&&m.val(pts[i])==null)i+=dir;
+      if(i>=0&&i<pts.length)show(i)});
+  }
+  function spark(m,pts){
+    var vals=pts.map(m.val),ok=vals.filter(function(v){return v!=null});
+    if(ok.length<2)return '<svg viewBox="0 0 100 34"></svg>';
+    var lo=Math.min.apply(null,ok),hi=Math.max.apply(null,ok);if(hi-lo<1e-9){lo-=1;hi+=1}
+    var n=vals.length,path='',started=false;
+    vals.forEach(function(v,i){if(v==null){started=false;return}var x=i/(n-1)*100,y=30-(v-lo)/(hi-lo)*26;path+=(started?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' ';started=true});
+    return '<svg viewBox="0 0 100 34" preserveAspectRatio="none"><path d="'+path+'" fill="none" stroke="'+m.color+'" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg>';
+  }
+
+  function renderStage(){
+    var d=st.data,c=d&&d.current;
+    var chips=$('pl-chips'),tiles=$('pl-tiles');
+    if(!d||!d.samples||!c){chips.innerHTML='';tiles.innerHTML='';$('pl-plot').innerHTML='<div class="pl-none">No readings to chart yet.</div>';$('pl-read').innerHTML='';$('pl-mt').textContent='';$('pl-ms').textContent='';return}
+    var pts=d.samples;
+    chips.innerHTML=ORDER.map(function(k){return '<button type="button" class="pl-chip" data-m="'+k+'" aria-pressed="'+(k===st.metric)+'">'+M[k].short+'</button>'}).join('');
+    tiles.innerHTML=ORDER.map(function(k){var m=M[k],cv=m.cur(c),tg=m.tag(c);
+      return '<button type="button" class="pl-tile" data-m="'+k+'" aria-pressed="'+(k===st.metric)+'" style="--tc:'+m.color+'"><small>'+m.name+'</small>'
+        +'<b>'+(cv==null?'\u2014':(m.fmt?m.fmt(cv):Number(cv).toFixed(m.dec)))+(m.fmt?'':'<em>'+m.unit+'</em>')+'</b>'+spark(m,pts)+'<i style="color:'+tg[1]+'">'+tg[0]+'</i></button>'}).join('');
+    var m=M[st.metric],g=chartSVG(m,pts,d,680,280,{l:50,r:12,t:12,b:26}),plot=$('pl-plot'),s=statsOf(m,d),cv=m.cur(c);
+    $('pl-mt').textContent=m.name;$('pl-ms').textContent=m.about;
+    plot.innerHTML=g.svg+'<div class="pl-tip"></div>';hover(plot,m,pts,g);
+    $('pl-read').innerHTML=[['Right now',cv],['Typical',s.avg],['Floor',s.min],['Ceiling',s.max]].map(function(x){return '<div><span>'+x[0]+'</span><b>'+fv(m,x[1])+'</b></div>'}).join('');
+  }
+
+  /* ---------- records + outage timeline ---------- */
+  function renderLower(){
+    var d=st.data,rec=$('pl-records'),log=$('pl-log');
+    if(!d||!d.current){rec.innerHTML='';log.innerHTML='';return}
+    var pk=d.peak||{},sT=d.stats&&d.stats.tps,sM=d.stats&&d.stats.mspt,sR=d.stats&&d.stats.ram_mb;
+    rec.innerHTML='<h3>Records</h3><div class="pl-rec">'
+      +'<div><span>Most players ever</span><b>'+(pk.all_time||0)+'</b><small>'+(pk.all_time_at?dt(pk.all_time_at):'not recorded yet')+'</small></div>'
+      +'<div><span>Most this session</span><b>'+(pk.session||0)+'</b><small>'+(pk.session_at?dt(pk.session_at):'since the last restart')+'</small></div>'
+      +'<div><span>Slowest tick</span><b>'+(sM&&sM.max!=null?sM.max.toFixed(1)+' ms':'\u2014')+'</b><small>in this window</small></div>'
+      +'<div><span>Lowest TPS</span><b>'+(sT&&sT.min!=null?sT.min.toFixed(2):'\u2014')+'</b><small>in this window</small></div>'
+      +'</div>';
+    var items=[];
+    items.push('<li style="--dc:'+GOOD+'"><b>Server started</b>'+dt(d.server.started_at)+' \u00b7 running '+fmtDur((nowMs()-d.server.started_at)/1000)+'</li>');
+    if(!st.online&&st.lastOk)items.unshift('<li style="--dc:'+BAD+'"><b>Offline now</b>since about '+dt(st.lastOk)+' \u00b7 '+fmtDur((Date.now()-st.lastOk)/1000)+' so far</li>');
+    (d.downtimes||[]).slice(0,8).forEach(function(x){
+      items.push('<li style="--dc:'+(x.clean?'#7dbdf0':BAD)+'"><b>'+(x.clean?'Restart':'Outage')+' \u00b7 '+fmtDur(x.seconds)+' down</b>'+dt(x.from)+' \u2192 '+dt(x.to)+(x.clean?'':' \u00b7 crash or power loss, time approximate')+'</li>')});
+    log.innerHTML='<h3>Restarts and outages</h3><ul class="pl-tl">'+items.join('')+'</ul>'+((d.downtimes||[]).length?'':'<p class="pl-none" style="margin:12px 0 0">No outages recorded yet.</p>');
+  }
+
+  function render(){
+    setLive();renderHero();renderRibbon();renderStage();renderLower();
+    var d=st.data,tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){}
+    $('pl-foot').textContent='Tap or hover a chart to read it, and use the arrow keys to step along it. '
+      +(d&&d.history?d.history.samples+' readings in this window, one every '+d.interval_seconds+' seconds. ':'')
+      +'A Minecraft server has no graphics card, so processor load is shown instead. Times are in '+(tz||'your time zone')+'.'+(st.online?'':' Showing the last saved data.');
+  }
+
+  /* ---------- controls ---------- */
+  $('pl-range').addEventListener('click',function(e){var b=e.target.closest('[data-hr]');if(!b)return;
+    st.hours=+b.dataset.hr;root.querySelectorAll('[data-hr]').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});load()});
+  function pick(e){var b=e.target.closest('[data-m]');if(!b)return;st.metric=b.dataset.m;renderStage()}
+  $('pl-chips').addEventListener('click',pick);$('pl-tiles').addEventListener('click',pick);
+  $('pl-refresh').addEventListener('click',load);
+  $('pl-freeze').addEventListener('click',function(){st.paused=!st.paused;this.textContent=st.paused?'Unfreeze':'Freeze';setLive()});
+  $('pl-csv').addEventListener('click',function(){
+    var d=st.data;if(!d||!d.samples)return;
+    var rows=['time,tps,mspt,ram_mb,cpu_percent,online,chunks,entities'];
+    d.samples.forEach(function(p){rows.push([new Date(p.t).toISOString(),p.tps,p.mspt==null?'':p.mspt,p.ram,p.cpu==null?'':p.cpu,p.online,p.chunks,p.entities].join(','))});
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows.join('\n')],{type:'text/csv'}));
+    a.download='relique-pulse-'+st.hours+'h.csv';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500)});
+
+  setInterval(function(){if(active()&&!st.paused&&!document.hidden)load()},15000);
+  setInterval(function(){if(!active()||!st.data)return;var c=root.querySelector('.pl-clock');if(c)c.textContent=clockText()},1000); // keeps the uptime / offline clock ticking
+  window.addEventListener('hashchange',function(){if(active())load()});
+  document.addEventListener('visibilitychange',function(){if(active()&&!document.hidden&&!st.paused)load()});
+  if(active())load();
 })();
 </script>

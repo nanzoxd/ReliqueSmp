@@ -2930,6 +2930,142 @@ html.js.rdy .nav-links a{animation-duration:.2s !important}
       <div class="phead-copy"><h1>Leaderboard</h1><p class="lede">The top 20 SMP players on Relique, ranked by Elo. Search any player, see who&rsquo;s online, and tap a name for their stats and tiers.</p></div>
       
     </header>
+    <style id="lbp-css">
+.lbp{--p-card:rgba(8,6,10,.82);--p-line:rgba(255,255,255,.07);--p-rose:#e6b3d3;--p-txt:#f4eef2;--p-mut:#a99aa6;--p-up:#52e08a;--p-warn:#f3c969;--p-bad:#ff7a8a;position:relative;margin:22px 0 8px;padding:18px;border-radius:32px;color:var(--p-txt);background:radial-gradient(120% 90% at 18% 0%,rgba(150,112,136,.62),rgba(78,60,74,.5) 38%,rgba(22,18,24,.92) 78%),#0b090d;border:1px solid rgba(255,255,255,.09);box-shadow:0 30px 70px -30px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.08)}
+.lbp *{box-sizing:border-box}
+.lbp button{font:inherit;cursor:pointer}
+.lbp-head{display:flex;flex-wrap:wrap;gap:14px 18px;align-items:flex-end;justify-content:space-between;padding:4px 4px 0}
+.lbp-head h2{margin:0;font-size:clamp(24px,3.4vw,32px);font-weight:600;letter-spacing:-.01em;line-height:1.1;color:var(--p-txt)}
+.lbp-head h2 em{font-style:normal;color:var(--p-rose)}
+.lbp-head p{margin:6px 0 0;font-size:13.5px;color:var(--p-mut)}
+.lbp-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.lbp-pillset{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:rgba(6,4,8,.72);border:1px solid var(--p-line)}
+.lbp-pill{appearance:none;border:1px solid transparent;background:transparent;color:var(--p-txt);padding:7px 15px;border-radius:999px;font-size:13px;font-weight:500;line-height:1;white-space:nowrap}
+.lbp-pill:hover{background:rgba(255,255,255,.07)}
+.lbp-pill[aria-pressed="true"]{background:linear-gradient(180deg,rgba(214,170,198,.55),rgba(160,118,148,.42));border-color:rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+.lbp-live,.lbp-link{display:inline-flex;align-items:center;gap:8px;padding:9px 15px;border-radius:999px;background:rgba(6,4,8,.72);border:1px solid var(--p-line);font-size:13px;color:var(--p-txt);text-decoration:none}
+.lbp-link:hover{background:rgba(255,255,255,.08)}
+.lbp-link svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lbp-dot{position:relative;display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--p-up);box-shadow:0 0 10px 1px rgba(82,224,138,.7)}
+.lbp-dot::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1.5px solid var(--p-up);opacity:0;animation:lbpr 2.4s ease-out infinite}
+.lbp-dot.wait{background:#8f8190;box-shadow:none}
+.lbp-dot.off{background:var(--p-bad);box-shadow:0 0 10px 1px rgba(255,122,138,.6)}
+.lbp-dot.wait::after,.lbp-dot.off::after{animation:none}
+@keyframes lbpr{0%{transform:scale(.6);opacity:.7}100%{transform:scale(1.8);opacity:0}}
+.lbp-grid{display:grid;grid-template-columns:1fr 1.12fr 1fr;gap:14px;margin-top:16px}
+.lbp-col{display:flex;flex-direction:column;gap:14px;min-width:0}
+.lbp-card{position:relative;min-width:0;overflow:hidden;background:var(--p-card);border:1px solid var(--p-line);border-radius:24px;padding:16px 18px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.lbp-ch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.lbp-ch h3{margin:0;font-size:15px;font-weight:500;color:var(--p-txt)}
+.lbp-ch .lbp-pill{border-color:var(--p-line);padding:6px 12px;font-size:12.5px}
+.lbp-ch .lbp-pillset{padding:3px}
+.lbp-ch .lbp-pillset .lbp-pill{border:0;padding:6px 11px;font-size:12px}
+.lbp-cyc{display:inline-flex;align-items:center;gap:6px}
+.lbp-cyc svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.lbp-ghost{width:34px;height:34px;padding:0!important;display:inline-grid;place-items:center;border-radius:12px!important;border:1px solid var(--p-line);background:transparent;color:var(--p-txt);text-decoration:none}
+.lbp-ghost svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lbp-ghost:hover{background:rgba(255,255,255,.08)}
+.lbp-big{display:flex;align-items:center;gap:10px;font-size:clamp(28px,3.4vw,36px);font-weight:700;letter-spacing:-.01em;line-height:1.1;margin:6px 0 4px}
+.lbp-big svg{width:26px;height:26px;stroke:var(--p-rose);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.lbp-usub{font-size:12.5px;color:var(--p-mut);min-height:18px}
+.lbp-state{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--p-up)}
+.lbp-state.warn{color:var(--p-warn)}.lbp-state.bad{color:var(--p-bad)}
+.lbp-ecg{position:absolute;right:14px;bottom:12px;width:120px;height:34px;opacity:.7;pointer-events:none}
+.lbp-ecg path{fill:none;stroke:var(--p-rose);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60 200;animation:lbpe 2.6s linear infinite;filter:drop-shadow(0 0 4px rgba(230,179,211,.7))}
+@keyframes lbpe{from{stroke-dashoffset:260}to{stroke-dashoffset:0}}
+.lbp-hc{text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:176px;padding-bottom:58px;background:radial-gradient(70% 55% at 50% 108%,rgba(236,160,214,.55),rgba(150,90,140,.22) 55%,transparent 78%),var(--p-card)}
+.lbp-hc h3{margin:0;font-size:16px;font-weight:600}
+.lbp-hc p{margin:0;max-width:30ch;font-size:12.5px;line-height:1.5;color:var(--p-mut)}
+.lbp-cta{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);padding:9px 22px;border-radius:999px;font-size:13px;font-weight:500;color:#fff;text-decoration:none;background:linear-gradient(180deg,rgba(236,176,222,.75),rgba(170,110,160,.7));box-shadow:0 0 28px 4px rgba(236,160,214,.4),inset 0 1px 0 rgba(255,255,255,.3);white-space:nowrap}
+.lbp-rows{display:flex;flex-direction:column;gap:2px}
+.lbp-row{appearance:none;width:100%;display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;text-align:left;padding:10px 8px;border:1px solid transparent;border-radius:16px;background:transparent;color:var(--p-txt)}
+.lbp-row:hover{background:rgba(255,255,255,.04)}
+.lbp-row[aria-pressed="true"]{background:rgba(214,170,198,.12);border-color:rgba(230,179,211,.22)}
+.lbp-ic{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:rgba(255,255,255,.06)}
+.lbp-ic svg{width:18px;height:18px;stroke:var(--p-rose);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lbp-rn{display:block;font-size:14px;font-weight:600}
+.lbp-rs{display:block;font-size:11.5px;color:var(--p-mut);margin-top:2px}
+.lbp-rv{text-align:right;font-size:14px;font-weight:700;white-space:nowrap}
+.lbp-rv i{display:block;font-style:normal;font-size:11.5px;font-weight:600;margin-top:2px}
+.lbp-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lbp-tile{appearance:none;text-align:left;display:flex;flex-direction:column;gap:3px;padding:13px 14px;border-radius:20px;background:rgba(255,255,255,.035);border:1px solid var(--p-line);color:var(--p-txt);min-width:0}
+button.lbp-tile:hover{background:rgba(255,255,255,.07)}
+.lbp-tile[aria-pressed="true"]{border-color:rgba(230,179,211,.4)}
+.lbp-tv{font-size:20px;font-weight:700;line-height:1.15}
+.lbp-ts{font-size:11.5px;font-weight:600;color:var(--p-up);min-height:15px}
+.lbp-tf{display:flex;justify-content:space-between;gap:6px;margin-top:10px;font-size:11.5px;color:var(--p-mut)}
+.lbp-tf b{color:var(--p-txt);font-weight:600}
+.lbp-perf{margin-top:14px;padding-bottom:12px}
+.lbp-sub{font-size:12.5px;color:var(--p-mut);margin-top:3px;display:block}
+.lbp-pw{position:relative;margin-top:8px}
+.lbp-plot{position:relative;touch-action:pan-y;outline:none}
+.lbp-plot svg{display:block;width:100%;height:auto;overflow:visible}
+.lbp-plot text{fill:var(--p-mut);font-size:11.5px;font-family:inherit}
+.lbp-plot .ln{filter:drop-shadow(0 0 6px rgba(230,179,211,.45))}
+.lbp-plot:focus-visible{box-shadow:0 0 0 2px rgba(230,179,211,.4);border-radius:12px}
+.lbp-tip{position:absolute;display:none;pointer-events:none;transform:translate(-50%,-100%);background:rgba(10,8,12,.94);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:9px 12px 10px;min-width:128px;box-shadow:0 14px 30px -10px rgba(0,0,0,.8);transition:left .12s,top .12s;z-index:2}
+.lbp-tip small{display:block;font-size:11.5px;color:var(--p-mut);margin-bottom:3px}
+.lbp-tip b{font-size:17px;font-weight:700;margin-right:8px}
+.lbp-chip{display:inline-block;padding:2px 8px;border-radius:7px;font-size:11px;font-weight:600;background:rgba(82,224,138,.14);color:var(--p-up);border:1px solid rgba(82,224,138,.28)}
+.lbp-chip.bad{background:rgba(255,122,138,.14);color:var(--p-bad);border-color:rgba(255,122,138,.3)}
+.lbp-none{padding:48px 12px;text-align:center;font-size:13px;color:var(--p-mut)}
+@media (max-width:980px){.lbp-grid{grid-template-columns:1fr 1fr}.lbp-col{grid-column:1/-1;flex-direction:row}.lbp-col>.lbp-card{flex:1 1 0}}
+@media (max-width:640px){.lbp{padding:12px;border-radius:26px}.lbp-grid{grid-template-columns:1fr}.lbp-col{flex-direction:column}.lbp-card{padding:14px}.lbp-head{align-items:flex-start}}
+@media (prefers-reduced-motion:reduce){.lbp-dot::after,.lbp-ecg path{animation:none}.lbp-tip{transition:none}}
+</style>
+<section class="lbp" id="lbp" aria-label="Server Pulse">
+  <div class="lbp-head">
+    <div><h2>Server <em>Pulse</em></h2><p>How Relique is running right now.</p></div>
+    <div class="lbp-tools">
+      <span class="lbp-live"><i class="lbp-dot wait" id="lbp-dot"></i><span id="lbp-livetxt">Connecting&hellip;</span></span>
+      <a class="lbp-link" href="#health">Full pulse<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+    </div>
+  </div>
+  <div class="lbp-grid">
+    <div class="lbp-col">
+      <div class="lbp-card lbp-up">
+        <div class="lbp-ch"><h3>Uptime</h3><button type="button" class="lbp-pill lbp-cyc" id="lbp-cyc" aria-label="Change time window"><span id="lbp-cyct">1H</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></div>
+        <div class="lbp-state" id="lbp-state">Connecting</div>
+        <div class="lbp-big"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l2.5-6 4 12 2.5-6H21"/></svg><span id="lbp-clock">&mdash;</span></div>
+        <div class="lbp-usub" id="lbp-usub">Reading the server&hellip;</div>
+        <svg class="lbp-ecg" viewBox="0 0 120 34" aria-hidden="true"><path d="M0 18h26l5-12 7 24 6-12h10l4-8 5 8h31"/></svg>
+      </div>
+      <div class="lbp-card lbp-hc">
+        <h3 id="lbp-hv">Checking vitals</h3>
+        <p id="lbp-ht">Live readings from the Relique plugin.</p>
+        <a class="lbp-cta" href="#health">Open full pulse</a>
+      </div>
+    </div>
+    <div class="lbp-card lbp-vit">
+      <div class="lbp-ch"><h3>Vitals</h3>
+        <div class="lbp-pillset" id="lbp-filter" role="group" aria-label="Filter vitals">
+          <button type="button" class="lbp-pill" data-f="all" aria-pressed="true">All</button>
+          <button type="button" class="lbp-pill" data-f="speed" aria-pressed="false">Speed</button>
+          <button type="button" class="lbp-pill" data-f="load" aria-pressed="false">Load</button>
+        </div>
+      </div>
+      <div class="lbp-rows" id="lbp-rows"></div>
+    </div>
+    <div class="lbp-card lbp-pl">
+      <div class="lbp-ch"><h3>Players</h3>
+        <span style="display:inline-flex;gap:8px;align-items:center"><button type="button" class="lbp-pill" id="lbp-seeall" style="border:1px solid var(--p-line)">See all</button><a class="lbp-ghost" href="#health" aria-label="Open full pulse"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a></span>
+      </div>
+      <div class="lbp-tiles" id="lbp-tiles"></div>
+    </div>
+  </div>
+  <div class="lbp-card lbp-perf">
+    <div class="lbp-ch">
+      <div><h3>Server Performance</h3><span class="lbp-sub" id="lbp-msub">Tick speed</span></div>
+      <div class="lbp-pillset" id="lbp-range" role="group" aria-label="Time window">
+        <button type="button" class="lbp-pill" data-hr="1" aria-pressed="true">1H</button>
+        <button type="button" class="lbp-pill" data-hr="6" aria-pressed="false">6H</button>
+        <button type="button" class="lbp-pill" data-hr="24" aria-pressed="false">1D</button>
+        <button type="button" class="lbp-pill" data-hr="48" aria-pressed="false">2D</button>
+      </div>
+    </div>
+    <div class="lbp-pw"><div class="lbp-plot" id="lbp-plot" tabindex="0" aria-label="Performance chart, use the arrow keys to move along it"><div class="lbp-none">Reading the server&hellip;</div></div><div class="lbp-tip" id="lbp-tip"></div></div>
+  </div>
+</section>
     <div class="lb-bar">
       <div class="lb-tabs" role="tablist" aria-label="Leaderboard view">
         <button type="button" class="lb-tab" role="tab" id="tab-top" aria-selected="true">Top 20</button>
@@ -5335,6 +5471,215 @@ html.rq-resizing *{transition:none !important;animation-duration:.001s !importan
   setInterval(function(){if(!active()||!st.data)return;var c=root.querySelector('.pl-clock');if(c)c.textContent=clockText()},1000); // keeps the uptime / offline clock ticking
   window.addEventListener('hashchange',function(){if(active())load()});
   document.addEventListener('visibilitychange',function(){if(active()&&!document.hidden&&!st.paused)load()});
+  if(active())load();
+})();
+</script>
+<script id="lbp-js">
+(function(){
+  var root=document.getElementById('lbp');if(!root)return;
+  var CK='relique-lbp-cache',RANGES=[[1,'1H'],[6,'6H'],[24,'1D'],[48,'2D']];
+  var GOOD='#52e08a',WARN='#f3c969',BAD='#ff7a8a';
+  var st={hours:1,metric:'tps',filter:'all',data:null,online:null,lastOk:0,offset:0,mcUp:null,sel:-1,geom:null};
+  var $=function(id){return document.getElementById(id)};
+  var active=function(){return location.hash==='#leaderboard'};
+  var nowMs=function(){return Date.now()+(st.offset||0)};
+  function gb(mb){return (mb/1024).toFixed(1)+' GB'}
+  function dur(s){s=Math.max(0,Math.floor(s));var d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60);return d?d+'d '+h+'h':h?h+'h '+m+'m':m+'m '+(s%60)+'s'}
+  function dt(t){try{return new Date(t).toLocaleString([],{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}catch(e){return ''}}
+  function hm(t){try{return new Date(t).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}catch(e){return ''}}
+  function dd(t){try{return new Date(t).toLocaleDateString([],{day:'numeric',month:'short'})}catch(e){return ''}}
+  function ramPct(c){return c.ram_max_mb?c.ram_used_mb/c.ram_max_mb*100:0}
+  function winText(){var h=st.hours;return h>=24?(h/24)+' day'+(h>24?'s':''):h+' hour'+(h>1?'s':'')}
+  function nice(x){var e=Math.pow(10,Math.floor(Math.log(x)/Math.LN10)),f=x/e;return (f<=1?1:f<=2?2:f<=5?5:10)*e}
+
+  var IC={
+    tps:'<path d="M3 12h4l2.5-6 4 12 2.5-6H21"/>',
+    mspt:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+    ram:'<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/>',
+    cpu:'<path d="M4 16a8 8 0 1 1 16 0"/><path d="m12 16 4-5"/>',
+    entities:'<path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/>',
+    online:'<path d="M16 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-3A3.5 3.5 0 0 0 6 17.5V19"/><circle cx="11" cy="8" r="3"/><path d="M17.5 8.5a2.5 2.5 0 0 1 0 4.5M19 19v-1a3 3 0 0 0-2-2.8"/>'
+  };
+  var M={
+    tps:{name:'Tick speed',grp:'speed',up:true,val:function(p){return p.tps},cur:function(c){return c.tps},fmt:function(v){return v.toFixed(1)+' TPS'},axis:function(v){return Math.round(v)},fixed:function(){return 20},
+      sub:function(){return 'Ticks per second, ideal 20'},tag:function(c){return c.tps>=19?['Smooth',GOOD]:c.tps>=17?['Slight lag',WARN]:['Lagging',BAD]}},
+    mspt:{name:'Tick time',grp:'speed',up:false,val:function(p){return p.mspt},cur:function(c){return c.mspt},fmt:function(v){return v.toFixed(1)+' ms'},axis:function(v){return Math.round(v)},
+      sub:function(){return 'Milliseconds per tick, limit 50'},tag:function(c){return c.mspt==null?['',GOOD]:c.mspt<35?['Light',GOOD]:c.mspt<50?['Busy',WARN]:['Over budget',BAD]}},
+    ram:{name:'Memory',grp:'load',up:false,val:function(p){return p.ram},cur:function(c){return c.ram_used_mb},fmt:function(v){return gb(v)},axis:function(v){return (v/1024).toFixed(1)+'G'},fixed:function(d){return d.current&&d.current.ram_max_mb||null},
+      sub:function(c){return 'of '+(c.ram_max_mb?gb(c.ram_max_mb):'?')+' allowed'},tag:function(c){var p=ramPct(c);return p<75?['Roomy',GOOD]:p<90?['Filling up',WARN]:['Nearly full',BAD]}},
+    cpu:{name:'Processor',grp:'load',up:false,val:function(p){return p.cpu},cur:function(c){return c.cpu_process},fmt:function(v){return v.toFixed(0)+'%'},axis:function(v){return Math.round(v)+'%'},fixed:function(){return 100},
+      sub:function(){return 'Server process load'},tag:function(c){return c.cpu_process==null?['',GOOD]:c.cpu_process<70?['Light',GOOD]:c.cpu_process<90?['Busy',WARN]:['Maxed out',BAD]}},
+    online:{name:'Players',grp:'none',up:true,val:function(p){return p.online},cur:function(c){return c.online},fmt:function(v){return Math.round(v)+(Math.round(v)===1?' player':' players')},axis:function(v){return Math.round(v)},
+      sub:function(c){return 'of '+(c.max_players||'?')+' slots'},tag:function(c){return c.max_players?[Math.round(c.online/c.max_players*100)+'% full',GOOD]:['',GOOD]}},
+    entities:{name:'World load',grp:'load',up:true,val:function(p){return p.entities},cur:function(c){return c.entities},fmt:function(v){return Math.round(v).toLocaleString()+' entities'},axis:function(v){return v>=1000?(v/1000).toFixed(v%1000?1:0)+'k':Math.round(v)},
+      sub:function(c){return c.chunks!=null?c.chunks.toLocaleString()+' chunks loaded':'Mobs, items and more'},tag:function(){return ['Loaded',GOOD]}}
+  };
+  var LIST=['tps','mspt','ram','cpu','entities'];
+  function curFmt(m,c){var v=m.cur(c);if(v==null)return '\u2014';var f=m.fmt(v);return f.replace(/ (TPS|entities|players?)$/,'')}
+
+  /* ---------- data ---------- */
+  function get(h){
+    var o={cache:'no-store',headers:{Accept:'application/json'}},k=window.RQ_API_KEY||'';
+    if(k)o.headers['X-Api-Key']=k;
+    var ctl=window.AbortController?new AbortController():null,t=setTimeout(function(){if(ctl)ctl.abort()},8000);
+    if(ctl)o.signal=ctl.signal;
+    return fetch((window.RQ_API_URL||'/relique')+'/api/health?hours='+h+'&points=240&_='+Date.now(),o)
+      .then(function(r){clearTimeout(t);if(!r.ok)throw 0;return r.json()},function(e){clearTimeout(t);throw e});
+  }
+  function load(){
+    var h=st.hours;
+    get(h).then(function(d){
+      if(h!==st.hours)return;
+      if(!d||!d.available)throw 0;
+      st.data=d;st.online=true;st.mcUp=null;st.lastOk=Date.now();st.offset=d.now-Date.now();
+      try{localStorage.setItem(CK,JSON.stringify({t:Date.now(),hours:h,data:d}))}catch(e){}
+      render();
+    }).catch(function(){if(h===st.hours)offline()});
+  }
+  function offline(){
+    var c=null;try{c=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){}
+    if(!st.data&&c&&c.data)st.data=c.data;
+    if(!st.lastOk&&c)st.lastOk=c.t;
+    st.online=false;render();
+    fetch('/api/status',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(s){
+      st.mcUp=s?!!s.online:null;render();
+    }).catch(function(){});
+  }
+  function avail(d){
+    var end=st.online?nowMs():Date.now(),start=end-st.hours*3600e3,hist=(d.history&&d.history.oldest)||start,from=Math.max(start,Math.min(hist,end)),off=0;
+    (d.downtimes||[]).forEach(function(x){var a=Math.max(x.from,from),b=Math.min(x.to,end);if(b>a)off+=b-a});
+    if(!st.online&&st.lastOk){var a2=Math.max(st.lastOk,from);if(end>a2)off+=end-a2}
+    return Math.max(0,Math.min(100,(1-off/Math.max(1,end-from))*100));
+  }
+
+  /* ---------- top cards ---------- */
+  function clockText(){var d=st.data;
+    if(st.online&&d)return dur((nowMs()-d.server.started_at)/1000);
+    if(!st.online&&st.mcUp!==true&&st.lastOk)return dur((Date.now()-st.lastOk)/1000);
+    return '\u2014'}
+  function top(){
+    var d=st.data,c=d&&d.current,on=st.online,warn=on===false&&st.mcUp===true;
+    var dot=$('lbp-dot'),lt=$('lbp-livetxt'),sEl=$('lbp-state'),usub=$('lbp-usub'),state,cls='',sub;
+    if(on===null&&!d){dot.className='lbp-dot wait';lt.textContent='Connecting\u2026';state='Connecting';sub='Reading the server\u2026'}
+    else if(on&&d){dot.className='lbp-dot';lt.textContent='Live';state='Online';var a=avail(d);sub=a.toFixed(a>=99.95||a<=0?0:1)+'% online, last '+winText()+' \u00b7 restarted '+dt(d.server.started_at)}
+    else if(warn){dot.className='lbp-dot wait';lt.textContent='No health data';state='Online, no data';cls='warn';sub='The server answers, but the health plugin does not. Showing the last saved data.'}
+    else{dot.className='lbp-dot off';lt.textContent='Server offline';state='Offline';cls='bad';sub=st.lastOk?'Offline since about '+dt(st.lastOk):'Not reachable, and no saved data yet.'}
+    sEl.className='lbp-state '+cls;sEl.textContent=state;usub.textContent=sub;$('lbp-clock').textContent=clockText();
+    var hv=$('lbp-hv'),ht=$('lbp-ht');
+    if(!c){hv.textContent=on===false?'Waiting for the server':'Checking vitals';ht.textContent=on===false?'No readings to show yet.':'Live readings from the Relique plugin.';return}
+    var worst=0;['tps','mspt','ram','cpu'].forEach(function(k){var t=M[k].tag(c)[1];if(M[k].cur(c)==null)return;worst=Math.max(worst,t===BAD?2:t===WARN?1:0)});
+    hv.textContent=worst===2?'Under strain':worst===1?'Running warm':'Running smoothly';
+    ht.textContent=(c.tps!=null?c.tps.toFixed(1)+' TPS':'')+(c.max_players?' \u00b7 '+c.online+' of '+c.max_players+' players':'')+(on?'':' \u00b7 last saved readings');
+  }
+  function rows(){
+    var d=st.data,c=d&&d.current,el=$('lbp-rows');
+    if(!c){el.innerHTML='<div class="lbp-none">No readings yet.</div>';return}
+    el.innerHTML=LIST.filter(function(k){return st.filter==='all'||M[k].grp===st.filter}).map(function(k){
+      var m=M[k],t=m.tag(c);
+      return '<button type="button" class="lbp-row" data-m="'+k+'" aria-pressed="'+(k===st.metric)+'"><span class="lbp-ic"><svg viewBox="0 0 24 24" aria-hidden="true">'+IC[k]+'</svg></span>'
+        +'<span><span class="lbp-rn">'+m.name+'</span><span class="lbp-rs">'+m.sub(c)+'</span></span>'
+        +'<span class="lbp-rv">'+curFmt(m,c)+'<i style="color:'+t[1]+'">'+t[0]+'</i></span></button>'}).join('');
+  }
+  function tiles(){
+    var d=st.data,c=d&&d.current,el=$('lbp-tiles');
+    if(!c){el.innerHTML='<div class="lbp-none" style="grid-column:1/-1">No readings yet.</div>';return}
+    var pk=d.peak||{},t=M.online.tag(c);
+    function tile(key,val,sub,icon,label,meta,metaLbl){
+      var inner='<span class="lbp-tv">'+val+'</span><span class="lbp-ts">'+sub+'</span><span class="lbp-tf"><span>'+label+'</span><span>'+metaLbl+' <b>'+meta+'</b></span></span>';
+      return key?'<button type="button" class="lbp-tile" data-m="'+key+'" aria-pressed="'+(key===st.metric)+'">'+inner+'</button>':'<div class="lbp-tile">'+inner+'</div>';
+    }
+    el.innerHTML=tile('online',c.online,t[0],'', 'Online now',c.max_players||'?','Slots')
+      +tile('',pk.session||0,pk.session_at?dt(pk.session_at):'This session','','Session peak',pk.all_time||0,'Record')
+      +tile('',pk.all_time||0,pk.all_time_at?dt(pk.all_time_at):'Not recorded yet','','All-time peak','','')
+      +tile('entities',c.chunks!=null?c.chunks.toLocaleString():'\u2014','Loaded','','Chunks',c.entities!=null?c.entities.toLocaleString():'\u2014','Entities');
+  }
+
+  /* ---------- chart ---------- */
+  function chart(){
+    var d=st.data,m=M[st.metric],plot=$('lbp-plot'),tip=$('lbp-tip');
+    $('lbp-msub').textContent=m.name+' \u00b7 last '+winText();
+    var pts=d&&d.samples?d.samples.filter(function(p){return m.val(p)!=null}):[];
+    if(pts.length<2){st.geom=null;tip.style.display='none';plot.innerHTML='<div class="lbp-none">'+(st.online===null?'Reading the server\u2026':'Not enough readings yet. This fills in within a minute of the server running.')+'</div>';return}
+    var W=Math.max(280,Math.round(plot.clientWidth||600)),H=W<560?220:270,L=W<420?38:46,R=12,T=14,B=26;
+    var vals=pts.map(m.val),hi=Math.max.apply(null,vals),y0=0,y1=m.fixed?m.fixed(d):null;
+    if(!y1||y1<=0){var step=nice(Math.max(1,hi*1.15)/4);y1=step*4}
+    var t0=pts[0].t,t1=pts[pts.length-1].t;if(t1<=t0)t1=t0+1;
+    var X=function(t){return L+(t-t0)/(t1-t0)*(W-L-R)},Y=function(v){return T+(1-(Math.min(Math.max(v,y0),y1)-y0)/(y1-y0))*(H-T-B)};
+    var g='<defs><linearGradient id="lbp-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6b3d3" stop-opacity=".42"/><stop offset="1" stop-color="#e6b3d3" stop-opacity="0"/></linearGradient></defs>';
+    for(var k=0;k<=4;k++){var v=y0+(y1-y0)*k/4,yy=Y(v);
+      g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yy.toFixed(1)+'" y2="'+yy.toFixed(1)+'" stroke="rgba(255,255,255,.07)"/><text x="'+(L-9)+'" y="'+(yy+4).toFixed(1)+'" text-anchor="end">'+m.axis(v)+'</text>'}
+    var dts=[];for(var i=1;i<pts.length;i++)dts.push(pts[i].t-pts[i-1].t);dts.sort(function(a,b){return a-b});
+    var med=dts.length?dts[Math.floor(dts.length/2)]:0,gap=Math.max(med*3,90000),segs=[],cur=[];
+    pts.forEach(function(p,i){
+      if(i>0&&p.t-pts[i-1].t>gap){if(cur.length)segs.push(cur);cur=[];
+        g+='<rect x="'+X(pts[i-1].t).toFixed(1)+'" y="'+T+'" width="'+(X(p.t)-X(pts[i-1].t)).toFixed(1)+'" height="'+(H-T-B)+'" fill="rgba(255,122,138,.12)"/>'}
+      cur.push([X(p.t),Y(m.val(p))])});
+    if(cur.length)segs.push(cur);
+    segs.forEach(function(s){
+      if(s.length===1){g+='<circle cx="'+s[0][0].toFixed(1)+'" cy="'+s[0][1].toFixed(1)+'" r="2.5" fill="#efd2e3"/>';return}
+      var line=s.map(function(q,i){return (i?'L':'M')+q[0].toFixed(1)+' '+q[1].toFixed(1)}).join(' ');
+      g+='<path d="'+line+' L'+s[s.length-1][0].toFixed(1)+' '+(H-B)+' L'+s[0][0].toFixed(1)+' '+(H-B)+' Z" fill="url(#lbp-fill)"/>';
+      g+='<path class="ln" d="'+line+'" fill="none" stroke="#efd2e3" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'});
+    var span=t1-t0,fx=span>20*3600e3?dd:hm,nT=W<520?4:6;
+    for(var j=0;j<nT;j++){var tt=t0+span*j/(nT-1);g+='<text x="'+X(tt).toFixed(1)+'" y="'+(H-6)+'" text-anchor="'+(j===0?'start':j===nT-1?'end':'middle')+'">'+fx(tt)+'</text>'}
+    g+='<line class="vl" y2="'+(H-B)+'" stroke="rgba(255,255,255,.35)" stroke-dasharray="3 5"/><circle class="rg" r="12" fill="rgba(240,190,222,.22)"/><circle class="pt" r="5.5" fill="#f7d9ec" stroke="rgba(20,12,18,.9)" stroke-width="2"/>';
+    plot.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" role="img" aria-label="'+m.name+' over time">'+g+'</svg>';
+    st.geom={pts:pts,m:m,X:X,Y:Y,W:W,H:H};st.sel=-1;place();
+  }
+  function place(){
+    var g=st.geom;if(!g)return;
+    var i=st.sel<0?g.pts.length-1:st.sel,p=g.pts[i];if(!p)return;
+    var plot=$('lbp-plot'),tip=$('lbp-tip'),m=g.m,v=m.val(p),x=g.X(p.t),y=g.Y(v);
+    var vl=plot.querySelector('.vl'),rg=plot.querySelector('.rg'),pt=plot.querySelector('.pt');
+    if(!vl)return;
+    vl.setAttribute('x1',x);vl.setAttribute('x2',x);vl.setAttribute('y1',y);
+    rg.setAttribute('cx',x);rg.setAttribute('cy',y);pt.setAttribute('cx',x);pt.setAttribute('cy',y);
+    var first=m.val(g.pts[0]),chip='';
+    if(first){var pc=(v-first)/first*100,good=Math.abs(pc)<.05||(pc>=0)===m.up;
+      chip='<span class="lbp-chip'+(good?'':' bad')+'">'+(pc>=0?'+':'')+pc.toFixed(Math.abs(pc)<.05?0:1)+'%</span>'}
+    tip.innerHTML='<small>'+dt(p.t)+'</small><b>'+m.fmt(v)+'</b>'+chip;tip.style.display='block';
+    var w=tip.offsetWidth,h=tip.offsetHeight,left=Math.min(Math.max(x,w/2+2),g.W-w/2-2);
+    tip.style.left=left+'px';tip.style.top=y+'px';
+    tip.style.transform=y<h+24?'translate(-50%,16px)':'translate(-50%,calc(-100% - 16px))';
+  }
+  function nearest(ev){
+    var g=st.geom;if(!g)return;
+    var r=$('lbp-plot').getBoundingClientRect(),x=ev.clientX-r.left,best=0,bd=1e18;
+    for(var i=0;i<g.pts.length;i++){var dd2=Math.abs(g.X(g.pts[i].t)-x);if(dd2<bd){bd=dd2;best=i}}
+    st.sel=best;place();
+  }
+
+  function render(){top();rows();tiles();chart()}
+
+  /* ---------- controls ---------- */
+  function setRange(h){
+    st.hours=h;
+    root.querySelectorAll('[data-hr]').forEach(function(b){b.setAttribute('aria-pressed',+b.dataset.hr===h?'true':'false')});
+    RANGES.forEach(function(r){if(r[0]===h)$('lbp-cyct').textContent=r[1]});
+    load();
+  }
+  $('lbp-range').addEventListener('click',function(e){var b=e.target.closest('[data-hr]');if(b)setRange(+b.dataset.hr)});
+  $('lbp-cyc').addEventListener('click',function(){var i=0;RANGES.forEach(function(r,k){if(r[0]===st.hours)i=k});setRange(RANGES[(i+1)%RANGES.length][0])});
+  $('lbp-filter').addEventListener('click',function(e){var b=e.target.closest('[data-f]');if(!b)return;st.filter=b.dataset.f;
+    root.querySelectorAll('[data-f]').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});rows()});
+  function pick(e){var b=e.target.closest('[data-m]');if(!b||!M[b.dataset.m])return;st.metric=b.dataset.m;rows();tiles();chart()}
+  $('lbp-rows').addEventListener('click',pick);$('lbp-tiles').addEventListener('click',pick);
+  $('lbp-seeall').addEventListener('click',function(){
+    var t=$('tab-on');if(t)t.click();
+    var bar=document.querySelector('#page-leaderboard .lb-bar');if(bar)bar.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  var plot=$('lbp-plot');
+  plot.addEventListener('pointermove',nearest);plot.addEventListener('pointerdown',nearest);
+  plot.addEventListener('pointerleave',function(){st.sel=-1;place()});
+  plot.addEventListener('keydown',function(e){
+    var g=st.geom;if(!g||(e.key!=='ArrowLeft'&&e.key!=='ArrowRight'))return;e.preventDefault();
+    var i=st.sel<0?g.pts.length-1:st.sel;i+=e.key==='ArrowRight'?1:-1;st.sel=Math.min(g.pts.length-1,Math.max(0,i));place()});
+  var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){if(active()&&st.data)chart()},150)});
+
+  setInterval(function(){if(active()&&!document.hidden)load()},15000);
+  setInterval(function(){if(active()&&st.data){var c=$('lbp-clock');if(c)c.textContent=clockText()}},1000);
+  window.addEventListener('hashchange',function(){if(active()){load();setTimeout(function(){if(st.data)chart()},60)}});
+  document.addEventListener('visibilitychange',function(){if(active()&&!document.hidden)load()});
   if(active())load();
 })();
 </script>

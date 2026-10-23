@@ -3356,7 +3356,9 @@ function card(r, n) {
   const grid = el('div', 'rc-grid');
   for (let i = 0; i < 9; i++) grid.append(slot(r.input[i] || null, i));
   const arrow = new Image(); arrow.src = ARROW; arrow.alt = 'makes'; arrow.className = 'rc-arrow';
-  craft.append(grid, arrow, slot(out, null, 'out'));
+  const outSlot = slot(out, null, 'out');
+  craft.append(grid, arrow, outSlot);
+  const abil = el('div', 'rcg-view rcg-abil'); abil.hidden = true;
 
   const tot = new Map();
   for (const it of Object.values(r.input)) tot.set(it.id, (tot.get(it.id) || 0) + it.count);
@@ -3378,14 +3380,42 @@ function card(r, n) {
   }
   list.append(ul);
 
-  const body = el('div', 'rcg-body'); body.append(craft, list);
+  const body = el('div', 'rcg-body'); body.append(craft, list, abil);
   const nm = el('div', 'rcg-name'); nm.append(nodeWithCount(out), el('small', 'rt-n', '#' + n));
-  const view = on => { craft.hidden = on; list.hidden = !on; info.setAttribute('aria-pressed', on); ttl.firstChild.textContent = on ? 'INFO' : 'RECIPE'; hideTip(); };
-  info.addEventListener('click', () => view(list.hidden));
-  back.addEventListener('click', () => view(false));
+  const view = mode => { craft.hidden = mode !== 'craft'; list.hidden = mode !== 'info'; abil.hidden = mode !== 'abil'; info.setAttribute('aria-pressed', mode === 'info'); ttl.firstChild.textContent = mode === 'info' ? 'INFO' : mode === 'abil' ? 'ABILITY' : 'RECIPE'; hideTip(); };
+  info.addEventListener('click', () => view(list.hidden || !abil.hidden ? 'info' : 'craft'));
+  back.addEventListener('click', () => view('craft'));
+  if (r.key) {
+    outSlot.classList.add('abil-btn'); outSlot.setAttribute('role', 'button');
+    outSlot.setAttribute('aria-label', out.name + ' - show ability');
+    const open = () => { fillAbility(abil, r.key, out); view('abil'); };
+    outSlot.addEventListener('click', open);
+    outSlot.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  }
   panel.append(ttl, back, info, body, nm);
+  if (r.key) panel.append(el('div', 'rcg-hint', 'Click the effect icon to see its ability'));
   art.append(panel);
   return art;
+}
+/* Ability text is read from the Concept page effect cards so there is one source of truth */
+const ABIL_CARD = {ender: 'Thief'};
+function fillAbility(box, key, out) {
+  box.textContent = '';
+  const want = (ABIL_CARD[key] || key).toLowerCase();
+  const card = [...document.querySelectorAll('#s-effects-list .cls')].find(c => { const h = c.querySelector('h3'); return h && h.textContent.trim().toLowerCase() === want; });
+  const head = el('div', 'abil-head');
+  const ic = iconImg(out.id); if (ic) { const w = el('span', 'abil-ico'); w.append(ic); head.append(w); }
+  const t = el('div'); t.append(el('div', 'abil-name', out.name || title(key)));
+  const tag = card && card.querySelector('.tag'); if (tag) t.append(el('div', 'abil-tag', tag.textContent.trim()));
+  head.append(t); box.append(head);
+  if (!card) { box.append(el('p', 'abil-p', 'Ability details are not available for this effect yet.')); return; }
+  card.querySelectorAll('.blk').forEach(b => {
+    const lab = b.querySelector('b'), em = lab && lab.querySelector('em'), p = b.querySelector('p');
+    const d = el('div', 'abil-blk');
+    const h = el('div', 'abil-h', lab ? lab.childNodes[0].textContent.trim() : '');
+    if (em) h.append(el('span', 'abil-meta', em.textContent.trim()));
+    d.append(h, el('p', 'abil-p', p ? p.textContent.trim() : '')); box.append(d);
+  });
 }
 function nodeWithCount(out) { const s = el('span'); s.append(nameNode(out)); if (out.count > 1) s.append(txt('  ×' + out.count)); return s; }
 
@@ -5980,4 +6010,18 @@ window.__pfTest={decode:decode,pose:pose,JM:JM,A:A};
 .rcgui .rcg-title,.rcgui .rcg-btn{background:var(--g-ttl) !important;box-shadow:0 0 0 2px rgba(0,0,0,.45),inset 2px 2px 0 var(--g-pan-hi),inset -2px -2px 0 var(--g-pan-lo) !important}
 .rcgui .rc-slot,html[data-theme="amoled"] .rcgui .rc-slot{background:rgba(70,120,200,.18) !important;box-shadow:inset 2px 2px 0 rgba(0,0,0,.4),inset -2px -2px 0 rgba(140,190,255,.35) !important}
 .rcgui .rc-tile{background:var(--g-btn) !important}
+
+.rcgui .abil-btn{cursor:pointer !important}
+.rcgui .abil-btn:hover{filter:brightness(1.25)}
+.rcgui .rcg-hint{margin-top:6px;text-align:center;font-size:11px;color:var(--g-sub);opacity:.85}
+.rcgui .rcg-abil{padding:calc(var(--s)*.1) 4px 0;display:flex;flex-direction:column;gap:10px}
+.rcgui .abil-head{display:flex;align-items:center;justify-content:center;gap:12px}
+.rcgui .abil-ico{width:calc(var(--s)*.9);height:calc(var(--s)*.9);display:block;position:relative}
+.rcgui .abil-ico img{width:100%;height:100%;image-rendering:pixelated}
+.rcgui .abil-name{font-size:17px;font-weight:700;color:var(--g-txt)}
+.rcgui .abil-tag{font-size:11px;color:var(--g-sub);letter-spacing:.06em;text-transform:uppercase}
+.rcgui .abil-blk{background:rgba(70,120,200,.14);border-radius:6px;padding:8px 12px}
+.rcgui .abil-h{font:400 10px 'Press Start 2P',monospace;letter-spacing:.06em;color:var(--g-sub);display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.rcgui .abil-meta{font:500 11px system-ui,sans-serif;letter-spacing:0;color:#9fc6f5}
+.rcgui .abil-p{margin:6px 0 0;font-size:13.5px;line-height:1.45;color:var(--g-txt)}
 </style>

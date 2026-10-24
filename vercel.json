@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/relique/:path*",
-      "destination": "http://r99-p.lordcloud.ovh:25551/:path*"
+      "destination": "/api/relique?path=:path*"
     }
   ],
   "headers": [

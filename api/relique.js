@@ -1,14 +1,22 @@
-// Vercel function: proxies /relique/* to the Relique plugin API (works even when a plain rewrite to a custom port fails).
-// Default target is your plugin port; override in Vercel -> Settings -> Environment Variables with RELIQUE_API (and RELIQUE_KEY if you set api-key).
+// Vercel function: proxies /relique/* to the Relique plugin API (plugin port 25551).
+// Optional overrides in Vercel -> Settings -> Environment Variables: RELIQUE_API, RELIQUE_KEY
 const BASE = (process.env.RELIQUE_API || 'http://r99-p.lordcloud.ovh:25551').replace(/\/+$/, '');
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store, max-age=0');
-  const path = String((req.query && req.query.path) || '').replace(/^\/+/, '');
+
+  // Work out the plugin path from the original URL (/relique/api/stats?sort=elo),
+  // falling back to the rewritten ?path= value.
+  const u = new URL(req.url, 'http://x');
+  let path = u.searchParams.get('path') || '';
+  if (!path && u.pathname.indexOf('/relique/') === 0) path = u.pathname.slice('/relique/'.length);
+  path = String(path).replace(/^\/+/, '');
   if (!/^api\/[a-z0-9\/_-]*$/i.test(path)) return res.status(404).json({ error: 'not found' });
+
   const qs = new URLSearchParams();
-  Object.keys(req.query || {}).forEach(k => { if (k !== 'path') [].concat(req.query[k]).forEach(v => qs.append(k, v)); });
+  u.searchParams.forEach((v, k) => { if (k !== 'path') qs.append(k, v); });
   const url = BASE + '/' + path + (qs.toString() ? '?' + qs.toString() : '');
+
   const ctl = new AbortController();
   const t = setTimeout(() => ctl.abort(), 8000);
   try {

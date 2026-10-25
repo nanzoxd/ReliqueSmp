@@ -6,9 +6,8 @@
 // (Don't hard-code it here if your GitHub repo is public.)
 
 module.exports = async function handler(req, res) {
-  const addr = process.env.MC_STATUS_ADDR;
+  const addr = process.env.MC_STATUS_ADDR || 'reliquesmp.lordnodes.in:25569';
   res.setHeader('Cache-Control', 'public, s-maxage=20, stale-while-revalidate=40');
-  if (!addr) return res.status(500).json({ error: 'MC_STATUS_ADDR is not set' });
 
   try {
     const r = await fetch('https://api.mcstatus.io/v2/status/java/' + encodeURIComponent(addr), {

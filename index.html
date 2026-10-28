@@ -1795,7 +1795,7 @@ html[data-theme="amoled"] .ice-snow{display:none !important}
 .ev-t{flex:none;font-size:12px;color:var(--muted)}
 html[data-theme="amoled"] .ev-row{background:rgba(0,0,0,.5)}
 @media (max-width:700px){.ev{padding:8px}.ev-row{flex-direction:column;align-items:flex-start;gap:6px}}
-</style><script>(function(){var h=(location.hash||'').replace('#','');if(['rules','concept','recipes','leaderboard','announcements'].indexOf(h)<0)document.documentElement.classList.add('rq-home')})()</script><script>try{if((localStorage.getItem('relique-theme')||'amoled')==='amoled')document.documentElement.setAttribute('data-theme','amoled')}catch(e){document.documentElement.setAttribute('data-theme','amoled')}</script>
+</style><script src="infuse.js"></script><script src="ranked.js"></script><script src="strength.js"></script><script>(function(){var h=(location.hash||'').replace('#','');var P=['rules','recipes','leaderboard','announcements'];if(window.RELIQUE_INFUSE===true)P.push('concept');if(window.RELIQUE_RANKED===true)P.push('ranked');if(window.RELIQUE_STRENGTH===true)P.push('strength');if(P.indexOf(h)<0)document.documentElement.classList.add('rq-home')})()</script><script>try{if((localStorage.getItem('relique-theme')||'amoled')==='amoled')document.documentElement.setAttribute('data-theme','amoled')}catch(e){document.documentElement.setAttribute('data-theme','amoled')}</script>
 
 <style id="rc-gui-css">
 /* ============ Recipe tiles (list) ============ */
@@ -2184,7 +2184,7 @@ html body .lb-tab{font-weight:400 !important}
 <!-- Top bar: every screen (same as index 2) -->
 <header class="nav" id="nav">
   <a class="brand" href="#home" aria-label="Relique home"><img data-m="logo" width="884" height="318" alt="" ></a>
-  <nav class="nav-links" id="navlinks" aria-label="Main" data-nav><a href="#home" data-page="home">Home</a><a href="#rules" data-page="rules">Rules</a><a href="#concept" data-page="concept">Infuse SMP S3</a><a href="#recipes" data-page="recipes">Recipes</a><a href="#leaderboard" data-page="leaderboard" data-lb hidden>Activity</a><a href="#announcements" data-page="announcements">Announcements</a><a class="m-cta" href="https://discord.gg/cy3VCNRqf" target="_blank" rel="noopener">Join the Discord</a></nav>
+  <nav class="nav-links" id="navlinks" aria-label="Main" data-nav><a href="#home" data-page="home">Home</a><a href="#rules" data-page="rules">Rules</a><a href="#concept" data-page="concept">Infuse SMP S3</a><a href="#ranked" data-page="ranked">Ranked SMP</a><a href="#strength" data-page="strength">Strength SMP</a><a href="#recipes" data-page="recipes">Recipes</a><a href="#leaderboard" data-page="leaderboard" data-lb hidden>Activity</a><a href="#announcements" data-page="announcements">Announcements</a><a class="m-cta" href="https://discord.gg/cy3VCNRqf" target="_blank" rel="noopener">Join the Discord</a></nav>
   <div class="nav-tools">
     <button type="button" class="nav-icon-btn" id="themetoggle" aria-label="Toggle AMOLED theme" title="Toggle AMOLED theme">
       <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -2205,6 +2205,8 @@ html body .lb-tab{font-weight:400 !important}
     <a href="#home" data-scroll="hx-rules">Rules</a>
     <i class="rq-sep" aria-hidden="true"></i>
     <a href="#home" data-scroll="hx-concept">Infuse SMP S3</a>
+    <a href="#ranked" data-flag-link="ranked">Ranked SMP</a>
+    <a href="#strength" data-flag-link="strength">Strength SMP</a>
     <a href="#home" data-scroll="hx-videos" id="rqVideosLink" hidden>Uploads</a>
     <a href="#home" data-scroll="elo-about">Elo System</a>
   </nav>
@@ -2697,6 +2699,64 @@ html body .lb-tab{font-weight:400 !important}
 
       </div>
     </div>
+  </div>
+</section>
+
+<!-- RANKED SMP (controlled by ranked.js) -->
+<section class="page" id="page-ranked">
+  <div class="docwrap" style="margin-top:0">
+    <header class="phead glass"><div class="phead-copy"><h1>Ranked SMP</h1><p class="lede">A competitive survival server where every fight moves your Elo and ranks #1 to #30 are won in combat.</p></div></header>
+    <div class="docwrap"><div class="docbody">
+      <section class="rsec glass rv" id="s-ranked-overview">
+        <h2 class="section-title">What is Ranked SMP?</h2>
+        <p>Ranked SMP is built around one idea: your skill is your rank. Every fight changes your Elo rating, and the best players hold the top ranks on the server.</p>
+        <div class="steps" style="margin-top:22px">
+          <div class="step"><i>1</i><h3>Elo rating</h3><p>Every fight affects your Elo. Beat someone rated higher and climb faster. Lose to a weaker player and drop more.</p></div>
+          <div class="step"><i>2</i><h3>30 Ranks</h3><p>Ranks #1&ndash;#30 are taken in combat. Kill someone to steal their rank.</p></div>
+          <div class="step"><i>3</i><h3>Rank perks</h3><p>Your rank scales hearts, potion duration, XP gain and inventory size.</p></div>
+          <div class="step"><i>4</i><h3>Leaderboard</h3><p>The top 20 players by Elo are listed live on the Activity page.</p></div>
+        </div>
+      </section>
+      <section class="rsec glass rv" id="s-ranked-ladder">
+        <h2 class="section-title">Elo classifications</h2>
+        <p>Your rating decides your classification on the leaderboard:</p>
+        <ul class="hx-ladder">
+          <li style="--c:#9aa7bd"><b>Rookie</b><span>700+</span></li>
+          <li style="--c:#6ee7a8"><b>Combat Novice</b><span>950+</span></li>
+          <li style="--c:#7ecbff"><b>Combat Cadet</b><span>1200+</span></li>
+          <li style="--c:#c4a4ff"><b>Combat Specialist</b><span>1450+</span></li>
+          <li style="--c:#E798FF"><b>Combat Ace</b><span>1700+</span></li>
+          <li style="--c:#ff9a5c"><b>Combat Master</b><span>1950+</span></li>
+        </ul>
+      </section>
+    </div></div>
+  </div>
+</section>
+
+<!-- STRENGTH SMP (controlled by strength.js) -->
+<section class="page" id="page-strength">
+  <div class="docwrap" style="margin-top:0">
+    <header class="phead glass"><div class="phead-copy"><h1>Strength SMP</h1><p class="lede">Built around the Strength effect: craft it, equip it and hit harder with every drop of health you lose.</p></div></header>
+    <div class="docwrap"><div class="docbody">
+      <section class="rsec glass rv" id="s-strength-overview">
+        <h2 class="section-title">The Strength effect</h2>
+        <div class="classes">
+          <div class="cls glass">
+            <div class="cls-top">
+              <div class="cls-icon"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAACxUlEQVR4nNWVv0sbYRjHP9HrdpeY3GTr4I+rUGj/AEXBZlAQzRyQUnCRVAfXoqMh/0AmJ5fGLg4tpdgMRahUaGkHU8iQO4jEkunumtyNaa/D5d7ceUqF0qHPEu4hz/f7PN/3+7wv/O+RuJpYZsj7G8C3/IpgSlfBFxkGQJWTpBTlVqA/HAfL7QafXpjEJ0jAsjcAnxy9J4o7joPZL7bpAZDul6lyksPsaoRs8fWLCIn/z5AoAXgAbNMjjYQqJ5lUFBL9jk23y2F2lfXtDaa0cQDySyux6SISqXJSgAfy2K4l8l/aFwBocoZqbo1iuSRqT0/OBhiuLfJDYYIA1HS7dBxHyGG6XSETwGF2lWK5xMOxDAAH+5UYxrUEQfc2PXTXwnS7qHJSaK/JGT7nnorOv11aHOxX0KYnKJeK7LaaMYliBKbbJc0wmux3p7tWrHNDb0Y6L5eKPKufR6YMQoplAFVOCXcYjRqF+rnQ3NCbTGnjAvz4qOJ3Lif7BInIcoUm8NM2PVKKgtGoCSmquTXWtzci4Nr0BMdHFfL1r+iuxYii9KX0wqYMT+CFeURsPd9hbmFGfA8032O3dYEerf6zRGlP8h00omLoTeYWZnw5EjD/eBbwNS/Ua5ggdqTjOGIBwxGTCPyD3m012dncAkCbnhAtHh9VKNTPsekJdwU110WIwEcIbBm45/TkjNGxUeazs3x4/5Gp+4+o5tZ84pDTbHpiIW8g8COlKKSRaDzQeHJXolwqsrO5RfuyzXx21j/sRo00ElZ/TzQ5QxqJlBIniIjWcRxhz+U7Bq8+XZBvtdDkDHulYqRQlZPorkWG8PZ64ga4lsB0uxiNGi/fvSG/tEKh1cZmcCYBUPiGDX7D18yNBEHkl1bw8G/WAMx0u+JcArdockYAJwCj/T2GFXH94MHxUOXUrR+c8ERVfkZetX/+ZP7/8RvoFEwE7hdtzQAAAABJRU5ErkJggg==" alt="Strength" width="32" height="32" onerror="this.style.display='none'"></div>
+              <div><h3>Strength</h3><span class="tag">Primary</span></div>
+            </div>
+            <div class="blk"><b>Passive</b><ul><li>Shield disables are 2.0x longer</li><li>Damages shields by 20 when disabling</li><li>0.5x damage penetrates when disabling shields</li><li>2.0x damage to all mobs</li><li>Piercing on ranged attacks</li><li>+0.3 attack damage for every 1HP Lost</li><li>10th hit reveals armor durability for 3.0 seconds</li></ul></div>
+            <div class="blk"><b>Spark Ability <em>Duration: 15s &bull; Cooldown: 1m</em></b><ul><li>All attacks are critical</li></ul></div>
+          </div>
+        </div>
+      </section>
+      <section class="rsec glass rv" id="s-strength-recipe">
+        <h2 class="section-title">Crafting recipe</h2>
+        <p>Craft it in a 3&times;3 crafting table: <strong>Player Head</strong> + <strong>Rib Armor Trim Template</strong> in the top and bottom rows, <strong>Netherite Sword</strong>, <strong>Wither Rose</strong> and <strong>Netherite Axe</strong> across the middle.</p>
+        <p style="opacity:.8">Row 1: Head, Rib Template, Head &bull; Row 2: Sword, Wither Rose, Axe &bull; Row 3: Head, Rib Template, Head</p>
+      </section>
+    </div></div>
   </div>
 </section>
 
@@ -3462,7 +3522,7 @@ function setRcTab(i, focus) {
 }
 rcTabs.forEach((t, i) => {
   t.addEventListener('click', () => setRcTab(i));
-  t.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); setRcTab(i ? 0 : 1, true); } });
+  t.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { if (window.RELIQUE_INFUSE !== true) return; e.preventDefault(); setRcTab(i ? 0 : 1, true); } });
 });
 q.addEventListener('input', filter); setRcTab(0);
 const useLive = !!(live && live.available && Array.isArray(live.recipes));
@@ -3492,10 +3552,28 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
 }
 })();</script>
 <script>
+/* Feature switches: infuse.js / ranked.js / strength.js */
+(function(){
+  var d=document;
+  function drop(n){if(n&&n.parentNode)n.parentNode.removeChild(n)}
+  function off(sel){[].forEach.call(d.querySelectorAll(sel),drop)}
+  if(window.RELIQUE_INFUSE!==true){
+    off('#navlinks a[data-page="concept"]');off('#rqRnav a[data-scroll="hx-concept"]');
+    off('#hx-concept');off('#page-concept');
+    [].forEach.call(d.querySelectorAll('.rqc-slide a[href="#concept"]'),function(a){drop(a.closest('.rqc-slide'))});
+    [].forEach.call(d.querySelectorAll('article.hx-tile'),function(a){if(/Infuse SMP S3/.test(a.textContent))drop(a)});
+    var t=d.getElementById('rc-tab-charm'),p=d.getElementById('rc-pane-charm'),bar=d.querySelector('.rc-tabbar');
+    if(t)t.style.display='none';if(p)p.style.display='none';if(bar)bar.style.display='none';
+  }
+  if(window.RELIQUE_RANKED!==true){off('#page-ranked');off('a[data-page="ranked"]');off('a[data-flag-link="ranked"]')}
+  if(window.RELIQUE_STRENGTH!==true){off('#page-strength');off('a[data-page="strength"]');off('a[data-flag-link="strength"]')}
+})();
+</script>
+<script>
 (function(){
   /* LEADERBOARD SWITCH: set to true when the in-game leaderboard is ready */
   var SHOW_LEADERBOARD=true;
-  var pages=['home','rules','concept','recipes','announcements','health'];
+  var pages=['home','rules','recipes','announcements','health'];if(window.RELIQUE_INFUSE===true)pages.splice(2,0,'concept');if(window.RELIQUE_RANKED===true)pages.push('ranked');if(window.RELIQUE_STRENGTH===true)pages.push('strength');
   if(SHOW_LEADERBOARD){ pages.splice(4,0,'leaderboard'); document.querySelectorAll('[data-lb]').forEach(function(e){e.hidden=false}); }
   var links=document.querySelectorAll('[data-nav] a[data-page]');
   var navlinks=document.getElementById('navlinks'), toggle=document.getElementById('navtoggle');
@@ -4747,6 +4825,8 @@ html body .foot{position:relative;z-index:1}
 .hx-elo .hx-tile-art,.hx-discord .hx-tile-art{opacity:.4;-webkit-mask-image:linear-gradient(90deg,transparent 15%,#000 100%);mask-image:linear-gradient(90deg,transparent 15%,#000 100%)}
 #page-rules .phead::before{background-image:var(--a6)}
 #page-concept .phead::before{background-image:var(--a4)}
+#page-ranked .phead::before{background-image:var(--a7)}
+#page-strength .phead::before{background-image:var(--a6)}
 #page-recipes .phead::before{background-image:var(--a13)}
 #page-announcements .phead::before{background-image:var(--a9)}
 #page-leaderboard .phead::before{background-image:var(--a7)}
@@ -4904,7 +4984,7 @@ html body .phead::before{opacity:.6}
 (function(){
   'use strict';
   var d=document,root=d.documentElement;
-  var PAGES=['rules','concept','recipes','leaderboard','announcements'];
+  var PAGES=['rules','recipes','leaderboard','announcements'];if(window.RELIQUE_INFUSE===true)PAGES.push('concept');if(window.RELIQUE_RANKED===true)PAGES.push('ranked');if(window.RELIQUE_STRENGTH===true)PAGES.push('strength');
 
   /* Home flag: sidebar shows on Home only */
   function syncHome(){

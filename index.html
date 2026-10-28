@@ -1914,6 +1914,11 @@ html[data-theme="amoled"] .rt-slot{background:#0d2c5a;--b-lo:#040d1e;--b-hi:#4a8
 @media (prefers-reduced-motion:reduce){.rcgui,.rcg-panel{transition:none}}
 </style>
 
+<style id="rc-dl-css">
+.rc-ctx{position:fixed;z-index:5000;min-width:170px;padding:4px;background:#1b2a44;border-radius:4px;box-shadow:0 0 0 3px #000,inset 2px 2px 0 #3b5a8c,inset -2px -2px 0 #0c1526,6px 6px 0 rgba(0,0,0,.5)}
+.rc-ctx button{display:block;width:100%;padding:10px 14px;border:0;background:transparent;color:#dbe9ff;font:600 14px Onest,system-ui,sans-serif;text-align:left;cursor:pointer}
+.rc-ctx button:hover,.rc-ctx button:focus-visible{background:#26509a;color:#fff;outline:0}
+</style>
 <style id="rc-gui-inline">
 .rcgui{position:relative;inset:auto;display:block;z-index:auto;padding:0;margin:34px auto 18px;max-width:760px;background:none;opacity:1;-webkit-backdrop-filter:none;backdrop-filter:none;transition:none}
 .rcgui .rcg-panel{width:100%;transform:none;transition:none}
@@ -3361,6 +3366,179 @@ const QM_IMG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAATCAYAAACk9e
 const qmImg = () => { const i = new Image(); i.src = QM_IMG; i.alt = '?'; i.className = 'qm-ico'; i.draggable = false; return i; };
 const BACK_SVG = '<svg viewBox="0 0 12 12" shape-rendering="crispEdges"><path d="M5 1h2v2h-1v2h5v2H6v2h1v2H5V10H4V9H3V8H2V7H1V5h1V4h1V3h1V2h1z" fill="currentColor"/></svg>';
 const INFO_SVG = '<svg viewBox="0 0 12 12" shape-rendering="crispEdges"><path d="M5 1h3v2H5zM4 4h3v5h1v2H3V9h1z" fill="currentColor"/></svg>';
+
+/* ---- Download recipe GUI as PNG (drawn on a canvas, no external libs) ---- */
+const DL_SVG = '<svg viewBox="0 0 12 12" shape-rendering="crispEdges"><path d="M5 1h2v5h2v1H8v1H7v1H5V8H4V7H3V6h2zM1 10h10v1H1z" fill="currentColor"/></svg>';
+let atlasImgP = null;
+const loadImg = (src, cors) => new Promise(res => { const i = new Image(); if (cors) i.crossOrigin = 'anonymous'; i.onload = () => res(i); i.onerror = () => res(null); i.src = src; });
+const getAtlasImg = () => atlasImgP || (atlasImgP = loadImg('/textures/atlas.png'));
+async function drawItemIcon(ctx, item, x, y, size) {
+  ctx.imageSmoothingEnabled = false;
+  const id = item.icon || item.id;
+  if (item.skin) {
+    const sk = await loadImg(item.skin, true);
+    if (sk) {
+      const k = sk.width / 64;
+      ctx.drawImage(sk, 8 * k, 8 * k, 8 * k, 8 * k, x, y, size, size);
+      ctx.drawImage(sk, 40 * k, 8 * k, 8 * k, 8 * k, x - size * .04, y - size * .04, size * 1.08, size * 1.08);
+      return;
+    }
+  }
+  const src = ICONS[id];
+  if (!(src && HAND_MADE(id)) && ATLAS && ATLAS.icons && ATLAS.icons[id]) {
+    const at = await getAtlasImg();
+    if (at) {
+      const cw = at.width / ATLAS.cols, ch = at.height / ATLAS.rows, c = ATLAS.icons[id];
+      ctx.drawImage(at, c[0] * cw, c[1] * ch, cw, ch, x, y, size, size);
+      return;
+    }
+  }
+  if (src) {
+    const im = await loadImg(src.uri);
+    if (im) { ctx.drawImage(im, x, y, size, size); return; }
+  }
+  ctx.fillStyle = '#000'; ctx.fillRect(x + size * .1, y + size * .1, size * .8, size * .8);
+  ctx.fillStyle = '#E798FF'; ctx.font = (size * .5) + "px 'Press Start 2P',monospace"; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('?', x + size / 2, y + size / 2); ctx.textAlign = 'left';
+}
+function bevel(ctx, x, y, w, h, fill, hi, lo, b) {
+  ctx.fillStyle = fill; ctx.fillRect(x, y, w, h);
+  ctx.fillStyle = hi; ctx.fillRect(x, y, w, b); ctx.fillRect(x, y, b, h);
+  ctx.fillStyle = lo; ctx.fillRect(x, y + h - b, w, b); ctx.fillRect(x + w - b, y, b, h);
+}
+function outlined(ctx, x, y, w, h, t, fill, hi, lo, b) {
+  ctx.fillStyle = '#000'; ctx.fillRect(x - t, y - t, w + t * 2, h + t * 2);
+  bevel(ctx, x, y, w, h, fill, hi, lo, b);
+}
+function pxText(ctx, str, x, y, size, color, align) {
+  ctx.font = size + "px 'Press Start 2P',monospace"; ctx.textAlign = align || 'left'; ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = 'rgba(0,0,0,.75)'; ctx.fillText(str, x + size / 8, y + size / 8);
+  ctx.fillStyle = color; ctx.fillText(str, x, y);
+}
+function parseShadows(str) {
+  const out = []; if (!str || str === 'none') return out;
+  const re = /(rgba?\([^)]+\))\s+(-?[\d.]+)px\s+(-?[\d.]+)px\s+([\d.]+)px\s+(-?[\d.]+)px(\s+inset)?/g; let m;
+  while ((m = re.exec(str))) out.push({ c: m[1], x: +m[2], y: +m[3], b: +m[4], sp: +m[5], inset: !!m[6] });
+  return out;
+}
+function rrPath(ctx, x, y, w, h, r) { ctx.beginPath(); if (ctx.roundRect && r > 0) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h); }
+/* Paint an element's background + hard (blur-free) box-shadows exactly as the page styles it. */
+function paintBox(ctx, el, ox, oy, pan) {
+  const R = el.getBoundingClientRect(), cs = getComputedStyle(el);
+  const x = R.left - pan.left + ox, y = R.top - pan.top + oy, w = R.width, h = R.height, rad = parseFloat(cs.borderTopLeftRadius) || 0;
+  const sh = parseShadows(cs.boxShadow);
+  for (const o of sh) if (!o.inset && o.b === 0 && o.sp > 0) {
+    ctx.save(); ctx.fillStyle = o.c; ctx.beginPath();
+    if (ctx.roundRect) { ctx.roundRect(x - o.sp, y - o.sp, w + o.sp * 2, h + o.sp * 2, rad + o.sp); ctx.roundRect(x, y, w, h, rad); } else { ctx.rect(x - o.sp, y - o.sp, w + o.sp * 2, h + o.sp * 2); ctx.rect(x, y, w, h); }
+    ctx.fill('evenodd'); ctx.restore();
+  }
+  ctx.save(); rrPath(ctx, x, y, w, h, rad); ctx.fillStyle = cs.backgroundColor; ctx.fill(); ctx.clip();
+  for (const o of sh) if (o.inset && o.b === 0) {
+    ctx.fillStyle = o.c;
+    if (o.x > 0) ctx.fillRect(x, y, o.x, h); if (o.y > 0) ctx.fillRect(x, y, w, o.y);
+    if (o.x < 0) ctx.fillRect(x + w + o.x, y, -o.x, h); if (o.y < 0) ctx.fillRect(x, y + h + o.y, w, -o.y);
+  }
+  ctx.restore();
+}
+async function renderRecipePng(r, panel) {
+  try { await Promise.all([document.fonts.load("16px 'Press Start 2P'"), document.fonts.load("600 15px Onest")]); } catch (e) {}
+  const pan = panel.getBoundingClientRect(), out = r.output, PAD = 28, SC = 3;
+  const q = s => panel.querySelector(s);
+  const nameEl = q('.rcg-name'), nameR = nameEl.getBoundingClientRect();
+  const PW = pan.width, PH = (nameR.bottom - pan.top) + 19;
+  const W = PW + PAD * 2, H = PH + PAD * 2 + 17;
+  const cv = document.createElement('canvas'); cv.width = Math.round(W * SC); cv.height = Math.round(H * SC);
+  const ctx = cv.getContext('2d'); ctx.scale(SC, SC); ctx.imageSmoothingEnabled = false;
+  const bgOf = e => { const c = getComputedStyle(e).backgroundColor; return c && c !== 'rgba(0, 0, 0, 0)' && c !== 'transparent' ? c : null; };
+  ctx.fillStyle = bgOf(document.body) || bgOf(document.documentElement) || '#050a18'; ctx.fillRect(0, 0, W, H);
+  const ox = PAD, oy = PAD + 17;
+  const fake = { left: pan.left, top: pan.top };
+  paintBox(ctx, panel, ox, oy, fake);
+  const pbg = bgOf(panel);
+  paintBox(ctx, q('.rcg-title'), ox, oy, fake);
+  const t = q('.rcg-t'), tR = t.getBoundingClientRect(), tcs = getComputedStyle(t);
+  ctx.font = tcs.font; ctx.textBaseline = 'middle'; ctx.textAlign = 'center';
+  const tcx = tR.left - pan.left + ox + tR.width / 2, tcy = tR.top - pan.top + oy + tR.height / 2;
+  ctx.fillStyle = 'rgba(0,0,0,.7)'; ctx.fillText('RECIPE', tcx + 2, tcy + 2); ctx.fillStyle = tcs.color; ctx.fillText('RECIPE', tcx, tcy);
+  // back + info buttons (with their pixel icons)
+  for (const sel of ['.rcg-back', '.rcg-info']) {
+    const b = q(sel); paintBox(ctx, b, ox, oy, fake);
+    const svg = b.querySelector('svg'); if (!svg) continue;
+    const sR = svg.getBoundingClientRect(), col = getComputedStyle(b).color;
+    const src = svg.outerHTML.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"').replace(/currentColor/g, col);
+    const im = await loadImg('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(src));
+    if (im) ctx.drawImage(im, sR.left - pan.left + ox, sR.top - pan.top + oy, sR.width, sR.height);
+  }
+  // slots + items
+  const slots = [...q('.rcg-craft').querySelectorAll('.rc-slot')];
+  const pending = [];
+  slots.forEach((sl, k) => {
+    paintBox(ctx, sl, ox, oy, fake);
+    const isOut = sl.classList.contains('out'), it = isOut ? out : r.input[k];
+    if (!it) return;
+    const ic = sl.querySelector('.rc-item'), R = (ic || sl).getBoundingClientRect();
+    pending.push({ it, x: R.left - pan.left + ox, y: R.top - pan.top + oy, s: Math.min(R.width, R.height), sl });
+  });
+  const arr = q('.rcg-craft .rc-arrow');
+  if (arr) {
+    const aR = arr.getBoundingClientRect(), im = await loadImg(arr.src);
+    if (im) { ctx.save(); ctx.globalAlpha = parseFloat(getComputedStyle(arr).opacity) || 1; const f = getComputedStyle(arr).filter; if (f && f !== 'none') ctx.filter = f; ctx.drawImage(im, aR.left - pan.left + ox, aR.top - pan.top + oy, aR.width, aR.height); ctx.restore(); }
+  }
+  for (const p of pending) {
+    await drawItemIcon(ctx, p.it, p.x, p.y, p.s);
+    const st = p.sl.querySelector('.rc-stack');
+    if (st) {
+      const sR = st.getBoundingClientRect(), scs = getComputedStyle(st);
+      ctx.font = scs.font; ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+      const sx = sR.right - pan.left + ox, sy = sR.bottom - pan.top + oy;
+      ctx.fillStyle = 'rgba(0,0,0,.75)'; ctx.fillText(st.textContent, sx + 1.5, sy + 1.5); ctx.fillStyle = scs.color; ctx.fillText(st.textContent, sx, sy);
+    }
+  }
+  // name + #n, per-letter colours kept
+  const nameSpan = nameEl.firstElementChild;
+  ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+  const walk = (node, inh) => {
+    if (node.nodeType === 3) {
+      const rg = document.createRange(); rg.selectNodeContents(node);
+      const rr = rg.getBoundingClientRect(); if (!rr.width) return;
+      const cs = getComputedStyle(node.parentElement);
+      ctx.font = cs.font; ctx.fillStyle = cs.color;
+      ctx.fillText(node.textContent, rr.left - pan.left + ox, rr.top - pan.top + oy + rr.height / 2);
+    } else node.childNodes.forEach(c => walk(c));
+  };
+  walk(nameEl);
+  return cv;
+}
+async function downloadRecipe(r, panel) {
+  const views = [...panel.querySelectorAll('.rcg-view')], was = views.map(v => v.hidden);
+  views.forEach(v => { v.hidden = !v.classList.contains('rcg-craft'); });
+  const btn = document.createElement('i');
+  try {
+    let cv; try { cv = await renderRecipePng(r, panel); } finally { views.forEach((v, i) => { v.hidden = was[i]; }); }
+    const blob = await new Promise((res, rej) => { try { cv.toBlob(b => b ? res(b) : rej(new Error('empty')), 'image/png'); } catch (e) { rej(e); } });
+    const a = document.createElement('a'), nm = (r.output.name || r.output.id).toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'recipe';
+    a.href = URL.createObjectURL(blob); a.download = 'relique-recipe-' + nm + '.png';
+    document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    btn.classList.add('done'); setTimeout(() => btn.classList.remove('done'), 1500);
+  } catch (e) { console.error(e); alert('Could not create the PNG for this recipe.'); }
+  btn.classList.remove('busy');
+}
+
+let dlMenu = null;
+function hideDlMenu() { if (dlMenu) { dlMenu.remove(); dlMenu = null; } }
+function showDlMenu(x, y, r, panel) {
+  hideDlMenu();
+  const m = el('div', 'rc-ctx'); m.setAttribute('role', 'menu');
+  const b = el('button', null, 'Download image'); b.type = 'button'; b.setAttribute('role', 'menuitem');
+  b.addEventListener('click', () => { hideDlMenu(); downloadRecipe(r, panel); });
+  m.append(b); document.body.append(m); dlMenu = m;
+  m.style.left = Math.max(6, Math.min(x, innerWidth - m.offsetWidth - 6)) + 'px';
+  m.style.top = Math.max(6, Math.min(y, innerHeight - m.offsetHeight - 6)) + 'px';
+  b.focus();
+}
+['click', 'wheel', 'resize'].forEach(ev => window.addEventListener(ev, e => { if (e && e.target && e.target.closest && e.target.closest('.rc-ctx')) return; hideDlMenu(); }, true));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') hideDlMenu(); });
+document.addEventListener('contextmenu', e => { if (dlMenu && !e.target.closest('.rcg-panel')) hideDlMenu(); });
 /* Every recipe is shown directly as a Minecraft-style RECIPE gui */
 function card(r, n) {
   const out = r.output;
@@ -3412,6 +3590,7 @@ function card(r, n) {
     outSlot.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
   }
   panel.append(ttl, back, info, body, nm);
+  panel.addEventListener('contextmenu', e => { e.preventDefault(); hideTip(); showDlMenu(e.clientX, e.clientY, r, panel); });
   if (r.key) { const hint = el('div', 'rcg-hint'); hint.append(qmImg(), txt(' Click the effect icon to see its ability')); panel.append(hint); }
   art.append(panel);
   return art;

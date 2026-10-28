@@ -1,6 +1,6 @@
-// Vercel function: proxies /relique/* to the Relique plugin API (plugin port 25551).
+// Vercel function: proxies /relique/* to the Relique plugin API (plugin port 28435).
 // Optional overrides in Vercel -> Settings -> Environment Variables: RELIQUE_API, RELIQUE_KEY
-const BASE = (process.env.RELIQUE_API || 'http://r99-p.lordcloud.ovh:25551').replace(/\/+$/, '');
+const BASE = (process.env.RELIQUE_API || 'http://139.99.22.24:28435').replace(/\/+$/, '');
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store, max-age=0');

@@ -10,13 +10,13 @@ async function t(name, url) {
   } finally { clearTimeout(to); }
 }
 module.exports = async (req, res) => {
-  const plugin = (process.env.RELIQUE_API || 'http://r99-p.lordcloud.ovh:25551').replace(/\/+$/, '');
-  const mc = process.env.MC_STATUS_ADDR || 'reliquesmp.lordnodes.in:25569';
+  const plugin = (process.env.RELIQUE_API || 'http://139.99.22.24:28435').replace(/\/+$/, '');
+  const mc = process.env.MC_STATUS_ADDR || '139.99.22.24:21322';
   const out = await Promise.all([
     t('plugin /api/online', plugin + '/api/online'),
     t('plugin /api/stats', plugin + '/api/stats?sort=elo'),
     t('mcstatus ' + mc, 'https://api.mcstatus.io/v2/status/java/' + encodeURIComponent(mc)),
-    t('mcstatus no-port', 'https://api.mcstatus.io/v2/status/java/reliquesmp.lordnodes.in')
+    t('mcstatus no-port', 'https://api.mcstatus.io/v2/status/java/139.99.22.24')
   ]);
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Cache-Control', 'no-store');

@@ -2709,33 +2709,228 @@ html body .lb-tab{font-weight:400 !important}
 
 <!-- RANKED SMP (controlled by ranked.js) -->
 <section class="page" id="page-ranked">
-  <div class="docwrap" style="margin-top:0">
-    <header class="phead glass"><div class="phead-copy"><h1>Ranked SMP</h1><p class="lede">A competitive survival server where every fight moves your Elo and ranks #1 to #30 are won in combat.</p></div></header>
-    <div class="docwrap"><div class="docbody">
-      <section class="rsec glass rv" id="s-ranked-overview">
-        <h2 class="section-title">What is Ranked SMP?</h2>
-        <p>Ranked SMP is built around one idea: your skill is your rank. Every fight changes your Elo rating, and the best players hold the top ranks on the server.</p>
-        <div class="steps" style="margin-top:22px">
-          <div class="step"><i>1</i><h3>Elo rating</h3><p>Every fight affects your Elo. Beat someone rated higher and climb faster. Lose to a weaker player and drop more.</p></div>
-          <div class="step"><i>2</i><h3>30 Ranks</h3><p>Ranks #1&ndash;#30 are taken in combat. Kill someone to steal their rank.</p></div>
-          <div class="step"><i>3</i><h3>Rank perks</h3><p>Your rank scales hearts, potion duration, XP gain and inventory size.</p></div>
-          <div class="step"><i>4</i><h3>Leaderboard</h3><p>The top 20 players by Elo are listed live on the Activity page.</p></div>
+<style>
+#page-ranked .rk{--u:2px;font-family:var(--font-b)}
+#page-ranked .rk-px{image-rendering:pixelated;background-repeat:no-repeat;background-size:100% 100%}
+#page-ranked .mc{font-family:'Minecraft','MinecraftStandard',monospace;font-weight:400;letter-spacing:0}
+/* overview */
+#page-ranked .rk-lead{max-width:70ch;margin:0 0 6px;color:var(--text)}
+#page-ranked .rk-note{margin:22px 0 0;font-size:14.5px;color:var(--muted);max-width:76ch}
+#page-ranked .steps.rk-four{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:980px){#page-ranked .steps.rk-four{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){#page-ranked .steps.rk-four{grid-template-columns:1fr}}
+/* hammer */
+#page-ranked .rk-ham{display:grid;grid-template-columns:minmax(0,430px) minmax(0,1fr);gap:34px;align-items:start}
+#page-ranked .rk-itemrow{display:flex;align-items:flex-end;gap:14px;margin-bottom:8px}
+#page-ranked .rk-slot{--s:72px;width:var(--s);height:var(--s);flex:none;background:#8b8b8b;box-shadow:inset 3px 3px 0 #373737,inset -3px -3px 0 #fff;display:grid;place-items:center}
+#page-ranked .rk-slot i{display:block;width:calc(var(--s)*.78);height:calc(var(--s)*.78)}
+#page-ranked .rk-tt{position:relative;padding:15px 18px;color:#aaa;font-size:15px;line-height:1.42;text-shadow:1px 1px 0 #2a2a2a;min-width:0}
+#page-ranked .rk-tt::before,#page-ranked .rk-tt::after{content:"";position:absolute;inset:0;pointer-events:none;border:9px solid transparent;image-rendering:pixelated}
+#page-ranked .rk-tt::before{border-image:var(--a-ttbg) 9 fill/9px/0 stretch}
+#page-ranked .rk-tt::after{border-image:var(--a-ttfr) 10 fill/10px/0 stretch}
+#page-ranked .rk-tt>*{position:relative;z-index:1}
+#page-ranked .rk-tt .nm{display:block;font-weight:700;font-size:17px;margin-bottom:8px;text-shadow:1px 1px 0 rgba(40,30,0,.6)}
+#page-ranked .rk-tt p{margin:0 0 .75em}
+#page-ranked .rk-tt p:last-child{margin-bottom:0}
+#page-ranked .rk-tt .g{color:#ffaa00}
+#page-ranked .rk-tt .w{color:#fff}
+#page-ranked .rk-flow{display:grid;gap:16px;margin:0;padding:0;list-style:none}
+#page-ranked .rk-flow li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:16px 18px;border-radius:18px;background:rgba(4,12,30,.45);border:1px solid rgba(126,203,255,.14)}
+#page-ranked .rk-flow b.ic{width:44px;height:44px;display:grid;place-items:center;background:#8b8b8b;box-shadow:inset 2px 2px 0 #373737,inset -2px -2px 0 #fff;color:#222;font-size:13px}
+#page-ranked .rk-flow h3{margin:0 0 4px;font:600 15px var(--font-b);color:var(--ice-1)}
+#page-ranked .rk-flow p{margin:0;font-size:14px;color:var(--muted)}
+#page-ranked .rk-flow p b{color:var(--ice-2);font-weight:500}
+#page-ranked .rk-chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;padding:0;list-style:none}
+#page-ranked .rk-chips li{font-size:13px;padding:6px 12px;border-radius:999px;border:1px solid var(--edge);background:rgba(4,12,30,.5);color:var(--ice-2)}
+#page-ranked .rk-chips li b{color:var(--ice-1);font-weight:600}
+@media(max-width:860px){#page-ranked .rk-ham{grid-template-columns:minmax(0,1fr)}}
+/* explorer */
+#page-ranked .rk-ex{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,auto);gap:34px;align-items:start}
+#page-ranked .rk-ctl{min-width:0;display:grid;gap:20px;align-content:start}
+#page-ranked .rk-top{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+#page-ranked .rk-big{font-size:clamp(46px,8vw,72px);line-height:1;color:var(--ice-1);text-shadow:0 0 30px rgba(126,203,255,.35)}
+#page-ranked .rk-tag{font-size:20px;color:#ffff55;text-shadow:2px 2px 0 #3f3f15}
+#page-ranked .rk-tag em{font-style:normal;color:#fff}
+#page-ranked .rk-lab{display:block;font:600 12px var(--font-b);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+#page-ranked .rk-range{-webkit-appearance:none;appearance:none;width:100%;height:34px;margin:0;background:transparent;cursor:pointer;--p:0%}
+#page-ranked .rk-range:focus-visible{outline:2px solid var(--ice-1);outline-offset:4px}
+#page-ranked .rk-range::-webkit-slider-runnable-track{height:12px;border:2px solid #000;background:linear-gradient(90deg,var(--ice-3) var(--p),#0a1224 var(--p))}
+#page-ranked .rk-range::-moz-range-track{height:8px;border:2px solid #000;background:linear-gradient(90deg,var(--ice-3) var(--p),#0a1224 var(--p))}
+#page-ranked .rk-range::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:32px;margin-top:-12px;border:2px solid #000;background:#c6c6c6;box-shadow:inset 2px 2px 0 #fff,inset -2px -2px 0 #555;border-radius:0}
+#page-ranked .rk-range::-moz-range-thumb{width:14px;height:28px;border:2px solid #000;background:#c6c6c6;box-shadow:inset 2px 2px 0 #fff,inset -2px -2px 0 #555;border-radius:0}
+#page-ranked .rk-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:2px}
+#page-ranked .rk-jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+#page-ranked .rk-jump button{font:500 13px var(--font-b);color:var(--ice-2);background:rgba(4,12,30,.5);border:1px solid var(--edge);border-radius:999px;padding:6px 14px;cursor:pointer}
+#page-ranked .rk-jump button[aria-pressed="true"]{background:rgba(126,203,255,.2);color:var(--ice-1);border-color:rgba(126,203,255,.5)}
+#page-ranked .rk-jump button:focus-visible{outline:2px solid var(--ice-1);outline-offset:2px}
+#page-ranked .rk-feat{display:grid;gap:10px;margin:0}
+#page-ranked .rk-feat div{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:2px 16px;padding:13px 16px;border-radius:16px;background:rgba(4,12,30,.45);border:1px solid rgba(126,203,255,.14)}
+#page-ranked .rk-feat dt{font:600 13px var(--font-b);color:var(--ice-2);letter-spacing:.02em}
+#page-ranked .rk-feat dd{margin:0;text-align:right;font-size:20px;color:var(--ice-1);font-variant-numeric:tabular-nums}
+#page-ranked .rk-feat dd.sub{grid-column:1/-1;text-align:left;font:400 13px var(--font-b);color:var(--muted)}
+#page-ranked .rk-feat dd.sub b{color:var(--ice-2);font-weight:500}
+/* screen */
+#page-ranked .rk-screen{--u:2px;width:100%;max-width:640px;margin:0 auto;padding:12px;background:radial-gradient(120% 90% at 50% 0,#1a2230,#090c12);border:1px solid var(--edge);border-radius:14px;display:grid;gap:calc(var(--u)*6);justify-items:center;min-width:0}
+#page-ranked .rk-effrow{width:calc(var(--u)*182);display:flex;justify-content:flex-end;height:calc(var(--u)*36)}
+#page-ranked .rk-eff{width:calc(var(--u)*24);display:grid;justify-items:center}
+#page-ranked .rk-effbox{width:calc(var(--u)*24);height:calc(var(--u)*24);position:relative;background-image:var(--a-effbg)}
+#page-ranked .rk-effbox i{position:absolute;left:calc(var(--u)*3);top:calc(var(--u)*3);width:calc(var(--u)*18);height:calc(var(--u)*18);background-image:var(--a-speed)}
+#page-ranked .rk-efft{font-size:calc(var(--u)*8);line-height:calc(var(--u)*10);color:#fff;text-shadow:calc(var(--u)*1) calc(var(--u)*1) 0 #3f3f3f;white-space:nowrap}
+#page-ranked .rk-gui{position:relative;width:calc(var(--u)*176);height:calc(var(--u)*222);background-image:var(--a-gui);flex:none}
+#page-ranked .rk-gt{position:absolute;left:calc(var(--u)*8);color:#404040;font-size:calc(var(--u)*8);line-height:calc(var(--u)*9);white-space:nowrap}
+#page-ranked .rk-grid{position:absolute;left:calc(var(--u)*8);top:calc(var(--u)*18);width:calc(var(--u)*162);display:grid;grid-template-columns:repeat(9,calc(var(--u)*18));grid-auto-rows:calc(var(--u)*18)}
+#page-ranked .rk-grid b{position:relative;display:block}
+#page-ranked .rk-grid b::after{content:"";position:absolute;left:calc(var(--u)*1);top:calc(var(--u)*1);width:calc(var(--u)*16);height:calc(var(--u)*16);background:rgba(255,255,255,.55);opacity:0}
+#page-ranked .rk-grid b:hover::after{opacity:1}
+#page-ranked .rk-grid b.x i{position:absolute;left:calc(var(--u)*1);top:calc(var(--u)*1);width:calc(var(--u)*16);height:calc(var(--u)*16);background-image:var(--a-barrier)}
+#page-ranked .rk-hud{position:relative;width:calc(var(--u)*182);height:calc(var(--u)*51)}
+#page-ranked .rk-hearts{position:absolute;left:0;top:0;width:calc(var(--u)*81);height:calc(var(--u)*19)}
+#page-ranked .rk-hearts i{image-rendering:pixelated;background-repeat:no-repeat;background-size:100% 100%;position:absolute;width:calc(var(--u)*9);height:calc(var(--u)*9);background-image:var(--a-hc)}
+#page-ranked .rk-hearts i.f{background-image:var(--a-hf),var(--a-hc)}
+#page-ranked .rk-hearts i.h{background-image:var(--a-hh),var(--a-hc)}
+#page-ranked .rk-xpl{position:absolute;right:0;top:calc(var(--u)*11);font-size:calc(var(--u)*8);line-height:calc(var(--u)*9);color:#80ff20;text-shadow:calc(var(--u)*1) calc(var(--u)*1) 0 #1a3305}
+#page-ranked .rk-xp{position:absolute;left:0;top:calc(var(--u)*22);width:calc(var(--u)*182);height:calc(var(--u)*5);background-image:var(--a-xpbg)}
+#page-ranked .rk-xp i{position:absolute;left:0;top:0;height:100%;background-image:var(--a-xpfg);background-size:calc(var(--u)*182) 100%;background-repeat:no-repeat;image-rendering:pixelated}
+#page-ranked .rk-hot{position:absolute;left:0;top:calc(var(--u)*29);width:calc(var(--u)*182);height:calc(var(--u)*22);background-image:var(--a-hotbar)}
+#page-ranked .rk-hot i{position:absolute;top:calc(var(--u)*3);width:calc(var(--u)*16);height:calc(var(--u)*16)}
+#page-ranked .rk-cap{margin:0;font-size:12.5px;color:var(--muted);text-align:center;max-width:calc(var(--u)*182)}
+@media(max-width:980px){#page-ranked .rk-ex{grid-template-columns:minmax(0,1fr)}}
+</style>
+<div class="docwrap rk" style="margin-top:0" id="rk-root">
+  <header class="phead glass"><div class="phead-copy"><h1>Ranked SMP</h1><p class="lede">A competitive survival server where every fight moves your Elo and ranks #1 to #30 are won in combat.</p></div></header>
+  <div class="docwrap"><div class="docbody">
+
+    <section class="rsec glass rv" id="s-ranked-overview">
+      <h2 class="section-title">What is Ranked SMP?</h2>
+      <p class="rk-lead">On Ranked SMP every player holds a numbered rank from #1 to #30, and a lower number is stronger. Your rank decides how many hearts you have, how fast you earn XP, how long your potions last and how much extra storage you can open with /inv. Nobody earns a rank by playing longer. You take it from someone else.</p>
+      <div class="steps rk-four">
+        <div class="step"><i>1</i><h3>Ranks #1 to #30</h3><p>Ranks are dealt out when a season starts. Players who join later receive any ranks that are left over. Everyone without a rank is unranked, with 10 hearts and no bonuses.</p></div>
+        <div class="step"><i>2</i><h3>Kill to take a rank</h3><p>Killing a player steals their rank. There is no limit on how far apart the two ranks are, and no cooldown between steals.</p></div>
+        <div class="step"><i>3</i><h3>Stay online</h3><p>A rank holder who stays offline for 2 days loses the rank. It goes to a random online player who has no rank yet.</p></div>
+        <div class="step"><i>4</i><h3>Perks scale with rank</h3><p>Hearts, XP gain, potion duration and extra slots shrink one step at a time from #1 down to #30. Slide through them in the explorer below.</p></div>
+      </div>
+      <p class="rk-note">Your rank is announced as a tag like [#7] in join, leave and death messages. Every fight also moves your Elo rating, and the top 20 players by Elo are listed live on the Activity page.</p>
+    </section>
+
+    <section class="rsec glass rv" id="s-ranked-hammer">
+      <h2 class="section-title">The Hierarchy Hammer</h2>
+      <p class="rk-lead">The Hierarchy Hammer is the weapon built for ranked fights. It dashes you into your target and rewards you for landing hit after hit without missing.</p>
+      <div class="rk-ham" style="margin-top:22px">
+        <div>
+          <div class="rk-itemrow"><div class="rk-slot"><i class="rk-px" style="background-image:var(--a-mace)"></i></div></div>
+          <div class="rk-tt mc" role="img" aria-label="Item tooltip for the Hierarchy Hammer">
+            <span class="nm"><span style="color:#f2bc45">ʜ</span><span style="color:#f2bf4b">ɪ</span><span style="color:#f2c151">ᴇ</span><span style="color:#f2c456">ʀ</span><span style="color:#f2c65c">ᴀ</span><span style="color:#f2c962">ʀ</span><span style="color:#f2cc68">ᴄ</span><span style="color:#f2cb6b">ʜ</span><span style="color:#f2d173">ʏ</span> <span style="color:#f2d67f">ʜ</span><span style="color:#f2d985">ᴀ</span><span style="color:#f2db8b">ᴍ</span><span style="color:#f2db90">ᴍ</span><span style="color:#f2b096">ᴇ</span><span style="color:#f2b39c">ʀ</span></span>
+            <p>A powerful hammer that manifested as a result of improper judgement</p>
+            <p><span class="g">SENTENCING</span> <span class="w">RMB</span><br>Launch forward, allowing you to initiate hits with the weapon. This dash will stop cooldown when a successful hit is initiated. Missing an attack will put it on cooldown.</p>
+            <p><span class="g">VERDICT</span><br>After hitting 3 consecutive hits without missing, your next hit is empowered.</p>
+          </div>
         </div>
-      </section>
-      <section class="rsec glass rv" id="s-ranked-ladder">
-        <h2 class="section-title">Elo classifications</h2>
-        <p>Your rating decides your classification on the leaderboard:</p>
-        <ul class="hx-ladder">
-          <li style="--c:#9aa7bd"><b>Rookie</b><span>700+</span></li>
-          <li style="--c:#6ee7a8"><b>Combat Novice</b><span>950+</span></li>
-          <li style="--c:#7ecbff"><b>Combat Cadet</b><span>1200+</span></li>
-          <li style="--c:#c4a4ff"><b>Combat Specialist</b><span>1450+</span></li>
-          <li style="--c:#E798FF"><b>Combat Ace</b><span>1700+</span></li>
-          <li style="--c:#ff9a5c"><b>Combat Master</b><span>1950+</span></li>
-        </ul>
-      </section>
-    </div></div>
-  </div>
+        <div>
+          <ol class="rk-flow">
+            <li><b class="ic mc">RMB</b><div><h3>Sentencing: the dash</h3><p>Right-click to launch forward and start a hit. <b>Land the hit</b> and the dash cooldown stops, so you can dash again straight away. <b>Miss</b> and the dash goes on a 10 second cooldown.</p></div></li>
+            <li><b class="ic mc">x3</b><div><h3>Build a streak</h3><p>Every hit made while falling at least 1.5 blocks counts as a smash and deals normal mace smash damage. Three smashes in a row without a miss charge your next hit. The streak resets after 5 seconds without a smash.</p></div></li>
+            <li><b class="ic mc">40</b><div><h3>Verdict: the empowered hit</h3><p>The fourth hit deals <b>40 damage, which is 20 hearts</b>. That is a full health bar for a #1 ranked player. After a Verdict the hammer is on a 30 second cooldown.</p></div></li>
+          </ol>
+          <ul class="rk-chips">
+            <li>Streak <b>3 smashes</b></li><li>Reset <b>5 s</b></li><li>Miss cooldown <b>10 s</b></li><li>Verdict cooldown <b>30 s</b></li><li>Verdict damage <b>20 hearts</b></li>
+          </ul>
+          <p class="rk-note" style="margin-top:16px">The hammer cannot be stored in chests, barrels, shulker boxes, hoppers or /inv. It can be dropped. If you die holding it, a skull of ash and smoke rises where you fell for 5 seconds. Staff hand it out with /rsmp give hammer. The server also has a Diamond Spear with Lunge III that never breaks, and a Dragon Egg whose carrier shows on everyone's locator bar.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="rsec glass rv" id="s-ranked-explorer">
+      <h2 class="section-title">Rank explorer</h2>
+      <p class="rk-lead">Slide from rank #1 to #30. The hearts, XP bar, potion timer and /inv chest below change to match what that rank gets.</p>
+      <div class="rk-ex" style="margin-top:22px">
+        <div class="rk-ctl">
+          <div>
+            <label class="rk-lab" for="rk-range">Choose a rank</label>
+            <div class="rk-top"><span class="rk-big mc" id="rk-n">#1</span><span class="rk-tag mc" id="rk-tag">[#1] <em>Steve</em></span></div>
+          </div>
+          <div>
+            <input class="rk-range" id="rk-range" type="range" min="1" max="30" step="1" value="1" aria-valuetext="Rank 1">
+            <div class="rk-scale" aria-hidden="true"><span>#1</span><span>#10</span><span>#20</span><span>#30</span></div>
+            <div class="rk-jump" id="rk-jump" role="group" aria-label="Jump to a rank"></div>
+          </div>
+          <dl class="rk-feat" aria-live="polite">
+            <div><dt>Hearts</dt><dd class="mc" id="f-h"></dd><dd class="sub" id="f-hs"></dd></div>
+            <div><dt>XP gain</dt><dd class="mc" id="f-x"></dd><dd class="sub" id="f-xs"></dd></div>
+            <div><dt>Potion duration</dt><dd class="mc" id="f-p"></dd><dd class="sub" id="f-ps"></dd></div>
+            <div><dt>Extra /inv slots</dt><dd class="mc" id="f-s"></dd><dd class="sub" id="f-ss"></dd></div>
+          </dl>
+        </div>
+        <div class="rk-screen" id="rk-screen">
+          <div class="rk-effrow"><div class="rk-eff"><div class="rk-effbox rk-px"><i class="rk-px"></i></div><span class="rk-efft mc" id="rk-efft">3:00</span></div></div>
+          <div class="rk-gui rk-px"><span class="rk-gt mc" style="top:calc(var(--u)*6)">Extra Inventory</span><div class="rk-grid" id="rk-grid"></div><span class="rk-gt mc" style="top:calc(var(--u)*128)">Inventory</span></div>
+          <div class="rk-hud">
+            <div class="rk-hearts" id="rk-hearts"></div>
+            <span class="rk-xpl mc" id="rk-xpl">XP x3.00</span>
+            <div class="rk-xp rk-px"><i id="rk-xpf"></i></div>
+            <div class="rk-hot rk-px"><i class="rk-px" style="left:calc(var(--u)*3);background-image:var(--a-mace)"></i><i class="rk-px" style="left:calc(var(--u)*23);background-image:var(--a-spear)"></i><i class="rk-px" style="left:calc(var(--u)*163);background-image:var(--a-egg)"></i></div>
+          </div>
+          <p class="rk-cap">Barriers mark slots you have not unlocked. The speed timer shows a 3:00 potion drunk at this rank.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="rsec glass rv" id="s-ranked-ladder">
+      <h2 class="section-title">Elo classifications</h2>
+      <p>Your rating decides your classification on the leaderboard:</p>
+      <ul class="hx-ladder">
+        <li style="--c:#9aa7bd"><b>Rookie</b><span>700+</span></li>
+        <li style="--c:#6ee7a8"><b>Combat Novice</b><span>950+</span></li>
+        <li style="--c:#7ecbff"><b>Combat Cadet</b><span>1200+</span></li>
+        <li style="--c:#c4a4ff"><b>Combat Specialist</b><span>1450+</span></li>
+        <li style="--c:#E798FF"><b>Combat Ace</b><span>1700+</span></li>
+        <li style="--c:#ff9a5c"><b>Combat Master</b><span>1950+</span></li>
+      </ul>
+    </section>
+  </div></div>
+</div>
+<script>
+(function(){
+  var D=[[20.0,3.0,2.0,54],[19.5,2.93,1.97,52],[19.5,2.87,1.94,51],[19.0,2.8,1.91,49],[19.0,2.74,1.88,47],[18.5,2.67,1.84,46],[18.0,2.61,1.81,44],[18.0,2.54,1.78,42],[17.5,2.48,1.75,41],[17.0,2.41,1.72,39],[17.0,2.34,1.69,37],[16.5,2.28,1.66,36],[16.5,2.21,1.63,34],[16.0,2.15,1.6,32],[15.5,2.08,1.57,31],[15.5,2.02,1.53,29],[15.0,1.95,1.5,28],[14.5,1.89,1.47,26],[14.5,1.82,1.44,24],[14.0,1.76,1.41,23],[14.0,1.69,1.38,21],[13.5,1.62,1.35,19],[13.0,1.56,1.32,18],[13.0,1.49,1.29,16],[12.5,1.43,1.26,14],[12.0,1.36,1.22,13],[12.0,1.3,1.19,11],[11.5,1.23,1.16,9],[11.5,1.17,1.13,8],[11.0,1.1,1.1,6]], rng=document.getElementById('rk-range'), root=document.getElementById('rk-root'), scr=document.getElementById('rk-screen');
+  if(!rng||!scr)return;
+  var st={a:{hc:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAASUlEQVR42o2PwQnAMAwDT51G+0+jbdJPTNPGhRwYjDlbGB7GrG+PamgbgCSsPSCtQkcSLg44ljSz2yhAdWkTS+iWh+3X+39swg1Vux2e/nRG0wAAAABJRU5ErkJggg==',hf:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAASElEQVR42p2O0QkAIAgFz1Zw/zH6spWawX4qwoioA0GepwgvuKq7qsceII2QnKe8LgJIHESkVkkA5SBsufU/Rtnput2EVeSHBoQgJ9QIKcHxAAAAAElFTkSuQmCC',hh:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAQ0lEQVR42mNgIAX8Fxb+/19Y+D82OSaYAoatW+GK0RUxYpNgfPuWEcOkPQScwsTAwMDg+vYt4x5iHb8bj+MxFDKQAwB+Dxd+NOu6bAAAAABJRU5ErkJggg==',gui:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALAAAADeCAYAAACdSYp0AAAC30lEQVR42u3cUWrCQBSG0f9KV6XbcCNC9uFCknXEZaVPtSEFkWjLTDnnqVS4BfkoE8idyrcl0Ifa/rAsi37ppN6qe7sH8dKbeZ7vJ4baBny73XxDNO16vSZJxnHMYf2BeOnNwVeAgEHAIGAEDAIGAYOAETAIGAQMAuYf+Xj04eVyefkPnM/nTNNkjjm755xOp30Bfw14xTAMmabJHHN2z3n0lqQjBM7AIGAQMAIGAYOAQcAIGAQMAgYBI2AQMAiYeKE9j94FHoYh73gp2Rxz8ktXtd/vB96+OGwjw5w0uJGxvh/YRoY5sZEBHuJAwAgYBAwCBgEjYBAwCBgEjIBBwCBgBAyxkWGOObGRYY45NjLMiY0M8BAHAgYBI2AQMAgYBIyAQcAgYAQMAgYBg4CJjQybAubERoaNA3NsZJgTGxnOwHiIAwGDgEHACBgEDAJGwCBgEDAIGAGDgEHAEBsZ5sRGhk0Bc2IjwxxzbGTgIQ4EDAIGASNgEDAIGASMgEHAIGAQMAIGAUNsZJgTGxmJjQxzbGTExoE5sZEBHuIQMAgYBAwCRsAgYBAwCBgBg4BBwAgYBAyxkWGOOXltIwNatN7IcITAGRgEDAJGwCBgEDAIGAGDgEHAIGAEDOngdUr3A5uTBu8Hfjpg9wObE/cDgzMwCBgBg4BBwCBgBAwCBgEjYBAwCBgEjIAh7gc2x5z8/f3ANjLMSYMbGev7gW1kmBMbGeAhDgSMgEHAIGAQMAIGAYOAQcAIGAQMAkbAEBsZ5pgTGxnmmGMjw5zYyAAPcSBgEDACBgGDgEHACBgEDAJGwCBgEDAImNjIsClgTnreyIAWrTcyHCFwBgYBw7sf4mwlm5MGt5KfDthWsjmxlQzOwCBgBAwCBgGDgBEwCBgEjIBBwCBgEDAChthKNsec2EqGxFYyzsAgYNh9fFg/xFVVLfM8//gQevkPXMfj0bdBN8ZxTJKqze8XXw2dqCT5BOZY9XVWCUzrAAAAAElFTkSuQmCC',hotbar:'data:image/png;base64,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',xpbg:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALYAAAAFCAYAAADorhbfAAAAnUlEQVR42u3WMQvCMBCG4TeQ0ARa6aTO2rUg+P9/giC4qrPGRayYlgh1E6G4VOpQ7psfbvjgjlMALk9bJJKRJFzvSrk8bcv1ijoEYnx2kDEa6xzH/YFFsRTX0/nTGYDpfCbdDOx2my0aoLpVhPCgqZsOTmzyHiKuv7PWSjd/dBogm2QYo4nu+xZcvBf3g/u82NLNsA5AyY8tGeOP/QI9J9b3yVY66gAAAABJRU5ErkJggg==',xpfg:'data:image/png;base64,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',effbg:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAVUlEQVR42u2WuQHAMAgDD8/EKkzJKuzkVHaeGqeSChUUd6Uw7kx6Y7uAGRGt9MwEMHvCq6oF7u5bMtaxC/5lDQ5HAgkkkEACCV6CNXOdk/nb6B99Wy4UEBcrKoeIcAAAAABJRU5ErkJggg==',speed:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAABoklEQVR42s2UMWvbQBiGnys22IaqcAJLcdrSBBssVJfOCWjokqlwv8EZ+kf6O7oEMhtCIC1kiEIImRuRwSXpFFsGaXDBDoRyne6wEiXx0CEfCO50d6+eT9/7HTy3EGUvlVJ6MBgIpZR2pQQgy3P+nh7bPXtpJp4UKovPnqujtXcADLOc0XRaEBMAcRzrKIpEHMcaoNvtWoHtXgBAPpsT+h5bvfcAfP95XhArJWrXqjp45XCXIJ/NUWHAeqvF5fU1APHVb/bSTFTKRL58/MAguWC91Sqs5bM5wyy388XxizIiI2C+akI26iTjlGGWFygfTc1QqTAoECTjFNmoW8KTPzMBUCkr9dHuTuFwx5WWQDbqlsKIPFr+dq2qP715TTJOCX0PwKayKGCisoyHRtMpK45jH0j1XSL7s42HJpOJBvj245CvJ2eEvmdTAei4EhUGhL7H5suGvicURZEAaDabwsw33q4WqDqutBXtuJKlW8QYc8VxSMaptcAioUmxUtas2/2+No16frAPQOh7lsj4y9hh6aZt16r6obVfN7fiv95H/wBk7dFTJvf/yQAAAABJRU5ErkJggg==',ttbg:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAs0lEQVR42u3RsRHAIBADQUEF33+VX4JLMDP2AMFerEibSJIkSdLexsqoUu2q73W63jYTxr5WvpxuuisgQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgAgJEQAQEiIAAERAgOgbS6XLTP/lSkiRJ0o09X4oJqDb1woAAAAAASUVORK5CYII=',ttfr:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAABeklEQVR42u3d0Q2DMAxFUafTdBw2qroR43QZQjdooyaiJpz7jfjIk/1sJ4EIAAAAAMClKa0PLrEvlut31ijrsJcR47g1vLW9breineyNa3gb+TJ8osbACNms54AYESGp4qMSJFc5OzRlVSuaKWURZIQcUpYIwUF9SBUhAwTZxglSREi2PoQgTF2EMPXTRAhB0k17CRK5pr08JJUgTD1dhEhZ/XLwkJh2/C5lKXt5CEFO5SFSVioPKU6d5IoQCctwkanzkFMNF3mILdzpqiymPm+VRRKdulmWKksfImWJkGlSlghh6jp1p06c7dUYSlnxt9HJpsry4QAcZepSli85EETK0ocYnehDjE7AQ1xpgytttnChU5eyCMLUeYgIiQkufRIkWYSosuyp21PXh4iQS+HCjmkv+ssiKctwUcrSqWsM4VzWtfoQmPbaD1H2EiSMTnjIDKbui3I6dX0ID3GljYcYneT3kOYf3N/j4Z/qHbziuVoFAAAAAMBX3ijd8pKaQ9fdAAAAAElFTkSuQmCC',mace:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABcUlEQVR42t2XvUvDQByGnxP/AD+qcYmC+BEFN0EMiJJFcVJRBCk4SAcR3B2cHFxdxElU0KEg7lIpnQRRF5corQ5uIn78B3HpYe+wTa1Vc3235HLD897vfY8IqiRvfCYofE6fnohy9tXxz6qvFvn8QhyAnoFhuRQUOjEXXw4AXp6fFIfMdUAnP0ullPX1zW0Aclk/ALjzbwB4f3s1fAaKkUvCXsdRvj84TgOwOOsB8Pjgi0g5IH5KLqfaHRkFwLZtJQ0baysANLdYAFycZxQnzJuB68sr9ay1M9fJpaRTQ+6Y0hPmOPDZ7Wrnt7ZZytnr5LmsD0BDY1M07wJR6cb2zr4AYGJyOk96W5I8FrOU9+amYGppKwDo7xgE4HA/8SVpGLl5d4FOnswcqUT5mZAKIzcnBZI84bkArO7uAXCf3hGl0iFVjDz6DnyXvFJFz4G/Io9OD+h/NDLnv00evSbs6naUbg/Lb+2kQG+uchusZhz4AChynlIPEKACAAAAAElFTkSuQmCC',spear:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABeklEQVR42u3XMUsCYRgH8P9zKBiCQ1ZcYKdEouIiGQfRoLZJ0FeIJltb8iuU36CpIUehMWjIosHwINoUHCpxkC5BDDEIeRpKkYMi6+49BN/p5bjhx/N/7n3uJU9CZXytznWZIHq5ggHucJ/z/TZ7EiqPgoQB4ro2RMR1TTxkFBHXNc732xwtFYRApMFGPykg9XKH4tzqJ2rFj6XDA7FRKLksR0uFYSVExCAZH7zeaFi/PcP+bBAbvQfxX4SSy7IrGOCw4ua9bYXT6rylVSAjAADeao8EAGHFzcmYF0/NHs7LuvgzYoA4yoQsr4RtCBoHYUUcjt++WK13CQDvpn0AwNOeMAtB/0EkY15wrYXjSteeOFKyky921jgTcdsXR0p28unW8uQiyEzEZsSHRvN5rJ6QzAIUm+90WWnAJy9gnEpIZkbxFwRZ1RMhdXE6RScDQaIQ341yhwjAT6OcRMdhrIQkElCtd+nqvgW/PAPhd1Dj3/fg6kd2IgDgA2qZ7ZYy5cPzAAAAAElFTkSuQmCC',egg:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEoUlEQVR42u2Xy44bNxOFvyqyb7qMYidB4v/f5FH0KnkSw082yptkEyebXCb2jKabzaosqKYkZww4hpNFEAJCAySL59SpCyn4b3zk2O12+83m5rbvN7ddt97/Y8Bdt96vVtvb7Xbnw7D1vt8s348iIn8FWEReqsrezAFovAXAmxlVJWcjZzu4+6txvD98EgILMLBv24CIME2ZVV7xIv0fgB+bH3gI96gqZoYXfh9ERD4EeJlrmoCZk7MB0GsHwKONiAgxKiIwTZmzjR5U5dXd3d3hgwjsdru9u7w0s32jEUV5zFMFBQhBCaF4a+a4O6130GXMnJTyKUQNJkYmv1cRuQROyV7GGPZRlO30Gd008Gv4lfv4Bndwd0QEVcHMUFWaJvDs+AUyBwThp/iaLIXA1rYkmRn1kRiVeTbc/YpIJTAMa48xFKBZ6G3gGB+IUXCHPDvP5uf0NvBTfI0HuyDjVwpdKhWjklJRBooTZpmUHuWKwHq98ZQyIkLbRkDqoe4OCK21JJ2IjVZFAHIuidd4Q5KEqhBjwKyQPFUHZrnazPMoAHEhcJpHBFKaT0kVUNVKIs1T3Xc+yBCEF+kFgUAm8yb8Tps6fgk/A457IRCCYCbV9kqBth38UjpVYZ7tREoAQQls8oaH+BbXp2U/O1SkBi+WFpg1VWf/pEANhW3o5467eAfiVWpVpWkFMUNFmFK+smvbkj8pzeScr7xsvMCoSg3JMioBEYhRsdFY24ZHG7nXtzRNIKWMuzFOEyPTSTipahVvjZTmCqxapHaHSaayFyFn54LbuwoIYzzyWn5A5Rz7EEqbDRYwMVy8SCvCPOeT1BBCIWVWbOAcxhreU54sQy+TMGcrsZcZi3PNA1U5bQ4MtkKkKFba7iK3wyxIDqfKcLrcc2M3FczM6XOPXPQ/vWT3VD2HIHx5/JqVrZikhOWyChZyrXV8Pn9B401dX81r3p72N97w2fyMUUYM+zMBkSWe10FRVYz8zpxU4KXBKMpRj+SY6r3wEN/iUsA67xh1JElC5IlWPAwrb7XBMow21U1Lt7uM5XLpzHOpb5FzbZdaPyfhYtt4Q5aMhDJ3PB7lSoEQlGCRzbSt3g15hVuRM8araNVsLtUjNQHP61bbNECShFEur2XuikDOF91JSr1ubUvwQAhaFRlsRUwt63mDnswvD3QHcamJ5s4VufJm8KdzYNKJ+3BfF38Lv5Wyc0iphKD1lmfz8yuAnL06YObs8q6SC0Gu8mq5N85lWTtZ+527fZPI35QNzkxG9NwJVWFk4qgPHPWI4zX2RbXyDR5IkshmcLqkCAuwH9zlW/f8/ZMPkvW6vITMfL8cOE255sC7jcXdaEIkzJEpjLgXFZb7vyHSaOSR8ZCzv8p5PHzQk2whkrPtc3YCAcdrDS+EUpoZtCOmjvvmTZV3yX4ROaj6q3EcDx/5DO/2bTvcrtsb/6r9n/f9ytt28L5f+Xq98b4f/Ka78ef6pTdN503Ted8P3jTtbQjd/pP+H9hsNrfDsPa2HXwYVt73Kx+GwVf92ttm8K7rfRiG2677hMDvU6RtBy+//uRx//cCv4/I3+7xv378Aeq170+2P083AAAAAElFTkSuQmCC',barrier:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAp0lEQVR42u2WwQ2AIAxFi3EVF3AEF2BWF3AEF/DoIPUgXIg/HGhDG/wXTUj4vofGEo2egBaOEJiIaGFuKrjCW7Exf3ZN5gzcRKxRdKZrLDrtGEBnXjtDFGSyNNHdwJxvtMjzPuhrsmOgjBR53ge9E3YNSJHX4tdAK7lfA1Lk/gxIk/sxoEVu34AUeW3CsmMA/be1yO1OxXt68nW4qRiZkEoEXd0N/HkA2zZUbjHkYTsAAAAASUVORK5CYII='}};
+  Object.keys(st.a).forEach(function(k){root.style.setProperty('--a-'+k,'url('+st.a[k]+')')});
+  var $=function(i){return document.getElementById(i)};
+  var grid=$('rk-grid'),hearts=$('rk-hearts'),i;
+  for(i=0;i<54;i++){var b=document.createElement('b');b.innerHTML='<i></i>';grid.appendChild(b)}
+  for(i=0;i<20;i++){var h=document.createElement('i');h.style.left='calc(var(--u)*'+(i%10)*8+')';h.style.top='calc(var(--u)*'+((i<10)?10:0)+')';h.hidden=true;hearts.appendChild(h)}
+  var jump=$('rk-jump');[1,5,10,15,20,25,30].forEach(function(n){var bt=document.createElement('button');bt.type='button';bt.textContent='#'+n;bt.dataset.n=n;bt.onclick=function(){rng.value=n;upd()};jump.appendChild(bt)});
+  function fmtT(s){s=Math.round(s);return Math.floor(s/60)+':'+('0'+s%60).slice(-2)}
+  function r2(n){return (Math.round(n*100)/100).toString()}
+  function upd(){
+    var n=+rng.value,d=D[n-1],hp=d[0],xp=d[1],po=d[2],sl=d[3];
+    $('rk-n').textContent='#'+n;
+    $('rk-tag').innerHTML='[#'+n+'] <em>Steve</em>';
+    rng.setAttribute('aria-valuetext','Rank '+n+': '+r2(hp)+' hearts, '+sl+' extra slots');
+    rng.style.setProperty('--p',((n-1)/29*100)+'%');
+    Array.prototype.forEach.call(jump.children,function(bt){bt.setAttribute('aria-pressed',+bt.dataset.n===n?'true':'false')});
+    $('f-h').textContent=r2(hp);$('f-hs').innerHTML='<b>+'+r2(hp-10)+(hp-10===1?' heart':' hearts')+'</b> over unranked, '+r2(hp*2)+' HP in total';
+    $('f-x').textContent=xp.toFixed(2)+'x';$('f-xs').innerHTML='<b>+'+Math.round((xp-1)*100)+'%</b> XP compared with unranked';
+    $('f-p').textContent=po.toFixed(2)+'x';$('f-ps').innerHTML='A 3:00 potion lasts <b>'+fmtT(180*po)+'</b>';
+    $('f-s').textContent=sl+' / 54';$('f-ss').innerHTML=sl===54?'<b>Every slot</b> is unlocked':'<b>'+(54-sl)+' slots</b> stay locked';
+    Array.prototype.forEach.call(grid.children,function(c,k){c.className=k<sl?'':'x'});
+    var full=Math.floor(hp),half=hp-full>=.5;
+    Array.prototype.forEach.call(hearts.children,function(el,k){
+      if(k<full){el.hidden=false;el.className='f'}else if(k===full&&half){el.hidden=false;el.className='h'}else{el.hidden=true}
+    });
+    $('rk-xpf').style.width=(xp/3*100)+'%';
+    $('rk-xpl').textContent='XP x'+xp.toFixed(2);
+    $('rk-efft').textContent=fmtT(180*po);
+  }
+  function fit(){
+    var w=scr.clientWidth-24; if(w<=0)return;
+    var raw=w/182, u=raw>=2?Math.min(3,Math.floor(raw)):Math.max(1,raw);
+    scr.style.setProperty('--u',(Math.floor(u*100)/100)+'px');
+  }
+  rng.addEventListener('input',upd);
+  if('ResizeObserver' in window)new ResizeObserver(fit).observe(scr);else addEventListener('resize',fit);
+  fit();upd();
+})();
+</script>
 </section>
 
 <!-- STRENGTH SMP (controlled by strength.js) -->

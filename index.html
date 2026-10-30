@@ -3371,7 +3371,8 @@ pick(0);
       return {online:d.online,
         motd:d.motd?String(d.motd).replace(/\s+/g,' ').trim():'',
         icon:d.icon||'',
-        n:d.players&&d.players.online!=null?d.players.online:0};
+        n:d.players&&d.players.online!=null?d.players.online:0,
+        max:d.players&&d.players.max?d.players.max:0};
     });
   }
   /* Fallback that works with no backend. TRADE-OFF: the address below is readable in the page source.
@@ -3386,7 +3387,7 @@ pick(0);
       dot.className='hx-dot on';
       motd.textContent=res.motd||'Online and ready to join.';
       if(res.icon&&icon){icon.src=res.icon;icon.hidden=false}
-      if(pcEl){pcEl.textContent=res.n+'/100';pcBox.classList.add('on')}
+      if(pcEl){pcEl.textContent=res.n+'/'+(res.max||300);pcBox.classList.add('on')}
     }else if(res){
       dot.className='hx-dot off';
       motd.textContent='Server is currently offline.';

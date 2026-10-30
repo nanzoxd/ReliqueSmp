@@ -2879,8 +2879,9 @@ html[data-theme="amoled"] #page-ranked .rk-screen::after{background:linear-gradi
 @media(max-width:980px){#page-ranked .rk-ex{grid-template-columns:minmax(0,1fr)}}
 </style>
 <div class="docwrap rk" style="margin-top:0" id="rk-root">
-  <header class="phead glass"><div class="phead-copy"><h1>Ranked SMP</h1><p class="lede">A competitive survival server where every fight moves your Elo and ranks #1 to #30 are won in combat.</p></div></header>
-  <div class="docwrap"><div class="docbody">
+  <header class="phead glass"><div class="phead-copy"><h1>Ranked SMP</h1><p class="lede">A competitive survival server where every fight moves your Elo and ranks #1 to #30 are won in combat.</p></div>
+    <div class="lb-tabs rk-tabs" role="tablist" aria-label="Ranked SMP view"><button type="button" class="lb-tab" role="tab" id="rk-tab-info" aria-selected="true">Overview</button><button type="button" class="lb-tab" role="tab" id="rk-tab-players" aria-selected="false">Ranked players <span class="ct" id="rk-ct">0</span></button></div></header>
+  <div class="docwrap" id="rk-overview"><div class="docbody">
 
     <section class="rsec glass rv" id="s-ranked-overview">
       <h2 class="section-title">What is Ranked SMP?</h2>
@@ -2972,6 +2973,25 @@ html[data-theme="amoled"] #page-ranked .rk-screen::after{background:linear-gradi
       </ul>
     </section>
   </div></div>
+  <div class="docwrap" id="rk-players" hidden>
+    <div class="lb-bar">
+      <div class="lb-tabs" role="tablist" aria-label="Ranked player filter">
+        <button type="button" class="lb-tab" role="tab" id="rk-f-all" aria-selected="true">All ranked</button>
+        <button type="button" class="lb-tab" role="tab" id="rk-f-on" aria-selected="false"><i class="odot"></i>Online</button>
+        <button type="button" class="lb-tab" role="tab" id="rk-f-risk" aria-selected="false">At risk</button>
+      </div>
+      <label class="lb-search"><span class="sr">Search ranked players</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.6-3.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="search" id="rk-q" placeholder="Search ranked players" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search">
+      </label>
+    </div>
+    <p class="lb-meta" id="rk-meta" role="status" aria-live="polite"></p>
+    <div class="lb-table glass" id="rk-table" role="table" aria-label="Ranked SMP players">
+      <div class="lb-row lb-head" role="row"><span role="columnheader"><b class="hf">Rank</b><b class="hs">#</b></span><span role="columnheader">Player</span><span role="columnheader" class="c-perk">Perks</span><span role="columnheader" class="c-p">Playtime</span><span role="columnheader" class="c-in">Inactive timer</span><span role="columnheader" class="r">Change</span></div>
+      <div id="rk-rows"></div>
+      <p class="lb-empty" id="rk-empty" hidden></p>
+    </div>
+  </div>
 </div>
 <script>
 (function(){
@@ -3683,6 +3703,67 @@ button.lbp-tile:hover{background:rgba(255,255,255,.07)}
   <a href="https://discord.gg/cy3VCNRqf" target="_blank" rel="noopener">Join the Discord</a>
 </div></footer>
 
+<style id="rk-players-css">
+#rk-overview[hidden],#rk-players[hidden]{display:none!important}
+.phead .rk-tabs{position:absolute;right:56px;top:50%;transform:translateY(-50%);z-index:3}
+#rk-players{margin-top:0}
+#rk-players .lb-bar{margin-top:22px}
+#rk-table{margin-top:18px;padding:12px 14px}
+#rk-table .lb-head{padding:4px 18px 10px 14px}
+#rk-table .lb-head[hidden]{display:none}
+#rk-table .lb-row{grid-template-columns:44px minmax(0,1.6fr) 158px 90px 118px 78px;gap:10px;padding-left:14px;padding-right:18px}
+#rk-rows{display:grid;gap:10px;padding-top:2px}
+#rk-table button.lb-row{position:relative;min-height:108px;padding-top:8px;padding-bottom:8px;border:0;border-radius:20px;
+ background:linear-gradient(100deg,rgba(52,84,190,.26),rgba(16,22,46,.62) 58%),rgba(10,14,30,.5);
+ box-shadow:inset 0 0 0 1px rgba(120,150,255,.14);transition:transform .25s var(--ease,ease),box-shadow .25s,background .25s;animation:fadeUp .45s var(--ease) backwards}
+#rk-table button.lb-row::before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(#7fa6ff,#2d4fd6)}
+#rk-table button.lb-row:hover{transform:translateY(-2px);background:linear-gradient(100deg,rgba(66,104,225,.36),rgba(18,26,56,.7) 58%),rgba(10,14,30,.5);box-shadow:inset 0 0 0 1px rgba(140,170,255,.42),0 14px 30px -14px rgba(60,100,255,.6)}
+#rk-table .lb-row .pos{display:grid;place-items:center;width:32px;height:32px;border-radius:11px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);color:#aebfe8}
+#rk-table .lb-row .who{gap:16px}
+#rk-table .lb-row .who b{font-size:17px}
+#rk-table .c-perk .pk{display:block;font-size:13px;color:var(--ice-1);white-space:nowrap}
+#rk-table .c-perk .pk.s{font-size:11.5px;color:var(--muted);margin-top:2px}
+.rk-in{justify-self:start;font:600 12.5px var(--font-b);padding:6px 11px;border-radius:999px;white-space:nowrap;background:rgba(74,222,128,.12);color:#4ade80;box-shadow:inset 0 0 0 1px rgba(74,222,128,.28)}
+.rk-in.warn{background:rgba(251,191,36,.12);color:#fbbf24;box-shadow:inset 0 0 0 1px rgba(251,191,36,.3)}
+.rk-in.bad{background:rgba(248,113,113,.13);color:#f87171;box-shadow:inset 0 0 0 1px rgba(248,113,113,.32)}
+.rk-in.ex{background:rgba(126,203,255,.12);color:var(--ice-2);box-shadow:inset 0 0 0 1px rgba(126,203,255,.28)}
+.rk-in.na{background:rgba(255,255,255,.05);color:var(--muted);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.rk-ms{display:none;margin-top:3px;font-size:11.5px;font-weight:600;color:#4ade80}
+.rk-ms.warn{color:#fbbf24}.rk-ms.bad{color:#f87171}.rk-ms.ex{color:var(--ice-2)}.rk-ms.na{color:var(--muted)}
+#rk-table .lb-head .hs{display:none}
+.rk-tr{justify-self:end;font:700 13px var(--font-d);padding:6px 11px;border-radius:999px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.rk-tr.up{color:#4ade80;background:rgba(74,222,128,.12);box-shadow:inset 0 0 0 1px rgba(74,222,128,.3)}
+.rk-tr.dn{color:#f87171;background:rgba(248,113,113,.13);box-shadow:inset 0 0 0 1px rgba(248,113,113,.32)}
+.rk-tr.eq{color:var(--muted);background:rgba(255,255,255,.04)}
+/* card block */
+.pf-rk[hidden]{display:none}
+.pf-rk .pf-stats{margin-top:0}
+.pf-rk .pf-st.rk-chg.up b{color:#4ade80}.pf-rk .pf-st.rk-chg.dn b{color:#f87171}.pf-rk .pf-st.rk-chg.eq b{color:var(--muted)}
+.rk-sub{margin:20px 0 10px;font:600 11px var(--font-d);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.rk-inact{display:grid;gap:4px;padding:14px 16px;border-radius:16px;background:rgba(4,12,30,.5);border:1px solid rgba(126,203,255,.14)}
+.rk-inact b{font:600 15px var(--font-b);color:#4ade80}
+.rk-inact.warn b{color:#fbbf24}.rk-inact.bad b{color:#f87171}.rk-inact.ex b,.rk-inact.na b{color:var(--ice-2)}
+.rk-inact span{font-size:12.5px;color:var(--muted)}
+.rk-bar{height:8px;margin-top:8px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.rk-bar i{display:block;height:100%;border-radius:inherit;background:#4ade80;transition:width .4s}
+.rk-inact.warn .rk-bar i{background:#fbbf24}.rk-inact.bad .rk-bar i{background:#f87171}
+.pf-rk .pf-info{margin-top:10px}
+@media (max-width:980px){#rk-table .lb-row{grid-template-columns:44px minmax(0,1.5fr) 100px 110px 74px}#rk-table .c-perk{display:none}}
+@media (max-width:860px){.phead .rk-tabs{position:static;transform:none;flex:1 1 100%;margin-top:22px}.phead{flex-wrap:wrap}}
+@media (max-width:700px){
+ #rk-table{padding:8px 6px}
+ #rk-table .lb-row{grid-template-columns:28px minmax(0,1fr) 54px;gap:8px;padding-left:10px;padding-right:10px}
+ #rk-table .c-perk,#rk-table .c-p,#rk-table .c-in{display:none}
+ #rk-table .lb-head .hf{display:none}#rk-table .lb-head .hs{display:inline}
+ #rk-table .rk-ms{display:block}
+ #rk-table button.lb-row{min-height:92px;border-radius:16px}
+ #rk-table .lb-row .pos{width:26px;height:26px;border-radius:9px;font-size:12px}
+ #rk-table .lb-row .who{gap:8px}#rk-table .lb-row .who b{font-size:14px}
+ .rk-in{font-size:11.5px;padding:5px 8px}.rk-tr{font-size:12px;padding:5px 8px}
+}
+@media (prefers-reduced-motion:reduce){#rk-table button.lb-row:hover{transform:none}}
+</style>
+
 <div class="ip-overlay" id="pf-modal" role="dialog" aria-modal="true" aria-labelledby="pf-name" hidden>
   <div class="pf-card glass">
     <button type="button" class="ip-x" id="pf-x" aria-label="Close">&times;</button>
@@ -3701,6 +3782,8 @@ button.lbp-tile:hover{background:rgba(255,255,255,.07)}
     <p class="pf-rnote" id="pf-rnote"></p>
     <h3 class="pf-h">Player info</h3>
     <dl class="pf-info" id="pf-info"></dl>
+    <h3 class="pf-h" id="pf-rk-h" hidden>Ranked SMP</h3>
+    <div class="pf-rk" id="pf-rk" hidden></div>
     <h3 class="pf-h" id="pf-tiers-h" hidden>Best tier</h3>
     <div class="pf-tiers" id="pf-tiers" hidden></div>
     <h3 class="pf-h">Recent fights</h3>
@@ -4339,7 +4422,7 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
     if(ctl)o.signal=ctl.signal;
     return fetch(API_URL+path+(path.indexOf('?')<0?'?':'&')+'_='+Date.now(),o).then(function(r){clearTimeout(tm);if(!r.ok)throw new Error('HTTP '+r.status);return r.json()},function(e){clearTimeout(tm);throw e});
   }
-  var CACHE_KEY='relique-stats-cache',staleNote='',EVENTS=[],TEAMS={available:false,teams:[]};
+  var CACHE_KEY='relique-stats-cache',staleNote='',EVENTS=[],TEAMS={available:false,teams:[]},RANKED={available:false,players:[],ranks:[]};
   var JOINED_PAGE=1,JOINED_PER_PAGE=24;
   function ago(t){var m=Math.max(1,Math.round((Date.now()-t)/60000));if(m<60)return m+' min ago';var h=Math.round(m/60);return h<48?h+' h ago':Math.round(h/24)+' days ago'}
   function buildPlayers(list,on){
@@ -4360,7 +4443,7 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
       });
     });
     document.getElementById('on-ct').textContent=P.filter(function(p){return p.on}).length;
-    render();
+    render();rkSync();
   }
   function timeAgo(t){var m=Math.round((Date.now()-t)/60000);if(m<1)return'just now';if(m<60)return m+' min ago';var h=Math.round(m/60);return h<48?h+' h ago':Math.round(h/24)+' days ago'}
   function evWho(name,chg,cls){
@@ -4510,7 +4593,8 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
       apiGet('/api/stats?sort=elo'),
       apiGet('/api/online').catch(function(){return{players:[]}}),
       apiGet('/api/events?limit=50').catch(function(){return null}),
-      apiGet('/api/teams').catch(function(){return null})
+      apiGet('/api/teams').catch(function(){return null}),
+      apiGet('/api/ranked').catch(function(){return null})
     ]).then(function(res){
       // a server that just restarted can answer with an empty list: treat that as "not ready", not as real data
       if(!res[0]||!res[0].players||!res[0].players.length)throw new Error('stats not ready');
@@ -4518,13 +4602,14 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
       staleNote='';
       if(res[2]&&res[2].events)EVENTS=res[2].events;else if(!EVENTS.length)EVENTS=(old&&old.events)||[];
       if(res[3]&&typeof res[3]==='object')TEAMS=res[3];else if(!TEAMS.available)TEAMS=(old&&old.teams)||TEAMS;
-      try{localStorage.setItem(CACHE_KEY,JSON.stringify({t:Date.now(),players:res[0].players,events:EVENTS,teams:TEAMS}))}catch(e){}
+      if(res[4]&&typeof res[4]==='object')RANKED=res[4];else if(!RANKED.available)RANKED=(old&&old.ranked)||RANKED;
+      try{localStorage.setItem(CACHE_KEY,JSON.stringify({t:Date.now(),players:res[0].players,events:EVENTS,teams:TEAMS,ranked:RANKED}))}catch(e){}
       buildPlayers(res[0].players,on);
     }).catch(function(){
       // server/plugin is restarting or off: keep what is already on screen, else the last saved stats
       if(P.length){staleNote='server restarting \u2014 showing the last known stats';render();return}
       var c=readCache();
-      if(c&&c.players&&c.players.length){staleNote='server offline \u2014 saved stats from '+ago(c.t);EVENTS=c.events||[];TEAMS=c.teams||{available:false,teams:[]};buildPlayers(c.players,{})}
+      if(c&&c.players&&c.players.length){staleNote='server offline \u2014 saved stats from '+ago(c.t);EVENTS=c.events||[];TEAMS=c.teams||{available:false,teams:[]};RANKED=c.ranked||RANKED;buildPlayers(c.players,{})}
       else metaEl.textContent='Server is restarting or offline and there are no saved stats yet. This page retries automatically.';
       clearTimeout(retryT);retryT=setTimeout(loadLive,8000); // keep trying until the server is back
     });
@@ -4706,6 +4791,173 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
   document.addEventListener('visibilitychange',function(){if(!document.hidden)loadLive()});
   window.addEventListener('focus',loadLive);
 
+  // ---------- Ranked SMP: every ranked player (page #ranked) + the extra block on the player card ----------
+  var RK={view:'info',f:'all',q:'',list:[]},RK_KEY='relique-rank-track';
+  var rkOv=document.getElementById('rk-overview'),rkPl=document.getElementById('rk-players'),
+      rkRowsEl=document.getElementById('rk-rows'),rkEmpty=document.getElementById('rk-empty'),rkMeta=document.getElementById('rk-meta'),
+      rkTabInfo=document.getElementById('rk-tab-info'),rkTabPl=document.getElementById('rk-tab-players'),rkCt=document.getElementById('rk-ct'),
+      rkQ=document.getElementById('rk-q'),rkF={all:document.getElementById('rk-f-all'),on:document.getElementById('rk-f-on'),risk:document.getElementById('rk-f-risk')};
+  function rkDur(ms){ms=Math.max(0,ms);var m=Math.floor(ms/60000),h=Math.floor(m/60),d=Math.floor(h/24);if(d>=1)return d+'d '+(h%24)+'h';if(h>=1)return h+'h '+(m%60)+'m';return Math.max(1,m)+'m'}
+  function rkInfo(n){var a=RANKED.ranks||[];for(var i=0;i<a.length;i++)if(a[i].rank===n)return a[i];return null}
+  // The API only says who holds a rank now. If the plugin sends prev_rank we use it; otherwise the change is
+  // tracked from what this browser last saw (kept in localStorage), so up/down shows after the next change.
+  function rkTrack(list){
+    var s={};try{s=JSON.parse(localStorage.getItem(RK_KEY)||'{}')||{}}catch(e){}
+    list.forEach(function(x){
+      if(x.prev_rank>0){x.delta=x.prev_rank-x.rank;x.from=x.prev_rank;return}
+      var k=String(x.uuid||x.name).toLowerCase(),o=s[k];
+      if(!o)o=s[k]={r:x.rank,d:0,f:0,t:0};
+      else if(o.r!==x.rank){o.d=o.r-x.rank;o.f=o.r;o.r=x.rank;o.t=Date.now()}
+      x.delta=o.d;x.from=o.f;
+    });
+    try{localStorage.setItem(RK_KEY,JSON.stringify(s))}catch(e){}
+  }
+  // inactivity state of one holder: text for the table, class for the colour, f = how much of the limit is used
+  function rkInact(x){
+    var I=RANKED.inactivity||{},after=I.after_ms||RANKED.inactive_after_ms||0,ls=x.last_seen||0;
+    if(x.online)return{t:'Online',c:'ok',f:0,after:after};
+    if(x.exempt)return{t:'Exempt',c:'ex',f:0,after:after};
+    if(!ls)return{t:'Unknown',c:'na',f:0,after:after};
+    var off=Date.now()-ls,left=after-off;
+    if(after&&left<=0)return{t:'Inactive',c:'bad',f:1,off:off,left:0,after:after};
+    return{t:after?rkDur(left)+' left':rkDur(off)+' away',c:after&&left<after*.25?'warn':'ok',f:after?Math.min(1,off/after):0,off:off,left:left,after:after};
+  }
+  function rkTrend(x){
+    var s=el('span','rk-tr');
+    if(x.delta>0){s.className+=' up';s.textContent='\u25b2 '+x.delta;s.title='Moved up from #'+x.from}
+    else if(x.delta<0){s.className+=' dn';s.textContent='\u25bc '+(-x.delta);s.title='Moved down from #'+x.from}
+    else{s.className+=' eq';s.textContent='\u2014';s.title='No rank change seen yet'}
+    return s;
+  }
+  function rkPerkCell(n){
+    var r=rkInfo(n),c=el('span','n c-perk');
+    if(!r){c.textContent='\u2014';return c}
+    c.append(el('span','pk',(+r.hearts)+' \u2665 \u00b7 XP '+(+r.xp).toFixed(2)+'\u00d7'),el('span','pk s',(+r.potion).toFixed(2)+'\u00d7 potion'+(r.slots!=null?' \u00b7 '+r.slots+' slots':'')));
+    return c;
+  }
+  function rkRow(p){
+    var x=p.rsmp,r=el('button','lb-row rk-row');r.type='button';r.setAttribute('role','row');
+    var who=el('span','who'),nm=el('span','nm'),inc=rkInact(x);
+    nm.append(el('b',null,p.n),p.stub?el('small','rkn',x.online?'Online now':'Offline'):el('small','rkn k'+p.rk,RN(p)),el('small','rk-ms '+inc.c,inc.t));
+    who.append(sitWrap(p),nm);
+    r.append(el('span','pos',x.rank),who,rkPerkCell(x.rank),el('span','n c-p',p.stub?'N/A':play(p.h)),el('span','rk-in c-in '+inc.c,inc.t),rkTrend(x));
+    ['pointerenter','pointerdown','focus'].forEach(function(ev){r.addEventListener(ev,function(){window.RQ_prefetchSkin&&RQ_prefetchSkin(p.n,ev==='pointerenter')})});
+    r.addEventListener('click',function(){openCard(p,r)});
+    return r;
+  }
+  function rkRender(){
+    if(!rkPl)return;
+    var ok=!!(RANKED&&RANKED.available),all=RK.list,on=all.filter(function(p){return p.rsmp.online}).length;
+    rkCt.textContent=ok?all.length:0;
+    var risk=function(p){var i=rkInact(p.rsmp);return i.c==='warn'||i.c==='bad'};
+    var list=all.filter(function(p){
+      if(RK.f==='on'&&!p.rsmp.online)return false;
+      if(RK.f==='risk'&&!risk(p))return false;
+      return !RK.q||p.n.toLowerCase().indexOf(RK.q)>-1||('#'+p.rsmp.rank)===RK.q||String(p.rsmp.rank)===RK.q;
+    });
+    Object.keys(rkF).forEach(function(k){rkF[k].setAttribute('aria-selected',k===RK.f)});
+    var I=RANKED.inactivity||{};
+    rkMeta.textContent=(ok?all.length+(all.length===1?' ranked player':' ranked players')+' \u00b7 '+on+' online'+(I.enabled&&I.after_ms?' \u00b7 a rank is lost after '+rkDur(I.after_ms)+' offline':''):'Ranked SMP')+(staleNote?' \u00b7 '+staleNote:'');
+    rkRowsEl.replaceChildren();
+    var empty=!list.length;
+    document.querySelector('#rk-table .lb-head').hidden=empty;
+    rkEmpty.hidden=!empty;
+    if(empty){
+      rkEmpty.textContent=!ok?'Ranked data isn\u2019t available right now. The server needs RankedSMPX running with the ranked option on.':
+        !all.length?'No ranked players yet.':RK.f==='on'?'No ranked player is online right now.':RK.f==='risk'?'Nobody is close to losing a rank.':'No ranked players found.';
+      return;
+    }
+    list.forEach(function(p){rkRowsEl.append(rkRow(p))});
+  }
+  function rkSync(){
+    var R=RANKED;
+    if(!R||!R.available){RK.list=[];rkRender();return}
+    var byU={},byN={};
+    P.forEach(function(p){p.rsmp=null;if(p.uuid)byU[String(p.uuid).toLowerCase()]=p;byN[p.n.toLowerCase()]=p});
+    var players=(R.players||[]).filter(function(x){return x&&x.rank>0});
+    rkTrack(players);
+    RK.list=players.sort(function(a,b){return a.rank-b.rank}).map(function(x){
+      var p=byU[String(x.uuid).toLowerCase()]||byN[String(x.name).toLowerCase()];
+      if(!p)p={n:x.name,uuid:x.uuid,elo:0,k:0,d:0,kd:0,h:0,bm:0,fj:0,rk:0,on:!!x.online,tiers:{},f:[],pos:'\u2013',stub:true};
+      p.rsmp=x;return p;
+    });
+    rkRender();
+  }
+  function rkView(v){
+    RK.view=v;
+    if(rkOv)rkOv.hidden=v!=='info';
+    if(rkPl)rkPl.hidden=v!=='players';
+    if(rkTabInfo)rkTabInfo.setAttribute('aria-selected',v==='info');
+    if(rkTabPl)rkTabPl.setAttribute('aria-selected',v==='players');
+    if(v==='players')rkRender();
+  }
+  if(rkPl&&rkTabInfo&&rkTabPl){
+    rkTabInfo.addEventListener('click',function(){rkView('info')});
+    rkTabPl.addEventListener('click',function(){rkView('players')});
+    Object.keys(rkF).forEach(function(k){rkF[k].addEventListener('click',function(){RK.f=k;rkRender()})});
+    rkQ.addEventListener('input',function(){RK.q=rkQ.value.trim().toLowerCase().replace(/^#/,'');rkRender()});
+  }
+  // ---- extra block on the player card: rank, up/down, playtime, perks, inactivity ----
+  function rkPretty(path){
+    var s=String(path).split('.'),n=s[s.length-1];
+    if(/^(custom-)?(multipliers?|values?|ranks?|amounts?)$/i.test(n)&&s.length>1)n=s[s.length-2]+' '+n;
+    n=n.replace(/[-_]+/g,' ').trim();return n.charAt(0).toUpperCase()+n.slice(1);
+  }
+  function rkCard(p){
+    var h=document.getElementById('pf-rk-h'),box=document.getElementById('pf-rk');
+    if(!h||!box)return;
+    box.replaceChildren();
+    var x=p.rsmp;
+    if(p.stub){ // ranked, but the stats plugin has no record of this player yet
+      Array.prototype.forEach.call(document.querySelectorAll('#pf-stats .pf-st b'),function(b){b.textContent='N/A'});
+      document.getElementById('pf-rnote').textContent='No Elo stats recorded for this player yet.';
+      Array.prototype.forEach.call(document.querySelectorAll('#pf-ladder span'),function(s){s.className='';s.style.removeProperty('--c')});
+    }
+    if(!x||!RANKED||!RANKED.available){h.hidden=true;box.hidden=true;return}
+    h.hidden=false;box.hidden=false;
+    // 1) rank / change / playtime
+    var tiles=el('div','pf-stats');
+    var chg=x.delta>0?['\u25b2 '+x.delta,'Up from #'+x.from,'up']:x.delta<0?['\u25bc '+(-x.delta),'Down from #'+x.from,'dn']:['\u2014','No change seen yet','eq'];
+    [['#'+x.rank,'Ranked rank','gold'],[chg[0],chg[1],'rk-chg '+chg[2]],[p.stub?'N/A':play(p.h),'Playtime','']].forEach(function(t){
+      var c=el('div','pf-st '+t[2]);c.append(el('b',null,t[0]),el('span',null,t[1]));tiles.append(c);
+    });
+    box.append(tiles);
+    // 2) perks of this rank
+    var r=rkInfo(x.rank),pk=[];
+    if(r){
+      pk.push(['Hearts',(r.hearts_est?'~':'')+(+r.hearts)]);
+      pk.push(['XP gain',(+r.xp).toFixed(2)+'\u00d7']);
+      pk.push(['Potion duration',(+r.potion).toFixed(2)+'\u00d7']);
+      if(r.slots!=null)pk.push(['Extra /inv slots',r.slots+' / 54']);
+      var o=r.perks||{};
+      Object.keys(o).forEach(function(k){var v=o[k];pk.push([rkPretty(k),typeof v==='boolean'?(v?'Yes':'No'):typeof v==='number'?String(Math.round(v*100)/100):String(v)])});
+    }
+    box.append(el('h4','rk-sub','Perks of rank #'+x.rank));
+    if(pk.length){
+      var dl=el('dl','pf-info');
+      pk.forEach(function(q){var d=el('div');d.append(el('dt',null,q[0]),el('dd',null,q[1]));dl.append(d)});
+      box.append(dl);
+    }else box.append(el('p','pf-nofight','No perk data for this rank.'));
+    // 3) inactivity
+    var I=RANKED.inactivity||{},inc=rkInact(x),main,sub;
+    if(x.online){main='Online now';sub='The inactivity timer is paused while this player is online.'}
+    else if(x.exempt){main='Exempt from inactivity';sub='This player never loses their rank for being offline.'}
+    else if(!x.last_seen){main='Last seen unknown';sub='No login record for this player yet.'}
+    else if(inc.after&&inc.left<=0){main=I.enabled?'Inactive \u00b7 rank can be taken any moment':'Inactive';sub='Offline for '+rkDur(inc.off)+' \u00b7 limit is '+rkDur(inc.after)+'.'}
+    else{
+      main=(I.enabled?'Loses rank in ':'Marked inactive in ')+rkDur(inc.left);
+      sub='Offline for '+rkDur(inc.off)+(inc.after?' \u00b7 limit '+rkDur(inc.after):'')+(I.enabled?(I.action==='reroll'?' \u00b7 the rank then goes to a random online player':' \u00b7 the rank is then removed'):'')+'.';
+    }
+    box.append(el('h4','rk-sub','Inactive time'));
+    var ib=el('div','rk-inact '+inc.c);
+    ib.append(el('b',null,main),el('span',null,sub));
+    if(!x.online&&!x.exempt&&inc.after){var bar=el('div','rk-bar'),fill=el('i');fill.style.width=Math.round(inc.f*100)+'%';bar.append(fill);ib.append(bar)}
+    box.append(ib);
+    var info=el('dl','pf-info');
+    [['Last seen',x.online?'Now':x.last_seen?ago(x.last_seen):'N/A'],['Rank updated',x.rank_since?ago(x.rank_since):'N/A']].forEach(function(q){var d=el('div');d.append(el('dt',null,q[0]),el('dd',null,q[1]));info.append(d)});
+    box.append(info);
+  }
+
   // ---------- live tier lookup (MCTiers + SubTiers public APIs) ----------
   // Runs in the visitor's browser. If a site blocks browser requests (CORS) you'll see an error for it;
   // set CORS_PROXY to a proxy prefix (e.g. your own Cloudflare Worker) to route requests through it.
@@ -4865,6 +5117,7 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
       r.append(op,dt,rs);fl.append(r);
     });
     document.getElementById('pf-namemc').href='https://namemc.com/profile/'+encodeURIComponent(p.n);
+    rkCard(p);
     M.hidden=false;document.body.style.overflow='hidden';
     document.getElementById('pf-close').focus({preventScroll:true});M.querySelector('.pf-card').scrollTop=0;
   }

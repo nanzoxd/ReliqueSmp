@@ -6,7 +6,8 @@
 // (Don't hard-code it here if your GitHub repo is public.)
 
 module.exports = async function handler(req, res) {
-  const addr = process.env.MC_STATUS_ADDR || '139.99.22.24:21322';
+  const addr = process.env.MC_STATUS_ADDR;
+  if (!addr) return res.status(500).json({ error: 'MC_STATUS_ADDR is not set in Vercel' });
   res.setHeader('Cache-Control', 'public, s-maxage=20, stale-while-revalidate=40');
 
   try {

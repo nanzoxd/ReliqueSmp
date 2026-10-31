@@ -10,15 +10,14 @@ async function t(name, url) {
   } finally { clearTimeout(to); }
 }
 module.exports = async (req, res) => {
-  const plugin = (process.env.RELIQUE_API || 'http://139.99.22.24:28435').replace(/\/+$/, '');
-  const mc = process.env.MC_STATUS_ADDR || '139.99.22.24:21322';
+  const plugin = (process.env.RELIQUE_API || '').replace(/\/+$/, '');
+  const mc = process.env.MC_STATUS_ADDR || '';
   const out = await Promise.all([
     t('plugin /api/online', plugin + '/api/online'),
     t('plugin /api/stats', plugin + '/api/stats?sort=elo'),
-    t('mcstatus ' + mc, 'https://api.mcstatus.io/v2/status/java/' + encodeURIComponent(mc)),
-    t('mcstatus no-port', 'https://api.mcstatus.io/v2/status/java/139.99.22.24')
+    t('mcstatus ' + mc, 'https://api.mcstatus.io/v2/status/java/' + encodeURIComponent(mc))
   ]);
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Cache-Control', 'no-store');
-  res.status(200).send(JSON.stringify({ env: { RELIQUE_API: process.env.RELIQUE_API || '(not set)', MC_STATUS_ADDR: process.env.MC_STATUS_ADDR || '(not set)' }, results: out }, null, 2));
+  res.status(200).send(JSON.stringify({ env: { RELIQUE_API: process.env.RELIQUE_API ? 'set' : '(not set)', MC_STATUS_ADDR: process.env.MC_STATUS_ADDR ? 'set' : '(not set)' }, results: out }, null, 2));
 };

@@ -1,6 +1,8 @@
 // Vercel function: proxies /relique/* to the Relique plugin API (plugin's "website" port).
-// Optional overrides in Vercel -> Settings -> Environment Variables: RELIQUE_API, RELIQUE_KEY
+// Works with no env vars (defaults below). Optional overrides in Vercel -> Settings -> Environment Variables: RELIQUE_API, RELIQUE_KEY
+const DEFAULT_RELIQUE_API = 'http://ancientsmp.helixcloud.online:8766';
 function pluginBase() {
+  if (!process.env.RELIQUE_API && !(process.env.RELIQUE_HOST && process.env.RELIQUE_PORT)) return DEFAULT_RELIQUE_API;
   if (process.env.RELIQUE_API) return process.env.RELIQUE_API.replace(/\/+$/, '');
   if (process.env.RELIQUE_HOST && process.env.RELIQUE_PORT) return 'http://' + process.env.RELIQUE_HOST + ':' + process.env.RELIQUE_PORT;
   return '';

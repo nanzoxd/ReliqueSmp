@@ -6,8 +6,7 @@
 // (Don't hard-code it here if your GitHub repo is public.)
 
 module.exports = async function handler(req, res) {
-  const addr = process.env.MC_STATUS_ADDR;
-  if (!addr) return res.status(500).json({ error: 'MC_STATUS_ADDR is not set in Vercel' });
+  const addr = process.env.MC_STATUS_ADDR || 'ancientsmp.helixcloud.online:19132';
   res.setHeader('Cache-Control', 'public, s-maxage=20, stale-while-revalidate=40');
 
   try {

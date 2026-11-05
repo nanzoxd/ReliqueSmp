@@ -8,8 +8,33 @@ function pluginBase() {
   return '';
 }
 
+const kv = require('./_kv');
+
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store, max-age=0');
+
+  // Preferred: data the plugin pushes into the linked database (no open port needed).
+  if (kv.enabled()) {
+    const u0 = new URL(req.url, 'http://x');
+    let p0 = u0.searchParams.get('path') || '';
+    if (!p0 && u0.pathname.indexOf('/relique/') === 0) p0 = u0.pathname.slice('/relique/'.length);
+    p0 = String(p0).replace(/^\/+/, '');
+    if (!/^api\/[a-z0-9\/_-]*$/i.test(p0)) return res.status(404).json({ error: 'not found' });
+    const q = [];
+    u0.searchParams.forEach((v, k) => { if (k !== 'path' && k !== '_') q.push(k + '=' + v); });
+    q.sort();
+    const key = p0 + (q.length ? '?' + q.join('&') : '');
+    try {
+      const r = await kv.read([key]);
+      if (!r.fresh) return res.status(502).json({ error: 'the Relique plugin is not reporting (server offline or website-sync not set up)' });
+      if (r.values[0] == null) return res.status(404).json({ error: 'no data for ' + key });
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      return res.status(200).send(r.values[0]);
+    } catch (e) {
+      return res.status(502).json({ error: 'cannot read the data store', detail: String(e && e.message || e).slice(0, 120) });
+    }
+  }
+
   const BASE = pluginBase();
   if (!BASE) return res.status(500).json({ error: 'RELIQUE_API is not set in Vercel' });
 

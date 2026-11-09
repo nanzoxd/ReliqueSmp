@@ -3093,7 +3093,7 @@ html[data-theme="amoled"] #page-ranked .rk-screen::after{background:linear-gradi
 @keyframes cdin{from{opacity:.0;transform:translateY(6px)}}
 @media(prefers-reduced-motion:reduce){#page-cards .cd-t,#page-cards #cd-detail.fade{transition:none;animation:none}}
 #page-cards .cd-recwrap{grid-column:1/-1}
-#page-cards .cd-recwrap .rc-slot-no{opacity:1;color:#bcd8f7;font-size:11px;left:5px;top:3px;z-index:3;text-shadow:1px 1px 0 #000}
+#page-cards .cd-recwrap .rc-stack{z-index:3;font-size:calc(var(--s)*.26);right:calc(var(--s)*.07);bottom:calc(var(--s)*.03);text-shadow:2px 2px 0 #000}
 #page-cards .cd-recwrap .cd-rit{text-align:center;margin:14px 0 0}
 @media(max-width:520px){#page-cards #cd-all{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
 #page-cards .cd-recwrap .rcgui{margin:6px auto 0}
@@ -3166,11 +3166,12 @@ function layout(){var w=W.clientWidth;if(!w)return;var g=Math.max(110,Math.min(w
 function pick(i,sc){cur=(i+N)%N;layout();detail(CARDS[cur]);if(sc&&root.classList.contains('all'))$('#cd-detail').scrollIntoView({behavior:'smooth',block:'start'})}
 function li(a){return '<ul>'+a.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>'}
 var ARROW='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAPCAYAAADgbT9oAAAAXklEQVR42rXUwQkAMQhEUU2lFpByLGA6zZ4CISQuxPFfhXdRFHnMrI9o3iRRhKfgCE/DN5wCn3AavOP6t92XANcmBZn1UQIDrso+M8CVvryJUuEVpcE7SoFPaMmPmH21ZSKaqCmv0AAAAABJRU5ErkJggg==',tip=document.getElementById('rc-tip');
-function showTip(e,nm,ct,id){if(!tip)return;tip.textContent='';var a=document.createElement('div');a.className='n';a.textContent=nm;var b=document.createElement('div');b.className='ct';b.textContent='Amount: '+ct;tip.append(a,b);if(id){var d=document.createElement('div');d.className='id';d.textContent=id;tip.append(d)}tip.style.display='block';var r=e.currentTarget.getBoundingClientRect(),w=tip.offsetWidth,h=tip.offsetHeight;tip.style.left=Math.max(6,Math.min(r.left+r.width/2-w/2,innerWidth-w-6))+'px';tip.style.top=Math.max(6,r.top-h-8)+'px'}
+function showTip(e,nm,ct,id){if(!tip)return;tip.textContent='';var a=document.createElement('div');a.className='n';a.textContent=nm;var b=document.createElement('div');b.className='ct';b.textContent=(cls_out(nm)?'Amount: 1':'Needed in total: '+ct);tip.append(a,b);if(id){var d=document.createElement('div');d.className='id';d.textContent=id;tip.append(d)}tip.style.display='block';var r=e.currentTarget.getBoundingClientRect(),w=tip.offsetWidth,h=tip.offsetHeight;tip.style.left=Math.max(6,Math.min(r.left+r.width/2-w/2,innerWidth-w-6))+'px';tip.style.top=Math.max(6,r.top-h-8)+'px'}
+function cls_out(n){return /Card$/.test(n)}
 function hideTip(){if(tip)tip.style.display='none'}
-function sl(v,cls,cnt,no){var s=document.createElement('div');s.className='rc-slot'+(v?' has':'')+(cls?' '+cls:'');if(no){var n=document.createElement('span');n.className='rc-slot-no';n.textContent=no;s.appendChild(n)}if(v){s.tabIndex=0;s.setAttribute('aria-label',v[0]);var w=document.createElement('span');w.className='rc-item';if(v[1]){var i=new Image();i.src=v[1];i.alt='';i.className='px';i.draggable=false;w.appendChild(i)}else w.textContent=v[0].slice(0,2);s.appendChild(w);var f=function(e){showTip(e,v[0],cnt||1,v[2])};s.onmouseenter=f;s.onfocus=f;s.onmouseleave=s.onblur=hideTip}return s}
-function recipe(c){var art=document.createElement('article');art.className='rc-tile rcgui on show-nums';var cnt={};c.sh.join('').split('').forEach(function(k){if(c.ing[k])cnt[k]=(cnt[k]||0)+1});
-var grid=document.createElement('div');grid.className='rc-grid';c.sh.join('').split('').forEach(function(k,ix){grid.appendChild(sl(c.ing[k],'',cnt[k],ix+1))});
+function sl(v,cls,cnt,no){var s=document.createElement('div');s.className='rc-slot'+(v?' has':'')+(cls?' '+cls:'');if(v){s.tabIndex=0;s.setAttribute('aria-label',v[0]);var w=document.createElement('span');w.className='rc-item';if(v[1]){var i=new Image();i.src=v[1];i.alt='';i.className='px';i.draggable=false;w.appendChild(i)}else w.textContent=v[0].slice(0,2);s.appendChild(w);if(cnt&&cls!=='out'){var q=document.createElement('span');q.className='rc-stack';q.textContent=cnt;s.appendChild(q)}var f=function(e){showTip(e,v[0],cnt||1,v[2])};s.onmouseenter=f;s.onfocus=f;s.onmouseleave=s.onblur=hideTip}return s}
+function recipe(c){var art=document.createElement('article');art.className='rc-tile rcgui on';var cnt={};c.sh.join('').split('').forEach(function(k){if(c.ing[k])cnt[k]=(cnt[k]||0)+1});
+var grid=document.createElement('div');grid.className='rc-grid';c.sh.join('').split('').forEach(function(k,ix){grid.appendChild(sl(c.ing[k],'',cnt[k]))});
 var ar=new Image();ar.src=ARROW;ar.alt='makes';ar.className='rc-arrow';var out=sl([c.n+' Card',c.img,'card'],'out',1);
 var cr=document.createElement('div');cr.className='rcg-view rcg-craft';cr.append(grid,ar,out);
 art.innerHTML='<div class="rcg-panel"><div class="rcg-title"><span class="rcg-t">RECIPE</span></div><div class="rcg-body"></div><div class="rcg-name">'+c.n+' Card <small class="rt-n">#'+(cur+1)+'</small></div><p class="cd-rit">Ritual time <b>'+c.rit+' min</b> · Max crafts <b>'+c.mx+'</b></p></div>';

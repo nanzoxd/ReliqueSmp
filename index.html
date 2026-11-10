@@ -15,7 +15,7 @@ setTimeout(go,3500)})();</script>
 <meta name="theme-color" content="#050a18"><meta name="color-scheme" content="dark">
 <meta name="description" content="Rules, kit rules, ranks, charms and custom recipes for the Relique Minecraft server.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Onest:wght@400;500;600&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Onest:wght@400;500;600&family=Unbounded:wght@500;600;700&family=Michroma&display=swap" rel="stylesheet">
 <style>
 @font-face {
   font-family: 'Minecraft';
@@ -3346,6 +3346,21 @@ if(window.ResizeObserver)new ResizeObserver(layout).observe(W);addEventListener(
 #page-weapons .wp-tt .ab b{margin:0;color:#fff;font:700 15px var(--font-b)}
 #page-weapons .wp-tt .ab p{margin:8px 0 0;color:var(--text)}
 #page-weapons .wp-tt .ab small.unl{display:inline-block;margin-top:10px;padding:3px 11px;font:600 11px var(--font-b);letter-spacing:.05em;color:#ffd166;background:rgba(255,209,102,.1);border:1px solid rgba(255,209,102,.28);border-radius:999px}
+/* ===== single-card layout ===== */
+#page-weapons #wp-main{grid-template-columns:minmax(0,1fr)}
+#page-weapons .wp-stage{aspect-ratio:16/10}
+@media(max-width:860px){#page-weapons .wp-stage{aspect-ratio:1/1}}
+#page-weapons .wp-bgt,#page-weapons .wp-ab,#page-weapons .wp-key b{font-family:'Michroma','Unbounded',var(--font-d);font-weight:400}
+#page-weapons .wp-bgt{letter-spacing:.01em}
+#page-weapons .wp-bgt span{-webkit-text-stroke:1.2px rgba(255,255,255,.34)}
+#page-weapons .wp-bgt em{font-family:'Michroma','Unbounded',var(--font-d);letter-spacing:.6em}
+#page-weapons #wp-cv{left:46%}
+#page-weapons .wp-keys{gap:12px}
+#page-weapons .wp-key{display:flex;flex-direction:column;align-items:flex-end;gap:3px;max-width:min(46%,360px);font-size:clamp(9px,1.5cqw,14px)}
+#page-weapons .wk-top{display:flex;align-items:center;gap:10px}
+#page-weapons .wp-key em{font:600 .8em var(--font-b);letter-spacing:.1em;color:#fff;border:1px solid rgba(255,255,255,.42);background:rgba(255,255,255,.08);border-radius:5px;padding:2px 8px;text-shadow:none}
+#page-weapons .wp-key small{font:500 clamp(9px,1.45cqw,13px)/1.4 var(--font-b);letter-spacing:.02em;text-transform:none;color:rgba(255,255,255,.72);text-shadow:none}
+@container (max-width:520px){#page-weapons .wp-key small{display:none}#page-weapons .wp-keys{gap:6px}}
 </style>
 <div class="docwrap rk" style="margin-top:0" id="wp-root">
   <header class="phead glass"><div class="phead-copy"><h1>Relique Weapons</h1><p class="lede">Custom weapons you cannot get anywhere else. Every one has its own look, passives and abilities. Spin them around in 3D, then press F to see their powers.</p></div></header>
@@ -3366,8 +3381,8 @@ if(window.ResizeObserver)new ResizeObserver(layout).observe(W);addEventListener(
       <p class="wp-lead">Pick a weapon from the hotbar. Drag the weapon to turn it. Press <kbd>F</kbd> or <kbd>Shift</kbd>+<kbd>F</kbd> on your keyboard, or tap the buttons on the stage, to cast its abilities.</p>
       <div class="wp-bar"><div class="lb-tabs" role="tablist" aria-label="Weapon type" id="wp-tabs"></div><span class="wp-hint" id="wp-hint">Drag to rotate · ← → to switch</span></div>
       <div id="wp-main">
-        <div class="wp-stage" id="wp-stage"><div class="wp-logo">Relique<small>Weapons</small></div><div class="wp-bgt" id="wp-bgt" aria-hidden="true"></div><i class="wp-sp s1"></i><i class="wp-sp s2"></i><i class="wp-sp s3"></i><canvas id="wp-cv" aria-label="3D weapon preview"></canvas><canvas id="wp-fx" aria-hidden="true"></canvas><div class="wp-ab" id="wp-ab"></div><div class="wp-keys" id="wp-keys"></div></div>
-        <div class="wp-tt mc" id="wp-tt" aria-live="polite"></div>
+        <div class="wp-stage" id="wp-stage"><div class="wp-logo">Relique<small>Weapons</small></div><div class="wp-bgt" id="wp-bgt" aria-hidden="true"></div><i class="wp-sp s1"></i><i class="wp-sp s2"></i><i class="wp-sp s3"></i><canvas id="wp-cv" aria-label="3D weapon preview"></canvas><canvas id="wp-fx" aria-hidden="true"></canvas><div class="wp-ab" id="wp-ab"></div><div class="wp-keys" id="wp-keys" aria-live="polite"></div></div>
+        
       </div>
       <div id="wp-bar" role="listbox" aria-label="Weapons"></div>
     </section>
@@ -3479,19 +3494,13 @@ var tb=$('#wp-tabs');TABS.forEach(function(t,i){var b=document.createElement('bu
 /* thumbnails, drawn lazily as textures arrive */
 (function thumbs(){var left=0;WP.forEach(function(w){if(w.done)return;var x=w.th.getContext('2d'),r=WPR.render(w.id,x,72,.6,w.id=='crown'?-.45:-.15,0,1);if(r.ready){x.putImageData(r.img,0,0);w.done=1}else left++});if(left)setTimeout(thumbs,120)})();
 function key(a,i,n){return n>1?(i?'Shift + F':'F'):'F / Shift + F'}
-var TYPES={s:'Sword',t:'Tool / Axe',o:'Special'};
 function setBg(w){var wd=w.n.toUpperCase().split(' '),l1=wd[0],l2=wd.slice(1).join(' ')||'WEAPON',mx=Math.max(l1.length,l2.length),B=$('#wp-bgt');
- B.innerHTML='<span>'+l1+'</span><span>'+l2+'</span><em>Relique \u00b7 Weapons \u00b7 Showcase</em>';B.style.fontSize=Math.min(15,86/(mx*.78))+'cqw'}
-function detail(w){var T=$('#wp-tt');T.style.setProperty('--cc',w.c);
- var h='<div class="wp-th"><span class="nm">'+w.n+'</span><span class="wp-tag">'+TYPES[w.g]+'</span></div>'+(w.l?'<p class="tg">'+w.l+'</p>':'');
- if(w.p.length)h+='<div class="h">Passive effects</div><ul>'+w.p.map(function(x){return'<li>'+x+'</li>'}).join('')+'</ul>';
- if(w.a.length)h+='<div class="h">Abilities \u00b7 tap to cast</div>'+w.a.map(function(a,i){return'<div class="ab" data-i="'+i+'"><div class="ab-top"><span class="kc">'+key(a,i,w.a.length)+'</span><b>'+a[0]+'</b></div><p>'+a[1]+'</p>'+(a[2]?'<small class="unl">'+a[2]+'</small>':'')+'</div>'}).join('');
- else h+='<div class="h">Abilities</div><p style="margin:0">Passive powers only. It does its work just by being in your hand.</p>';
- T.innerHTML=h;T.classList.remove('fade');void T.offsetWidth;T.classList.add('fade');
- [].forEach.call(T.querySelectorAll('.ab'),function(e){e.onclick=function(){cast(+e.dataset.i)}});
- var K=$('#wp-keys');K.innerHTML='<span class="wp-spl">Type : '+TYPES[w.g]+'</span>';
- w.a.forEach(function(a,i){var b=document.createElement('button');b.type='button';b.className='wp-key';b.innerHTML='<em>'+key(a,i,w.a.length)+'</em> : '+a[0];b.onclick=function(){cast(i)};K.appendChild(b)});
- if(!w.a.length)K.insertAdjacentHTML('beforeend','<span class="wp-spl">Passive : always on</span>');
+ B.innerHTML='<span>'+l1+'</span><span>'+l2+'</span><em>Relique \u00b7 Weapons \u00b7 Showcase</em>';B.style.fontSize=Math.min(12,86/(mx*1.02))+'cqw'}
+function short(t){t=(t||'').split(/(?<=[.!?])\s/)[0];if(t.length<=72)return t;t=t.slice(0,72);return t.slice(0,t.lastIndexOf(' '))+'\u2026'}
+function detail(w){
+ var K=$('#wp-keys');K.innerHTML='';
+ w.a.forEach(function(a,i){var b=document.createElement('button');b.type='button';b.className='wp-key';b.innerHTML='<span class="wk-top"><em>'+key(a,i,w.a.length)+'</em><b>'+a[0]+'</b></span><small>'+short(a[1])+'</small>';b.onclick=function(){cast(i)};K.appendChild(b)});
+ if(!w.a.length){var d=document.createElement('span');d.className='wp-key';d.innerHTML='<span class="wk-top"><em>Passive</em><b>Always on</b></span><small>'+short(w.p[0]||'')+'</small>';K.appendChild(d)}
  setBg(w)}
 function pick(i,noScroll){cur=(i+N)%N;var w=WP[cur];stage.style.setProperty('--cc',w.c);stage.style.setProperty('--tilt',w.id=='crown'?'0deg':'32deg');slots.forEach(function(s,k){s.classList.toggle('on',k==cur);s.setAttribute('aria-selected',k==cur)});
  pitch=w.id=='crown'?-.45:-.15;boost=.5;pulse=1;ab('');detail(w);P.length=R.length=B.length=0}

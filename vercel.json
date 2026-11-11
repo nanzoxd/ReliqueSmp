@@ -1,10 +1,6 @@
 {
   "rewrites": [
     {
-      "source": "/join",
-      "destination": "/api/embed"
-    },
-    {
       "source": "/relique/:path*",
       "destination": "/api/relique?path=:path*"
     }

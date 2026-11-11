@@ -1,17 +1,6 @@
 {
   "rewrites": [
     {
-      "source": "/",
-      "has": [
-        {
-          "type": "header",
-          "key": "user-agent",
-          "value": ".*(Discordbot|Twitterbot|facebookexternalhit|Slackbot|TelegramBot|WhatsApp|LinkedInBot).*"
-        }
-      ],
-      "destination": "/api/embed"
-    },
-    {
       "source": "/relique/:path*",
       "destination": "/api/relique?path=:path*"
     }

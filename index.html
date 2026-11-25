@@ -4446,31 +4446,103 @@ button.lbp-tile:hover{background:rgba(255,255,255,.07)}
 @media (prefers-reduced-motion:reduce){#rk-table button.lb-row:hover{transform:none}}
 </style>
 
+<style id="pf-v2-css">
+#pf-modal{--i-dia:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA70lEQVR42u2XvQ3CMBBGPyMmCQWsQENhYAp2gQCzsEWUgoYVSAGrXApsRMB/sYVyFrhJkYtP7+l85wC/vkRADH0zx4izAQIAojQBQghnLpYGOuTLY2P8sJ5PH8ErtVFlTlAW6jkxmxjcwNhGromkhfxDm8/EjbQJejXBwoCRHIHkqSZY1UASuc3E/u6O42NAn/dy0yXeFZ5GUrnfy0vjNMqqExIAyMMVALAINGEzYCVfdzsi31kQauLdQCh5PvcBn4nnzOhJnoWBIBPnUxw5y/uA01K9nak5bjbRlzyrGnDWRCx51gZsf0xRew1u4L9aheZbSWxlQiAAAAAASUVORK5CYII=);--i-tro:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABEUlEQVR42mNkwA3+M1AXMGITZGIYYMBCSMH//5QFBCMjI175QRkC2L38JAlCy8xD5aODq68gtLYYLnMZB20I/GdgYGD4/ziRqhagpyFGRkaUkBgUIfAfxaU7fSDO89gK9QEkzv/Vb4bE2VzycsH/Hd4MyCHMKDv//6AIgVEHjDqABZYfYfkTnlqhNAaA5hKMkg5aAv5bdRLis0ZfrOYwys5nGFTlACOhugDuA6iP4eVBmDmKJrjP0cRh5QkuOwdlCGANEfSQgNd6uAxG+JxxUOcCRhLU/sday6HVHaSaPfjbhFh89J+KoTo0QgB/G5Gw+qGbC/7j7RfgDgG8Zf8QTAOw2m+4tgcYyc4FVLJjwEMAAFfiVJjMoC//AAAAAElFTkSuQmCC);--i-crw:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABEUlEQVR42mNkYGD4zwABjAykgf9ofLL0MzEMMGAkwyf/GRgYGP7/R9XGyMhIkn4YGDwhAPMRHp9g9TmGgYT0P06ESMrOHxwhwAJnPUliQAsJFK/CfQ5VxyAzD9UkQvqhPkcHgy8NwH1ICOAIAZzg6isIrS02WNMAus92+qCKQ10OB7ITUfnHCfgcBxiEIUAIWOpD6GQDNHFYSFwkybghFALoPm+wx6GOtJAYOiHA+KQAWqAfIFJd4nBLAzAw9wIqTSEYgiEAA+jlAJkhMnRCANGSwZ4b4Kn/ceIwTwOIkHBgIKbFM+hDgAmlRUNsawjagkLGQ7ocYIS20aDtdho3QqFtQZi9g6JVTKjXS1M7BzwEAA4naC336Gb5AAAAAElFTkSuQmCC);--i-hrt:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAbCAYAAAAdx42aAAABq0lEQVR42u1XsUoDQRB9c7ueEdSIaKMggv6AXyCk80NsbbQQYqdgo42ltv6DnZAvSGMrKEELIyQBxSi5jMUhd7vZ3exeAte43d6bnZ33dnZmj2AfDPegCe0BABFKHmRjzu1P+yohQMsVdZG/vbKntC6KCEFYqL0hgIw5EXDddGQHq4x97VMlOK+ENEZLBAzZHX3+O9H4w47I6ItGmN80AWZgfyebTy3jCL2rBgQIC6/HHjmQZ8Y84kyX2Yl75ID9TBnA3raq292jP+4VQH9gjjoW5hITC3cJ+sN/Es8Abh/MFaG26f9dxz2UKL0S/gdQegASwBOAqNV72wCAdVFNI5ufzW4HAFRkmOf+QGk7w49vEBFekh5ECrT0zsQA0F07B5hRPdjV7vlWWI/NZ7+hAtp7gW18DdT5nLTjFHYEfowaz3ZFdHwaD5LO6plS55cOa6pVMtQeHZEieffyPoNAWGzXwx4kNCPsjUbfcMx6cpwJ+T5KOyuaIkc1lfGFxvi97rWXdxJS7FYkj1NAFgbkq67Iqcb4pJBvWbSCUSwLMZ5EgXE/LoV8ld4LfgHebYMVIIyadAAAAABJRU5ErkJggg==);--i-star:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABkElEQVR42mNkIBMciFP/j8x3WHSTkRxzmBgGGLCQovhojgXc11Z5DyCMI+8gIcIACRFSQ2JohQBWYCMETRTkaR/wEBhwBzCSkvjgCQ8PONjCT1LWHPhEiJy1cAEro3NQlhBBA+0d7sPZ+xg1/g/+NLA7yfg/AwMDg8vcYojI7SLa2abaB2fuT2gazYaQRHjn+U8GBgYGBpf5CRCRxAUIWWpFByzoYXYwMDDcfKU2SOuCL5WpcDZP+2zKQgLqc5iZPGqDuSie7qmDUWhkTHhMFUtmFMhiiGVuv8I4uNKAiugvSG6ofY8kzQahFCdhaHxfmcnAwMDAIKjzGSIQvQTT9Pt5kJCc9JKBgYGBYU+z4Gh7gIgmGZbghgXl+1m/cZu0NAZadQrhMat+EIfA9ReQBOeyMAqPckRrZ8lFGQjjIoTKjb7OwMDAwPBuwT8k9Tkouq+/kBwCaeDdLR44W0jtC4oc3NcMDAx5u66gtfcgBVm06XMMS87f5x1tlhMfBUvPyyOFHaocZrBjk9P5P6RCAAAl/G1AVgWeEwAAAABJRU5ErkJggg==);--i-game:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA/UlEQVR42u2WPQ6DMAyFH1WlLpyBA3CA7PVx2Nh6hG5sHCfdOQAH4AwsnehQPMQif6gSlsrbcGITf3ESA6f+XUVgbNnhk+130UhgAQBjzKbDMAzBgAl+hVoCTuZlWf70R/M8b5I4nMBVGmTmVVUBAKZpygrcPS0AoH1QkKiKGtjce85cKkbidesAAPd3CwBo7JdET+TMs6tdXw3ITHNrgDO3jV0tFJyvl4AkwefYd1rkOPWUtAD9BDizuq4d+ziOzrdvPEZKHwFeYewtkK+iJJAqfTehr8r55gr0Ek4nROLmk3vPBPX2A7FOJkFJ8fT2hBldcBIJX7zDCZw69QH5JF1HUoeHkwAAAABJRU5ErkJggg==);--i-blk:url(data:image/png;base64,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)}
+#pf-modal .pf-card{width:min(580px,100%);padding:0;border-radius:28px;overflow-y:auto;overscroll-behavior:contain}
+#pf-modal .pf-card>.ip-x{position:sticky;top:14px;float:right;margin:14px 14px -46px 0;z-index:6}
+#pf-modal .pf-view{padding:28px 24px 24px;animation:pfIn .38s cubic-bezier(.2,.7,.2,1) both}
+#pf-modal .pf-card[data-view="sum"] #pf-v-full,#pf-modal .pf-card[data-view="full"] #pf-v-sum{display:none}
+@keyframes pfIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#pf-modal .pf-top{padding:6px 36px 0 0;gap:18px}
+#pf-modal .pf-av .av{width:84px;height:84px;border-radius:20px}
+#pf-modal .pf-id h2{font-size:clamp(24px,6vw,32px)}
+#pf-modal .pf-seen{margin-top:8px;flex-wrap:wrap;row-gap:2px}
+#pf-modal .pf-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:999px;margin-bottom:8px;font-size:11.5px;border:1px solid rgba(231,152,255,.35);background:rgba(231,152,255,.09)}
+#pf-modal .pf-tag.k6::after,#pf-modal .pf-tag.k5::after{content:"";width:14px;height:14px;background:var(--i-crw) center/contain no-repeat;image-rendering:pixelated}
+#pf-modal .pf-stats{grid-template-columns:repeat(4,1fr);gap:8px;margin-top:20px}
+#pf-modal .pf-st,#pf-modal .pf-st.w{grid-column:auto;padding:12px 8px;border-radius:14px}
+#pf-modal .pf-st b{font-size:clamp(17px,4.6vw,21px)}
+#pf-modal .pf-st span{font-size:11px;margin-top:6px}
+#pf-modal .pf-st.ico-dia b::before{content:"";display:inline-block;width:16px;height:16px;margin-right:6px;vertical-align:-1px;background:var(--i-dia) center/contain no-repeat;image-rendering:pixelated}
+#pf-modal .pf-prog{margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(4,12,30,.42);border:1px solid rgba(126,203,255,.10)}
+#pf-modal .pf-prog div{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;color:var(--muted)}
+#pf-modal .pf-prog b{color:var(--ice-1);font-weight:600}
+#pf-modal .pf-prog i{display:block;height:5px;margin-top:9px;border-radius:9px;background:rgba(126,203,255,.12);overflow:hidden}
+#pf-modal .pf-prog i u{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--ice-3),var(--gold-1));transition:width .9s cubic-bezier(.2,.7,.2,1) .15s}
+#pf-modal .pf-h{margin:22px 0 10px}
+#pf-modal .pf-actions{flex-wrap:wrap;margin-top:20px}
+#pf-modal .pf-actions .btn{flex:1 1 40%;min-height:44px;transition:transform .2s,box-shadow .25s,border-color .25s}
+#pf-modal .pf-actions .btn:hover{transform:translateY(-1px)}
+#pf-modal .pf-actions .pf-full{flex:1 1 100%;order:-1;font-weight:700;letter-spacing:.06em;display:inline-flex;align-items:center;justify-content:center;gap:10px;cursor:pointer}
+#pf-modal .pf-full::before{content:"";width:18px;height:18px;background:var(--i-star) center/contain no-repeat;image-rendering:pixelated}
+#pf-modal .pf-full::after{content:"\2192";transition:transform .25s}
+#pf-modal .pf-full:hover::after{transform:translateX(4px)}
+#pf-modal .pf-fhead{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:16px 64px 14px 24px;background:linear-gradient(180deg,rgba(8,20,46,.96),rgba(8,20,46,.82));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(126,203,255,.12)}
+#pf-modal .pf-back{cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border-radius:999px;font:600 13px var(--font-b);color:var(--ice-2);background:rgba(126,203,255,.08);border:1px solid var(--edge);transition:background .2s,transform .2s}
+#pf-modal .pf-back:hover{background:rgba(126,203,255,.16);transform:translateX(-2px)}
+#pf-modal .pf-ftitle{font:600 15px var(--font-d);color:var(--ice-1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#pf-modal .pf-ftitle small{display:block;font:500 11px var(--font-b);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+#pf-modal #pf-v-full{padding-top:6px}
+.fs-sec h3{display:flex;align-items:center;gap:8px}
+.fs-sec h3 i{width:16px;height:16px;background:center/contain no-repeat;image-rendering:pixelated}
+.fs-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fs-c{padding:11px 12px;border-radius:14px;background:rgba(4,12,30,.42);border:1px solid rgba(126,203,255,.10);min-width:0;transition:border-color .25s,transform .25s,background .25s}
+.fs-c:hover{border-color:rgba(150,208,255,.3);transform:translateY(-2px)}
+.fs-c b{display:block;font:600 clamp(15px,4vw,18px)/1.15 var(--font-d);color:var(--ice-1);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.fs-c span{display:block;margin-top:5px;font-size:11px;line-height:1.3;color:var(--muted);letter-spacing:.02em}
+.fs-c.hi{border-color:rgba(231,152,255,.35);background:rgba(231,152,255,.07)}.fs-c.hi b{color:var(--gold-1)}
+.fs-c.na b{color:#4d5f7a}
+.fs-note{margin:18px 2px 0;font-size:11.5px;color:var(--muted)}
+#pf-modal .pf-info{grid-template-columns:repeat(3,1fr)}
+#pf-modal .pf-info div{padding:11px 12px}
+#pf-modal .pf-info dt{display:flex;align-items:center;gap:5px}
+#pf-modal .pf-info dt i{width:13px;height:13px;background:center/contain no-repeat;image-rendering:pixelated}
+#pf-modal .pf-rk .pf-stats{grid-template-columns:repeat(3,1fr)}
+#pf-modal .pf-tiers{grid-template-columns:1fr 1fr}
+@media(max-width:520px){
+ #pf-modal .pf-view{padding:24px 16px 18px}
+ #pf-modal .pf-fhead{padding:14px 58px 12px 16px}
+ #pf-modal .pf-av .av{width:68px;height:68px;border-radius:16px}
+ #pf-modal .pf-top{gap:13px}
+ #pf-modal .pf-stats{grid-template-columns:repeat(2,1fr)}
+ .fs-g,#pf-modal .pf-info,#pf-modal .pf-rk .pf-stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(prefers-reduced-motion:reduce){#pf-modal .pf-view{animation:none}#pf-modal .pf-prog i u{transition:none}}
+</style>
 <div class="ip-overlay" id="pf-modal" role="dialog" aria-modal="true" aria-labelledby="pf-name" hidden>
-  <div class="pf-card glass">
+  <div class="pf-card glass" data-view="sum">
     <button type="button" class="ip-x" id="pf-x" aria-label="Close">&times;</button>
-    <div class="pf-top">
-      <div class="pf-av" id="pf-av"></div><i class="pf-stars"></i><i class="pf-shoot"></i><div class="pf-model" id="pf-model" aria-hidden="true"></div>
-      <div class="pf-id">
-        <span class="pf-tag" id="pf-tag"></span>
-        <h2 id="pf-name"></h2>
-        <span class="pf-seen" id="pf-seen"></span>
-        <span class="pf-acct" id="pf-acct" hidden></span>
-        <div class="pf-stats" id="pf-stats"></div>
+    <div class="pf-view" id="pf-v-sum">
+      <div class="pf-top">
+        <div class="pf-av" id="pf-av"></div><i class="pf-stars"></i><i class="pf-shoot"></i><div class="pf-model" id="pf-model" aria-hidden="true"></div>
+        <div class="pf-id">
+          <span class="pf-tag" id="pf-tag"></span>
+          <h2 id="pf-name"></h2>
+          <span class="pf-seen" id="pf-seen"></span>
+          <span class="pf-acct" id="pf-acct" hidden></span>
+        </div>
+      </div>
+      <div class="pf-stats" id="pf-stats"></div>
+      <div class="pf-prog" id="pf-prog"></div>
+      <h3 class="pf-h">Recent fights</h3>
+      <div class="pf-fights" id="pf-fights"></div>
+      <div class="pf-actions"><button type="button" class="btn primary pf-full" id="pf-full">FULL STATS</button><a class="btn ghost" id="pf-namemc" href="#" target="_blank" rel="noopener">NameMC &#8599;</a><button type="button" class="btn ghost" id="pf-close">Close</button></div>
+    </div>
+    <div class="pf-view" id="pf-v-full" style="padding:0">
+      <div class="pf-fhead"><button type="button" class="pf-back" id="pf-back">&#8592; Back</button><div class="pf-ftitle" id="pf-ftitle"></div></div>
+      <div style="padding:6px 24px 26px" class="pf-fbody">
+        <div id="pf-fs"></div>
+        <h3 class="pf-h">Player info</h3>
+        <dl class="pf-info" id="pf-info"></dl>
+        <h3 class="pf-h" id="pf-rk-h" hidden>Ranked SMP</h3>
+        <div class="pf-rk" id="pf-rk" hidden></div>
+        <h3 class="pf-h">Classification</h3>
+        <div class="pf-ladder" id="pf-ladder"></div>
+        <p class="pf-rnote" id="pf-rnote"></p>
+        <h3 class="pf-h" id="pf-tiers-h" hidden>Best tier</h3>
+        <div class="pf-tiers" id="pf-tiers" hidden></div>
       </div>
     </div>
-    <h3 class="pf-h">Classification</h3>
-    <div class="pf-ladder" id="pf-ladder"></div>
-    <p class="pf-rnote" id="pf-rnote"></p>
-    <h3 class="pf-h">Player info</h3>
-    <dl class="pf-info" id="pf-info"></dl>
-    <h3 class="pf-h" id="pf-rk-h" hidden>Ranked SMP</h3>
-    <div class="pf-rk" id="pf-rk" hidden></div>
-    <h3 class="pf-h" id="pf-tiers-h" hidden>Best tier</h3>
-    <div class="pf-tiers" id="pf-tiers" hidden></div>
-    <h3 class="pf-h">Recent fights</h3>
-    <div class="pf-fights" id="pf-fights"></div>
-    <div class="pf-actions"><a class="btn ghost" id="pf-namemc" href="#" target="_blank" rel="noopener">NameMC &#8599;</a><button type="button" class="btn primary" id="pf-close">Close</button></div>
   </div>
 </div>
 
@@ -5114,7 +5186,7 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
   function buildPlayers(list,on){
     P=(list||[]).map(function(x){
       var elo=Math.round(x.elo);
-      return{n:x.name,uuid:x.uuid,elo:elo,k:x.kills||0,d:x.deaths||0,kd:x.kd!=null?x.kd:(x.deaths?x.kills/x.deaths:x.kills),h:(x.playtime_seconds||0)/3600,bm:x.blocks_mined||0,fj:x.first_joined||0,rk:rankIdx(x.rank,elo),on:!!on[x.name.toLowerCase()],tiers:{},f:[]};
+      return{n:x.name,uuid:x.uuid,elo:elo,k:x.kills||0,d:x.deaths||0,kd:x.kd!=null?x.kd:(x.deaths?x.kills/x.deaths:x.kills),h:(x.playtime_seconds||0)/3600,bm:x.blocks_mined||0,fj:x.first_joined||0,rk:rankIdx(x.rank,elo),on:!!on[x.name.toLowerCase()],tiers:{},f:[],raw:x};
     });
     P.sort(function(a,b){return b.elo-a.elo});
     P.forEach(function(p,i){p.pos=i+1});
@@ -5766,9 +5838,9 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
       acct.hidden=false;acct.className='pf-acct '+(v?'prem':'crk');acct.textContent=v?'Premium':'Cracked';
     });
     var seen=document.getElementById('pf-seen');seen.replaceChildren();
-    seen.append(el('i',p.on?'on':''),document.createTextNode(p.on?'Online now':'Offline'),el('span',null,'\u00b7 SMP rank #'+p.pos));
+    seen.append(el('i',p.on?'on':''),document.createTextNode(p.on?'Online now':'Offline'),el('span',null,'\u00b7 SMP rank #'+p.pos),el('span',null,'\u00b7 '+play(p.h)));
     var st=document.getElementById('pf-stats');st.replaceChildren();
-    [['Elo',fmt(p.elo),'gold'],['Kills',fmt(p.k),''],['Deaths',fmt(p.d),''],['K/D ratio',p.kd.toFixed(2),'w'],['Playtime',play(p.h),'w']].forEach(function(x){
+    [['Elo',fmt(p.elo),'gold ico-dia'],['Kills',fmt(p.k),''],['Deaths',fmt(p.d),''],['K/D ratio',p.kd.toFixed(2),'']].forEach(function(x){
       var c=el('div','pf-st '+x[2]);c.append(el('b',null,x[1]),el('span',null,x[0]));st.append(c);
     });
     var lad=document.getElementById('pf-ladder');lad.replaceChildren();
@@ -5776,8 +5848,8 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
     var note=document.getElementById('pf-rnote');note.replaceChildren(document.createTextNode('Reached '),el('b',null,RN(p)));
     if(p.rk===5)note.append(document.createTextNode(' \u00b7 top 2 players earn Combat Grandmaster'));else if(p.rk<LADDER.length-1)note.append(document.createTextNode(' \u00b7 '+fmt(LADDER[p.rk+1][1]-p.elo)+' Elo to '+LADDER[p.rk+1][0]));else note.append(document.createTextNode(' \u00b7 top classification'));
     var info=document.getElementById('pf-info');info.replaceChildren();
-    [['Blocks mined',fmt(p.bm)],['SMP rank','#'+p.pos]].forEach(function(x){
-      var d=el('div');d.append(el('dt',null,x[0]),el('dd',null,x[1]));info.append(d);
+    [['Blocks mined',fmt(p.bm),'blk'],['SMP rank','#'+p.pos,''],['Playtime',play(p.h),'']].forEach(function(x){
+      var d=el('div'),dt=el('dt',null,x[0]);if(x[2]){var ii=el('i');ii.style.backgroundImage='var(--i-'+x[2]+')';dt.prepend(ii)}d.append(dt,el('dd',null,x[1]));info.append(d);
     });
     var tiers=document.getElementById('pf-tiers'),tiersH=document.getElementById('pf-tiers-h');tiers.replaceChildren();tiers.hidden=true;tiersH.hidden=true;var oldb=M.querySelector('.pf-livebtn');if(oldb)oldb.remove();
     var uuidP=resolveUuid(p.n);
@@ -5803,10 +5875,59 @@ document.getElementById('rc-nums').addEventListener('change', e => { document.ge
       r.append(op,dt,rs);fl.append(r);
     });
     document.getElementById('pf-namemc').href='https://namemc.com/profile/'+encodeURIComponent(p.n);
-    rkCard(p);
+    rkCard(p);pfV2(p);
     M.hidden=false;document.body.style.overflow='hidden';
     document.getElementById('pf-close').focus({preventScroll:true});M.querySelector('.pf-card').scrollTop=0;
   }
+
+  // ---------- v2: compact card + FULL STATS view ----------
+  function pfV2(p){
+    var card=M.querySelector('.pf-card');card.dataset.view='sum';
+    // progress to next classification
+    var pg=document.getElementById('pf-prog');pg.replaceChildren();
+    var nxt=p.rk<LADDER.length-1&&p.rk!==5?LADDER[p.rk+1]:null,row=el('div');
+    row.append(el('b',null,RN(p)),el('span',null,nxt?fmt(Math.max(0,nxt[1]-p.elo))+' Elo to '+nxt[0]:p.rk===5?'Top 2 earn Combat Grandmaster':'Top classification'));
+    var bar=el('i'),fl=el('u');bar.append(fl);pg.append(row,bar);
+    requestAnimationFrame(function(){requestAnimationFrame(function(){fl.style.width=Math.round((nxt||p.rk===5?(p.rk===5?1:progress(p)):1)*100)+'%'})});
+    // detailed stats: only values the stats API actually reports; the rest stay as an em dash
+    var raw=p.raw||{};
+    function pick(keys){for(var i=0;i<keys.length;i++){var k=keys[i],srcs=[raw,raw.combat,raw.stats,raw.pvp];for(var j=0;j<srcs.length;j++){var o=srcs[j];if(o&&o[k]!=null&&o[k]!==''&&!(typeof o[k]==='number'&&isNaN(o[k])))return o[k]}}return null}
+    var n=function(v){return v==null?null:fmt(Math.round(+v))};
+    var pct=function(v){if(v==null)return null;v=+v;return(v<=1?v*100:v).toFixed(1).replace(/\.0$/,'')+'%'};
+    var dur=function(v){if(v==null)return null;v=Math.round(+v);if(v>=3600)return Math.floor(v/3600)+'h '+('0'+Math.floor(v%3600/60)).slice(-2)+'m';return Math.floor(v/60)+'m '+('0'+v%60).slice(-2)+'s'};
+    var secs=function(v){if(v==null)return null;return(+v).toFixed(1).replace(/\.0$/,'')+'s'};
+    var wins=pick(['wins','win_count']),loss=pick(['losses','loss_count']),sample=(p.f||[]).length,sw=0;(p.f||[]).forEach(function(f){if(f[2])sw++});
+    var wl=null,wr=pick(['win_rate','winrate']),matches=pick(['matches','total_matches','total_fights','fights','pvp_fights']),wnote='';
+    if(wins==null&&loss==null&&sample){wins=sw;loss=sample-sw;wnote=' \u00b7 last '+sample}
+    if(wr==null&&wins!=null&&loss!=null&&wins+loss>0)wr=(wins/(wins+loss));
+    var hits=pick(['hits','total_hits']),acc=pick(['accuracy','combat_accuracy','hit_accuracy']),swings=pick(['swings','total_swings','attacks']);
+    if(acc==null&&hits!=null&&swings)acc=hits/swings;
+    var SEC=[
+     ['General','tro',[['Total kills',fmt(p.k),'hi'],['Total deaths',fmt(p.d)],['K/D ratio',p.kd.toFixed(2),'hi'],
+       ['Win rate'+wnote,pct(wr)],['Total matches',n(matches)],['Wins / losses'+wnote,wins!=null&&loss!=null?fmt(+wins)+' / '+fmt(+loss):null]]],
+     ['Combat','star',[['Total hits',n(hits)],['Critical hits',n(pick(['crit_hits','critical_hits','crits']))],['Hits received',n(pick(['hits_received','damage_hits_taken','hits_taken']))],
+       ['Combat time',dur(pick(['combat_time_seconds','combat_time','combat_seconds']))],['Avg fight duration',dur(pick(['avg_fight_seconds','average_fight_seconds','avg_fight_duration']))],['Combat accuracy',pct(acc)]]],
+     ['Advanced combat','game',[['Shield breaks',n(pick(['shield_breaks','shield_break_count']))],['Shield stuns',n(pick(['shield_stuns','shield_stun_count']))],['Total combos',n(pick(['total_combos','combo_count','combos']))],
+       ['Max combo',n(pick(['max_combo','maximum_combo']))],['Consecutive hits',n(pick(['consecutive_hits','max_consecutive_hits']))],['Combos < 1s gap',n(pick(['fast_combos','quick_combos','combos_under_1s']))],
+       ['Longest combo record',n(pick(['longest_combo','longest_combo_record']))]]],
+     ['Records','crw',[['Longest win streak',n(pick(['longest_win_streak','best_win_streak','win_streak_best']))],['Best performance',(function(v){return v==null?null:typeof v==='number'?fmt(Math.round(v)):String(v)})(pick(['best_performance','best_combat_performance']))],
+       ['Total PvP fights',n(pick(['total_pvp_fights','pvp_fights','total_fights','fights']))],['Peak Elo',n(pick(['peak_elo','max_elo','highest_elo']))],['Blocks mined',fmt(p.bm)]]]
+    ];
+    var box=document.getElementById('pf-fs');box.replaceChildren();var missing=0;
+    SEC.forEach(function(s){
+      var sec=el('section','fs-sec'),h=el('h3','pf-h'),ic=el('i');ic.style.backgroundImage='var(--i-'+s[1]+')';h.append(ic,document.createTextNode(s[0]));
+      var g=el('div','fs-g');
+      s[2].forEach(function(c){var na=c[1]==null;if(na)missing++;var d=el('div','fs-c'+(na?' na':'')+(c[2]&&!na?' '+c[2]:''));d.append(el('b',null,na?'\u2014':c[1]),el('span',null,c[0]));g.append(d)});
+      sec.append(h,g);box.append(sec);
+    });
+    if(missing)box.append(el('p','fs-note','\u2014 means the server\u2019s stats plugin hasn\u2019t reported that value yet. It fills in automatically once it does.'));
+    var t=document.getElementById('pf-ftitle');t.replaceChildren(document.createTextNode(p.n),el('small',null,RN(p)+' \u00b7 Full statistics'));
+    // heart icon on the Hearts perk
+    Array.prototype.forEach.call(document.querySelectorAll('#pf-rk .pf-info dt'),function(dt){if(/^hearts$/i.test(dt.textContent)&&!dt.querySelector('i')){var i=el('i');i.style.backgroundImage='var(--i-hrt)';dt.prepend(i)}});
+  }
+  function pfView(v){var c=M.querySelector('.pf-card');c.dataset.view=v;c.scrollTop=0;var f=document.getElementById(v==='full'?'pf-back':'pf-full');if(f)f.focus({preventScroll:true})}
+  document.getElementById('pf-full').addEventListener('click',function(){pfView('full')});
+  document.getElementById('pf-back').addEventListener('click',function(){pfView('sum')});
   function closeCard(){M.hidden=true;document.body.style.overflow='';if(last)last.focus()}
   document.getElementById('pf-x').addEventListener('click',closeCard);
   document.getElementById('pf-close').addEventListener('click',closeCard);
